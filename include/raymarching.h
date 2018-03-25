@@ -13,8 +13,7 @@ using Resolution = std::array<float, 2>;
 using SurfaceBuffer = std::vector<Color>;
 using Seconds = float;
 enum class RGB {R = 0, G, B};
-using Vec2 = float[2];
-using Vec3 = float[3];
+using vec2 = float[2];
 
 class Raymarching {
   public:

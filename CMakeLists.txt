@@ -12,7 +12,7 @@ add_compile_options(-std=c++14 -Werror -Wall -pedantic -fno-omit-frame-pointer -
 #add_compile_options(-std=c++14 -Werror -Wall -pedantic -fno-omit-frame-pointer -fsanitize=undefined,leak,address)
 
 add_library (ApplicationLib src/application.cpp)
-add_library (RaymarchingLib src/raymarching.cpp)
+add_library (RaymarchingLib src/raymarching.cpp src/vec3.cpp)
 
 add_executable (raymarching src/main.cpp)
 target_link_libraries (raymarching
