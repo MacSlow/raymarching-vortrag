@@ -1,0 +1,45 @@
+I.) Motiviation
+ - Spaß/Neugier
+ - Begrenzung von Abhängigkeiten (Lizenzkosten, binary size)
+ - Kenntnisse von unterschiedlichen Rendering-Algorithmen
+ - erster Teil einer Vortragsreihe über Rendermethoden für's C++-Treffen
+ - die Ausrede für SIMD & Parallelisierung (Threadripper/EPYC, Xeon Phi)
+
+II.) Grundlagen
+ - Ursprung
+ - Einordnung im Bereich Rendermethoden (Ray/tracing/marching/casting, Scan)
+ - typische Anwendungen (Font-Rendering, Demoszene, kompakte Geometrie)
+ - Beispiele aus der Industrie (PS3-Spiel, font-rendering/Qt, Valve)
+ - Pro/Contra
+   * pro: unendliche Geometrie
+   * pro: prozedural -> sehr kompakt
+   * pro: mathematisch perfekt, keine Approximation
+   * pro: kinderleichte (weiche) Schatten
+   * pro: 2D-Variante eignet sich z.B. für auflösungs-unabhäng. Plots
+   * contra: umständlicher zu "modellieren" -> keine Tools à la blender
+   * contra: kein spezielle Hardware für Beschleunigung
+   * contra: Objektumrisse können Darstellungsartefakte verursachen
+   * contra: Unstetigkeiten im distance-field führen zu Artefakten
+
+II.) Grundlagen
+ - grundlegender Algorithmus
+ - Geometrie: Kugel, Ebene, Quarder, Zylinder 
+ - Transformation: "manipuliere den Raum, nicht das Objekt"
+ - Beleuchtung: Normalen, Schatten
+ - Oberflächen: Shading-Modelle Gouraud, Blinn/Phong, Cook-Torrance, PBR
+ - Variation: (Perlin)-Noise für Geometrie und Texturen
+
+III.) Implementation
+ - ausnahmsweise kein OpenGL, rein C++-11/14/17 -> nur CPU
+ - SDL für Andindung an Fenster-System, damit man was sieht
+ - DSL "GL fragment shader für die CPU"
+ - sehr funktional angelegt, damit es sich leicher parallelisieren läßt
+
+IV.) Resourcen & weiterführende Literatur
+ - wie weit kann man diesen Ansatz treiben? -> Beispiele von iq
+ - git-repo
+ - John C. Hart
+ - iq/ShaderToy
+
+V.) Fragen
+
