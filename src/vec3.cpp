@@ -73,6 +73,19 @@ float length (const vec3& a)
 	return sqrt (a.x()*a.x() + a.y()*a.y() + a.z()*a.z());
 }
 
+vec3 reflect (const vec3& i, const vec3& n)
+{
+	return i -  (n * dot(n, i) * 2.f);
+}
+
+vec3 abs (const vec3& v)
+{
+	float x = std::abs (v.x());
+	float y = std::abs (v.y());
+	float z = std::abs (v.z());
+	return vec3 (x, y, z);
+}
+
 float vec3::x() const
 {
 	return _data[X];

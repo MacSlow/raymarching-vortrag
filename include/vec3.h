@@ -19,6 +19,8 @@ class vec3 {
         friend vec3 cross (const vec3& a, const vec3& b);
         friend vec3 normalize (const vec3& a);
         friend float length (const vec3& a);
+        friend vec3 reflect (const vec3& i, const vec3& n);
+        friend vec3 abs (const vec3& v);
         float x() const;
         float y() const;
         float z() const;
