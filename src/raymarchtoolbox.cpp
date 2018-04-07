@@ -14,16 +14,34 @@ using std::min;
 using std::max;
 using std::make_tuple;
 using std::tuple;
+using std::modf;
 
-float clamp (const float v, const float edge0, const float edge1) {
+float clamp (float v, float edge0, float edge1) {
     return (v < edge0) ? edge0 : (v > edge1) ? edge1: v;
 }
 
-float saturate (const float v) {
+float fract (float x)
+{
+	float ignored = .0f;
+	return modf (x, &ignored);
+}
+
+float mix (float x, float y, float a)
+{
+	return x*(1.f - a) + y*a;
+}
+
+float smin (float d1, float d2, float r)
+{
+    float h = clamp (.5f + .5f * (d2 - d1) / r, .0f, 1.f);
+    return mix (d2, d1, h) - r * h * (1.f - h);
+}
+
+float saturate (float v) {
     return clamp (v, .0f, 1.f);
 }
 
-float smoothstep (const float v, const float edge0, const float edge1) {
+float smoothstep (float v, float edge0, float edge1) {
     float t = clamp((v - edge0) / (edge1 - edge0), .0f, 1.f);
     return t * t * (3.f - 2.f * t);
 }
@@ -122,22 +140,32 @@ tuple<vec3, vec3> createCamera (const UV& uv,
 
 Color computeColor (const UV& uv,
                     const Seconds& seconds,
-                    const Resolution& res)
+                    const Resolution& res,
+                    const Mouse& mouse)
 {
     Color color = {{uv[0], uv[1], .0f}};
     float aspect = res[0] / res[1];
 
-    UV cuv {{aspect*(uv[0]*2.f - 1.f), -1.f*(uv[1]*2.f - 1.f)}};
-    vec3 lookAt = vec3 (.0f);
-    float zoom = 1.5f;
-    auto [ro, rd] = createCamera (cuv, seconds, lookAt, zoom);
+    UV cuv {{aspect*(uv[X]*2.f - 1.f)*4.f, -1.f*(uv[Y]*2.f - 1.f)*4.f}};
+    vec3 m {aspect*(mouse[X]/res[X]*2.f - 1.f)*4.f, -1.f*(mouse[Y]/res[Y]*2.f - 1.f)*4.f, .0f};
 
-    float d = trace (ro, rd);
-    vec3 n = shade (ro, rd, d);
+    vec3 p = vec3 (cuv[X], cuv[Y], .0f); 
+    float b1 = sdBall (p - vec3 (2.f*cos (seconds), 2.f*sin (seconds), .0f), 1.25f);
+    float b2 = sdBall (p - m, 2.f);
+    float d = smin (b1, b2, .75f);
 
-    color[0] = n.x();
-    color[1] = n.y();
-    color[2] = n.z();
+    float f = fract (d);
+
+    if (d > .0f) {
+        float c = 1.f - smoothstep (.025f, .0125f, f);
+		color[0] = c;
+		color[1] = c;
+		color[2] = c;
+    } else {
+		color[0] = .0f;
+		color[1] = .0f;
+		color[2] = 1.0f;
+    }
 
     return color;
 }

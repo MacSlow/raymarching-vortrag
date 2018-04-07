@@ -34,6 +34,10 @@ void writeScanline (future<Input>& f)
 {
     Input input = f.get ();
     Resolution res {{input.resolution_x, input.resolution_y}};
+    int mouse_x = 0;
+    int mouse_y = 0;
+	SDL_GetMouseState (&mouse_x, &mouse_y);
+	Mouse mouse {{static_cast<float> (mouse_x), static_cast<float> (mouse_y)}};
 
     for (size_t x = 0; x < input.width; ++x) {
         size_t index = x + input.y * input.width;
@@ -41,7 +45,7 @@ void writeScanline (future<Input>& f)
                   static_cast<float> (input.y*input.recip_height)}};
         std::chrono::duration<float> elapsed = high_resolution_clock::now() -
                                                input.start;
-        input.dst[index] = computeColor (uv, elapsed.count (), res);
+        input.dst[index] = computeColor (uv, elapsed.count (), res, mouse);
     }
 }
 
@@ -87,6 +91,10 @@ void Raymarching::update ()
 {
     Resolution res {{static_cast<float> (_width),
                      static_cast<float> (_height)}};
+    int mouse_x = 0;
+    int mouse_y = 0;
+	SDL_GetMouseState (&mouse_x, &mouse_y);
+	Mouse mouse {{static_cast<float> (mouse_x), static_cast<float> (mouse_y)}};
 
     float recip_width = 1.f / static_cast<float> (_width);
     float recip_height = 1.f / static_cast<float> (_height);
@@ -98,7 +106,7 @@ void Raymarching::update ()
                       static_cast<float> (y*recip_height)}};
             std::chrono::duration<float> elapsed = high_resolution_clock::now() -
                                                    _startTimeStamp;
-            _bufferSurface[index] = computeColor (uv, elapsed.count (), res);
+            _bufferSurface[index] = computeColor (uv, elapsed.count (), res, mouse);
         }
     }
 }
