@@ -77,9 +77,13 @@ Display::Display (const char* shaderfile,
 	_running (false),
 	_paused (false),
 	_mouse {0, 0},
-	_lmbmouse {0, 0}
+	_lmbmouse {0, 0},
+	_file_watch_parameters {nullptr, 0}
 {
 	init ();
+
+	_file_watch_parameters.filename = std::make_shared<std::string> (shaderfile);
+	update_checksum (&_file_watch_parameters);
 
     SDL_GL_SetAttribute (SDL_GL_RED_SIZE, 8);
     SDL_GL_SetAttribute (SDL_GL_GREEN_SIZE, 8);
@@ -238,6 +242,12 @@ bool Display::update ()
         SDL_SetWindowTitle (_window, str.c_str ());
         fps = 0;
         lastTick = currentTick;
+
+		if (did_file_change (_file_watch_parameters.filename,
+							 _file_watch_parameters.checksum)) {
+			update_checksum (&_file_watch_parameters);
+			_gl->reloadShader (_file_watch_parameters.filename->c_str());
+		}
     }
 
 	return true;

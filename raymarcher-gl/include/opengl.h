@@ -43,6 +43,7 @@ class OpenGL
 				   const char* imagefile3 = nullptr);
 		bool resize (unsigned int width, unsigned int height);
 		bool draw (int x, int y, int lmbx, int lmby);
+		void reloadShader (const char* shaderfile);
 
 	private:
 		friend void checkGLError (const char* func);

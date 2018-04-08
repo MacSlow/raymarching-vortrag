@@ -29,6 +29,7 @@
 #include <SDL_image.h>
 
 #include "opengl.h"
+#include "file-watch.h"
 
 class Display
 {
@@ -61,6 +62,7 @@ class Display
 		unsigned int _mouse[2];
 		unsigned int _lmbmouse[2];
 		OpenGL* _gl;
+		FileWatchParameters _file_watch_parameters;
 };
 
 #endif // _DISPLAY_H

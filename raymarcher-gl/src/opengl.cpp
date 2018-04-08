@@ -47,6 +47,8 @@
 #include "opengl.h"
 #include "shaders.h"
 
+#define nl '\n'
+
 enum VertexAttribs {
     PositionAttr = 0,
     TexCoordAttr,
@@ -85,17 +87,8 @@ OpenGL::~OpenGL ()
 	glDeleteBuffers (1, &_vbo);
 }
 
-bool OpenGL::init (const char* shaderfile,
-				   const char* imagefile0,
-                   const char* imagefile1,
-                   const char* imagefile2,
-                   const char* imagefile3)
+void OpenGL::reloadShader (const char* shaderfile)
 {
-	dumpGLInfo ();
-    glClearColor (1.0, 1.0, 1.0, 1.0);
-    glViewport (0, 0, _width, _height);
-    glEnable (GL_BLEND);
-
     std::string shader = "";
     if (shaderfile) {
     	std::ifstream file (shaderfile);
@@ -106,7 +99,25 @@ bool OpenGL::init (const char* shaderfile,
 	    }
     }
 
+	glDeleteProgram (_program);
+	glDeleteShader (_vShaderId);
+	glDeleteShader (_fShaderId);
+
     _program = createShaderProgram (vert, shader.c_str(), true);
+}
+
+bool OpenGL::init (const char* shaderfile,
+				   const char* imagefile0,
+                   const char* imagefile1,
+                   const char* imagefile2,
+                   const char* imagefile3)
+{
+	dumpGLInfo ();
+    glClearColor (1.0, 1.0, 1.0, 1.0);
+    glViewport (0, 0, _width, _height);
+    glEnable (GL_BLEND);
+	
+	reloadShader (shaderfile);
 
     // the supported ShaderToy-like uniforms
 	_iResolution = glGetUniformLocation (_program, "iResolution");
@@ -268,35 +279,35 @@ void checkGLError (const char* func)
 
     switch (glGetError ()) {
         case GL_INVALID_ENUM :
-            std::cout << "invalid enum" << std::endl; 
+            std::cout << "invalid enum" << nl; 
         break;
 
         case GL_INVALID_VALUE :
-            std::cout << "invalid value" << std::endl; 
+            std::cout << "invalid value" << nl; 
         break;
 
         case GL_INVALID_OPERATION :
-            std::cout << "invalid operation" << std::endl; 
+            std::cout << "invalid operation" << nl; 
         break;
 
         case GL_INVALID_FRAMEBUFFER_OPERATION :
-            std::cout << "invalid framebuffer operation" << std::endl; 
+            std::cout << "invalid framebuffer operation" << nl; 
         break;
 
         case GL_OUT_OF_MEMORY :
-            std::cout << "out of memory" << std::endl; 
+            std::cout << "out of memory" << nl; 
         break;
 
         case GL_STACK_UNDERFLOW :
-            std::cout << "stack underflow" << std::endl; 
+            std::cout << "stack underflow" << nl; 
         break;
 
         case GL_STACK_OVERFLOW :
-            std::cout << "stack overflow" << std::endl; 
+            std::cout << "stack overflow" << nl; 
         break;
 
         default :
-            std::cout << "\033[32;1mok" << std::endl; 
+            std::cout << "\033[32;1mok" << nl; 
         break;
     }
 
@@ -319,9 +330,9 @@ void OpenGL::dumpGLInfo ()
               << "\n\n";
 }
 
-GLuint OpenGL::loadShader (const char *src, GLenum type)
+GLuint OpenGL::loadShader (const char* src, GLenum type)
 {
-    GLuint shader = glCreateShader (type);
+	GLuint shader = glCreateShader (type);
     if (shader)
     {
         GLint compiled;
@@ -334,7 +345,7 @@ GLuint OpenGL::loadShader (const char *src, GLenum type)
             GLchar log[1024];
             glGetShaderInfoLog (shader, sizeof log - 1, NULL, log);
             log[sizeof log - 1] = '\0';
-            std::cout << "loadShader compile failed: " << log << std::endl;
+            std::cout << "loadShader compile failed: " << log << nl;
             glDeleteShader (shader);
             shader = 0;
         }
@@ -374,9 +385,7 @@ GLuint OpenGL::createShaderProgram (const char* vertSrc,
         return _program;
     }
 
-    checkGLError (nullptr);
     glProgramParameteri(_program, GL_PROGRAM_BINARY_RETRIEVABLE_HINT, GL_TRUE);
-    checkGLError ("glProgramParameteri");
 
     glLinkProgram (_program);
 
@@ -387,7 +396,7 @@ GLuint OpenGL::createShaderProgram (const char* vertSrc,
         GLchar log[1024];
         glGetProgramInfoLog (_program, sizeof log - 1, NULL, log);
         log[sizeof log - 1] = '\0';
-        std::cout << "Link failed: " << log << std::endl;
+        std::cout << "Link failed: " << log << nl;
         glDeleteProgram (_program);
         return 0;
     }
@@ -406,7 +415,7 @@ void OpenGL::linkShaderProgram (GLuint progId)
         GLchar log[1024];
         glGetProgramInfoLog (progId, sizeof log - 1, NULL, log);
         log[sizeof log - 1] = '\0';
-        std::cout << "Link failed: " << log << std::endl;
+        std::cout << "Link failed: " << log << nl;
         glDeleteProgram (progId);
     }
 }
