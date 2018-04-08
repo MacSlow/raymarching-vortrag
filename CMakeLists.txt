@@ -1,5 +1,5 @@
 cmake_minimum_required (VERSION 2.8.12)
-project (raymarching)
+project (raymarcher-nongl)
 project (timer)
 project (raymarcher-gl)
 
@@ -18,8 +18,8 @@ add_library (RaymarchingLib src/raymarching.cpp
 	                        src/raymarchtoolbox.cpp
 	                        src/vec3.cpp)
 
-add_executable (raymarching src/main.cpp)
-target_link_libraries (raymarching
+add_executable (raymarcher-nongl src/main.cpp)
+target_link_libraries (raymarcher-nongl
 	ApplicationLib
 	RaymarchingLib
 	#-fsanitize=leak,address,undefined
@@ -42,11 +42,13 @@ include_directories (raymarcher-gl/include ${SDL2_IMAGE_INCLUDE_DIRS})
 add_library (DisplayLib raymarcher-gl/src/display.cpp)
 add_library (OpenGLLib raymarcher-gl/src/opengl.cpp
 	                   raymarcher-gl/src/texture.cpp)
+add_library (FileWatchLib raymarcher-gl/src/file-watch.cpp)
 
 add_executable (raymarcher-gl raymarcher-gl/src/main.cpp)
 target_link_libraries (raymarcher-gl
 	DisplayLib
 	OpenGLLib
+	FileWatchLib
 	GL
 	#-fsanitize=leak,address,undefined
 	${SDL2_IMAGE_LDFLAGS}
@@ -54,32 +56,32 @@ target_link_libraries (raymarcher-gl
 )
 
 add_custom_target (valgrind
-	DEPENDS raymarching
-	COMMAND valgrind --track-origins=yes --show-leak-kinds=all  --leak-check=full -v ./raymarching
+	DEPENDS raymarcher-nongl
+	COMMAND valgrind --track-origins=yes --show-leak-kinds=all  --leak-check=full -v ./raymarcher-nongl
 )
 
 add_custom_target (perf
-	DEPENDS raymarching
-	COMMAND perf stat ./raymarching
+	DEPENDS raymarcher-nongl
+	COMMAND perf stat ./raymarcher-nongl
 )
 
 add_custom_target (report
-	DEPENDS raymarching
-	COMMAND perf record -g ./raymarching
+	DEPENDS raymarcher-nongl
+	COMMAND perf record -g ./raymarcher-nongl
 	COMMAND perf report -g 'graph,0.5,caller' --sort comm,dso,sym
 )
 
 add_custom_target (tiny
-	DEPENDS raymarching
-	COMMAND sstrip ./raymarching
-	COMMAND gzip -cn9 ./raymarching >small
+	DEPENDS raymarcher-nongl
+	COMMAND sstrip ./raymarcher-nongl
+	COMMAND gzip -cn9 ./raymarcher-nongl >small
 	COMMAND cat ../data/tiny ./small >compact
 	COMMAND chmod +x ./compact
-	COMMAND rm ./small ./raymarching
-	COMMAND mv ./compact ./raymarching
+	COMMAND rm ./small ./raymarcher-nongl
+	COMMAND mv ./compact ./raymarcher-nongl
 )
 
 add_custom_target (tidy
-	DEPENDS raymarching
+	DEPENDS raymarcher-nongl
 	COMMAND clang-tidy -p=. ../src/*.cpp
 )
