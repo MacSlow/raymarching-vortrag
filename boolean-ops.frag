@@ -102,6 +102,7 @@ Result scene (in vec3 p)
 	float offsetY = 2. * (iMouse.y / iResolution.y * 2. - 1.);
 
 	vec3 cutBoxCenter = p;
+	cutBoxCenter.y += 0.04 * cos(10.*p.x) * sin (10.*p.z);
 	cutBoxCenter *= rotY (offsetY) * rotX (offsetX);
 	float cutBox1 = sdBox (cutBoxCenter, vec3 (.4), .05);
 	float cutBox2 = sdBox (cutBoxCenter, vec3 (.42, .35, .35), .05);
