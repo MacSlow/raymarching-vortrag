@@ -1,46 +1,46 @@
 #version 130
-    uniform vec3 iResolution;
-    uniform float iTime;
-    uniform vec3 iChannelResolution0;
-    uniform vec3 iChannelResolution1;
-    uniform vec3 iChannelResolution2;
-    uniform vec3 iChannelResolution3;
-    uniform vec4 iMouse;
-    uniform sampler2D iChannel0;
-    uniform sampler2D iChannel1;
-    uniform sampler2D iChannel2;
-    uniform sampler2D iChannel3;
-    uniform vec4 iDate;
-    in vec2 fragCoord;
-    out vec4 fragColor;
+uniform vec3 iResolution;
+uniform float iTime;
+uniform vec3 iChannelResolution0;
+uniform vec3 iChannelResolution1;
+uniform vec3 iChannelResolution2;
+uniform vec3 iChannelResolution3;
+uniform vec4 iMouse;
+uniform sampler2D iChannel0;
+uniform sampler2D iChannel1;
+uniform sampler2D iChannel2;
+uniform sampler2D iChannel3;
+uniform vec4 iDate;
+in vec2 fragCoord;
+out vec4 fragColor;
 
-	precision highp float;
+precision highp float;
 
-	const int MAX_ITER    = 128;
-	const float STEP_SIZE = .95;
-	const float EPSILON   = .001;
-	const vec4 red     = vec4 (1.0, 0.0, 0.0, 1.0);
-	const vec4 green   = vec4 (0.0, 1.0, 0.0, 1.0);
-	const vec4 blue    = vec4 (0.0, 0.0, 1.0, 1.0);
+const int MAX_ITER    = 128;
+const float STEP_SIZE = .95;
+const float EPSILON   = .001;
+const vec4 red     = vec4 (1.0, 0.0, 0.0, 1.0);
+const vec4 green   = vec4 (0.0, 1.0, 0.0, 1.0);
+const vec4 blue    = vec4 (0.0, 0.0, 1.0, 1.0);
 
 	mat3 rotX (in float a) {float c = cos(a); float s = sin (a); return mat3 (vec3 (1., .0, .0), vec3 (.0, c, s), vec3 (.0, -s, c));}
 	mat3 rotY (in float a) {float c = cos(a); float s = sin (a); return mat3 (vec3 (c, .0, s), vec3 (.0, 1., .0), vec3 (-s, .0, c));}
 	mat3 rotZ (in float a) {float c = cos(a); float s = sin (a); return mat3 (vec3 (c, s, .0), vec3 (-s, c, .0), vec3 (.0, .0, 1.));}
 	mat2 rot2d (in float a) {float c = cos(a); float s = sin (a); return mat2 (vec2 (c, s), vec2 (-s, c));}
 
-	vec4 gradient (float v) {
-	    float steps = 2.;
-	    float step = 1. / steps;
-	    vec4 col = green;
+vec4 gradient (float v) {
+    float steps = 2.;
+    float step = 1. / steps;
+    vec4 col = green;
 
-	    if (v >= .0 && v < step) {
-	        col = mix (green, blue, v * steps);
-	    } else if (v >= step && v < 2.0 * step) {
-	        col = mix (blue, red, (v - step) * steps);
-	    }
+    if (v >= .0 && v < step) {
+        col = mix (green, blue, v * steps);
+    } else if (v >= step && v < 2.0 * step) {
+        col = mix (blue, red, (v - step) * steps);
+    }
 	    
-	    return col;
-	}
+    return col;
+}
 
 	vec3 opRepeat (in vec3 p, in vec3 size) {return mod (p, 2. * size) - size;}
 	float sdTorus (in vec3 p, in vec2 t) { vec2 q = vec2 (length (p.xz) - t.x, p.y); return length (q) - t.y; }
