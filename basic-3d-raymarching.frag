@@ -91,21 +91,24 @@ vec2 mapToScreen (in vec2 p)
     return res;
 }
 
+float dd = .0;
+
 // ray-marching stuff
 Result scene (in vec3 p)
 {
-    float floor = p.y + .75;
+    float floor = p.y + cos (iTime); //.7;
 
 	vec3 sphereCenter = p;
 	vec3 boxCenter = p;
     vec2 mouse = iMouse.xy;
-	sphereCenter -= vec3 (1., .75, 2.75);
-	boxCenter -= vec3 (.0, .0, 2.5);
+	sphereCenter -= vec3 (1., .75, 1.5);
+	boxCenter -= vec3 (.0, .0, 1.25);
 	boxCenter *= rotY (iTime);
 
-	float sphere = sdSphere (sphereCenter, .75);
-	float box = sdBox (boxCenter, vec3 (.7, .5, .7), .125);
+	float sphere = sdSphere (sphereCenter, .6);
+	float box = sdBox (boxCenter, vec3 (.35, .35, .7), .125);
     float d = opCombine (box, sphere, .25);
+	dd = d;
 
     Result res = Result (.0, 0);
 	res.d = min (d, floor);
@@ -153,7 +156,7 @@ float shadow (in vec3 ro, in vec3 rd)
     return result;
 }
 
-vec3 shadePBR (in vec3 ro, in vec3 rd, in float d, in int id)
+vec3 shade (in vec3 ro, in vec3 rd, in float d, in int id)
 {
     vec3 p = ro + d * rd;
     vec3 nor = normal (p);
@@ -162,17 +165,18 @@ vec3 shadePBR (in vec3 ro, in vec3 rd, in float d, in int id)
     float mask1 = 1.;
     float mask2 = 0.;
 	float mask = (id == 1) ? mask1 : mask2;
-    vec3 albedo1 = vec3 (.9, .9, .9);
-    vec3 albedo2 = vec3 (.9, .3, .3);
+	float f = fract (dd*2.);
+    vec3 albedo1 = vec3 (1. - smoothstep (.025, .0125, f));
+    vec3 albedo2 = vec3 (.95, .05, .05);
     vec3 albedo = (id == 1) ? albedo1 : albedo2 ;
-    float metallic = (id == 1) ? 1.: .0;
-    float roughness = (id == 1) ? .75: mask;
+    float metallic = .0;
+    float roughness = 1.;
     float ao = 1.;
 
     // lights hard-coded as well atm
     vec3 lightColors[2];
-    lightColors[0] = vec3 (.7, .7, .9) * 15.;
-    lightColors[1] = vec3 (.9, .7, .7) * 15.;
+    lightColors[0] = vec3 (.8, .8, .9) * 20.;
+    lightColors[1] = vec3 (.9, .8, .8) * 20.;
 
     vec3 lightPositions[2];
     lightPositions[0] = p + vec3 (.5, .75, -1.5);
@@ -242,15 +246,15 @@ void main ()
     uv.x *= iResolution.x / iResolution.y;
 
     // set up "camera", view origin (ro) and view direction (rd)
-    vec3 ro = vec3 (.0, 1., -.7);
-    vec3 aim = vec3 (.0, 1., 1.5);
-    float zoom = 1.75;
+    vec3 ro = vec3 (0.0, 2.0, -5.0);
+    vec3 aim = vec3 (0.0, 2.0, 0.0);
+    float zoom = 1.;
     vec3 rd = camera (uv, ro, aim, zoom);
 
     // do the ray-march...
     Result res = trace (ro, rd);
     float fog = 1. / (1. + res.d * res.d * .1);
-    vec3 c = shadePBR (ro, rd, res.d, res.id);
+    vec3 c = shade (ro, rd, res.d, res.id);
 	c *= fog;
 
     // tonemapping, "gamma-correction", tint, vignette
