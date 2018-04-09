@@ -98,24 +98,27 @@ Result scene (in vec3 p)
 {
     float floor = p.y + .75;
 
-	float offsetX = -2. * (iMouse.x / iResolution.x * 2. - 1.);
-	float offsetY = -2. * (iMouse.y / iResolution.y * 2. - 1.);
+	float offsetX = 2. * (iMouse.x / iResolution.x * 2. - 1.);
+	float offsetY = 2. * (iMouse.y / iResolution.y * 2. - 1.);
 
 	vec3 cutBoxCenter = p;
-	cutBoxCenter *= rotY (iTime) * rotX (iTime);
+	cutBoxCenter *= rotY (offsetY) * rotX (offsetX);
 	float cutBox1 = sdBox (cutBoxCenter, vec3 (.4), .05);
-	float cutBox2 = sdBox (cutBoxCenter, vec3 (.9, .35, .35), .05);
-	float cutBox3 = sdBox (cutBoxCenter, vec3 (.35, .9, .35), .05);
-	float cutBox4 = sdBox (cutBoxCenter, vec3 (.35, .35, .9), .05);
+	float cutBox2 = sdBox (cutBoxCenter, vec3 (.42, .35, .35), .05);
+	float cutBox3 = sdBox (cutBoxCenter, vec3 (.35, .42, .35), .05);
+	float cutBox4 = sdBox (cutBoxCenter, vec3 (.35, .35, .42), .05);
 
-	float cutBox = opSubtract (cutBox2, cutBox1);
-	cutBox = opSubtract (cutBox3, cutBox);
-	cutBox = opSubtract (cutBox4, cutBox);
+	float f = opUnion (cutBox2, cutBox3);
+	f = opUnion (f, cutBox4);
+	float cutBox = opSubtract (f, cutBox1);
 
 	vec3 sphereCenter = p + vec3 (.5, .0, -.5);
 	float sphere = sdSphere (sphereCenter, .5);
+	sphere = opSubtract (f, sphere);
+
 	vec3 cubeCenter = p + vec3 (-.5, .0, -.5);
 	float cube = sdBox (cubeCenter, vec3 (.4), .0);
+	cube = opSubtract (f, cube);
 
     float d = opUnion (cutBox, sphere);
     d = opUnion (d, cube);
