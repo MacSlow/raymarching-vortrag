@@ -1,3 +1,6 @@
+"Dreiecke sind überbewertet, mehr als zwei braucht man nicht -
+ Sphere-Tracing für jedermann"
+
 I.) Motiviation
  - Spaß/Neugier
  - Begrenzung von Abhängigkeiten (Lizenzkosten, binary size)
@@ -23,11 +26,21 @@ II.) Grundlagen
 
 II.) Grundlagen
  - grundlegender Algorithmus
- - Geometrie: Kugel, Ebene, Quarder, Zylinder 
+ - Geometrie: Ebene, Kugel, Quarder, Zylinder 
  - Transformation: "manipuliere den Raum, nicht das Objekt"
+   * Wiederholung "unendliche Geometrien"
+   * Verbiegen
  - Beleuchtung: Normalen, Schatten
  - Oberflächen: Shading-Modelle Gouraud, Blinn/Phong, Cook-Torrance, PBR
  - Variation: (Perlin)-Noise für Geometrie und Texturen
+ - Boolsche Operationen
+   * CSG-like, min/max/not
+   * "smooth min/max"
+ - sonstige Tricks
+   * "iteration glow"
+   * "Nebel"
+   * Ambient Occlusion
+   * volumetrische Medien
 
 III.) Implementation
  - ausnahmsweise kein OpenGL, rein C++-11/14/17 -> nur CPU
@@ -42,4 +55,3 @@ IV.) Resourcen & weiterführende Literatur
  - iq/ShaderToy
 
 V.) Fragen
-
