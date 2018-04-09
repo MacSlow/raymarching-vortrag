@@ -29,7 +29,7 @@
 #include "config.h"
 #include "display.h"
 
-#define WIN_TITLE "ToyShader"
+#define WIN_TITLE "GL-Raymarcher by MacSlow"
 
 bool Display::init ()
 {

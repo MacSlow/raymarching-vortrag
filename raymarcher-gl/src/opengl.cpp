@@ -358,50 +358,56 @@ GLuint OpenGL::createShaderProgram (const char* vertSrc,
 									const char* fragSrc,
 									bool link)
 {
+	GLuint program = _program;
+
     if (!vertSrc && !fragSrc)
         return 0;
 
     if (vertSrc) {
         _vShaderId = loadShader (vertSrc, GL_VERTEX_SHADER);
-        assert (_vShaderId);
+        if (!_vShaderId)
+        	return _program;
     }
 
     if (fragSrc) {
         _fShaderId = loadShader (fragSrc, GL_FRAGMENT_SHADER);
-        assert (_fShaderId);        
+        if (!_fShaderId)
+        	return _program;
     }
 
-    _program = glCreateProgram ();
-    assert (_program);
+    program = glCreateProgram ();
+    if (!program)
+        return _program;
+
     if (vertSrc) {
-        glAttachShader (_program, _vShaderId);
+        glAttachShader (program, _vShaderId);
     }
 
     if (fragSrc) {
-        glAttachShader (_program, _fShaderId);
+        glAttachShader (program, _fShaderId);
     }
 
     if (!link) {
-        return _program;
+        return program;
     }
 
-    glProgramParameteri(_program, GL_PROGRAM_BINARY_RETRIEVABLE_HINT, GL_TRUE);
+    glProgramParameteri(program, GL_PROGRAM_BINARY_RETRIEVABLE_HINT, GL_TRUE);
 
-    glLinkProgram (_program);
+    glLinkProgram (program);
 
     GLint linked = 0;
-    glGetProgramiv (_program, GL_LINK_STATUS, &linked);
+    glGetProgramiv (program, GL_LINK_STATUS, &linked);
     if (!linked)
     {
         GLchar log[1024];
-        glGetProgramInfoLog (_program, sizeof log - 1, NULL, log);
+        glGetProgramInfoLog (program, sizeof log - 1, NULL, log);
         log[sizeof log - 1] = '\0';
         std::cout << "Link failed: " << log << nl;
-        glDeleteProgram (_program);
-        return 0;
+        glDeleteProgram (program);
+        return _program;
     }
 
-    return _program;
+    return program;
 }
 
 void OpenGL::linkShaderProgram (GLuint progId)
