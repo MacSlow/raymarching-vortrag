@@ -1,6 +1,5 @@
 cmake_minimum_required (VERSION 2.8.12)
 project (raymarcher-nongl)
-project (timer)
 project (raymarcher-gl)
 
 set (CMAKE_CXX_COMPILER "clang++")
@@ -22,14 +21,6 @@ add_executable (raymarcher-nongl src/main.cpp)
 target_link_libraries (raymarcher-nongl
 	ApplicationLib
 	RaymarchingLib
-	#-fsanitize=leak,address,undefined
-	${SDL2_LDFLAGS}
-	-pthread
-	-s
-)
-
-add_executable (timer timer.cpp)
-target_link_libraries (timer
 	#-fsanitize=leak,address,undefined
 	${SDL2_LDFLAGS}
 	-pthread
