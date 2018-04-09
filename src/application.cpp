@@ -5,7 +5,7 @@
 
 using namespace std;
 
-#define WIN_TITLE "Raymarching by MacSlow"
+#define WIN_TITLE "NonGL-Raymarcher by MacSlow"
 #define newline '\n'
 
 void Application::initialize ()
