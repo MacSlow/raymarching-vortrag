@@ -96,16 +96,14 @@ float dd = .0;
 // ray-marching stuff
 Result scene (in vec3 p)
 {
-	float offset = 2.*(iMouse.y / iResolution.y) - 1.;
+	float offset = 2.*(iMouse.w / iResolution.y) - 1.;
     float floor = p.y + offset;
 
 	vec3 sphereCenter = p;
 	vec3 boxCenter = p;
-    vec2 mouse = iMouse.xy;
-	float angle = radians (180. * (iMouse.x / iResolution.x * 2. - 1.));
-	float c = 1.5*cos (angle);
-	float s = 1.5*sin (angle);
-	sphereCenter -= vec3 (.5+c, .75, .5+s);
+	float offsetX = -2. * (iMouse.x / iResolution.x * 2. - 1.);
+	float offsetY = 2. * (iMouse.y / iResolution.y * 2. - 1.);
+	sphereCenter -= vec3 (offsetX, .25, offsetY);
 	boxCenter -= vec3 (.0, .0, 1.25);
 	boxCenter *= rotY (-iTime);
 

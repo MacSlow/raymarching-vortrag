@@ -171,13 +171,14 @@ bool Display::run ()
 				break;
 
 				case SDL_MOUSEMOTION:
-					_mouse[0] = event.motion.x;
-					_mouse[1] = event.motion.y;
 					if (SDL_GetMouseState(NULL, NULL) &
 						SDL_BUTTON (SDL_BUTTON_LEFT)) {
 						_lmbmouse[0] = event.button.x;
-						_lmbmouse[1] = event.button.y;					
-					}
+						_lmbmouse[1] = event.button.y;
+                    } else {
+                        _mouse[0] = event.motion.x;
+                        _mouse[1] = event.motion.y;
+                    }
 				break;
 
 				case SDL_WINDOWEVENT:
