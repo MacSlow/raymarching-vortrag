@@ -102,7 +102,7 @@ Result scene (in vec3 p)
 	vec3 sphereCenter = p;
 	vec3 boxCenter = p;
 	float offsetX = -2. * (iMouse.x / iResolution.x * 2. - 1.);
-	float offsetY = 2. * (iMouse.y / iResolution.y * 2. - 1.);
+	float offsetY = -2. * (iMouse.y / iResolution.y * 2. - 1.);
 	sphereCenter -= vec3 (offsetX, .25, offsetY);
 	boxCenter -= vec3 (.0, .0, 1.25);
 	boxCenter *= rotY (-iTime);
