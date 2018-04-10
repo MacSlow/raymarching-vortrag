@@ -93,31 +93,33 @@ float opCombine (in float d1, in float d2, in float r)
     return mix (d2, d1, h) - r * h * (1. - h);
 }
 
+float twoPlusSigns (in vec3 p)
+{
+    float verticalBar1 = sdBox (p, vec3 (.1, .1, .3), .0125);
+    float horizontalBar1 = sdBox (p, vec3 (.1, .3, .1), .0125);
+    p += vec3 (.0, .0, .9);
+    float verticalBar2 = sdBox (p, vec3 (.1, .1, .3), .0125);
+    float horizontalBar2 = sdBox (p, vec3 (.1, .3, .1), .0125);
+    float plusplus = opUnion (verticalBar1, horizontalBar1);
+
+    return opUnion (plusplus, opUnion (verticalBar2, horizontalBar2));
+}
+
 Result scene (in vec3 p)
 {
-    float floor = p.y + .6;
+    float floor = p.y + .65;
 
-	vec3 boxCenter = p;
-	boxCenter *= rotY (-iTime);
+	vec3 center = (p+vec3(.125, .0, -.2)) * rotY (iTime);
+	float plusSigns = twoPlusSigns (center);
 
-    float vbar1 = sdBox (boxCenter, vec3 (.1, .1, .3), .0125);
-    float hbar1 = sdBox (boxCenter, vec3 (.1, .3, .1), .0125);
-    boxCenter += vec3 (.0, .0, .9);
-    float vbar2 = sdBox (boxCenter, vec3 (.1, .1, .3), .0125);
-    float hbar2 = sdBox (boxCenter, vec3 (.1, .3, .1), .0125);
-    float plusplus = opUnion (vbar1, hbar1);
-    plusplus = opUnion (plusplus, opUnion (vbar2, hbar2));
-
-    vec3 cylinderCenter = p.xzy - vec3 (1., .0, .0);
-    cylinderCenter *= rotZ (-iTime);
-
-    float cylinder1 = sdCylinder (cylinderCenter, vec2 (.5, .1));
-    float cylinder2 = sdCylinder (cylinderCenter, vec2 (.4, .25));
-    cylinderCenter += vec3 (.5, .0, .0);
-    float cutBox = sdBox (cylinderCenter * rotY (70.), vec3 (.35, .15, .35), .0);
-    float f = opSubtract (cutBox, opSubtract (cylinder2, cylinder1));
-    float cplusplus = opUnion (plusplus, f);
-    //cplusplus = opUnion (cplusplus, cutBox);
+    vec3 cCenter = center.yxz + vec3 (.0, .0, -1.2);
+    float cylinder1 = sdCylinder (cCenter, vec2 (.6, .1));
+    float cylinder2 = sdCylinder (cCenter, vec2 (.4, .25));
+    cCenter += vec3 (.0, .0, -.5);
+    float cutBox = sdBox (cCenter * rotY (70.), vec3 (.35, .15, .35), .0);
+    float f = opSubtract (cylinder2, cylinder1);
+    f = opSubtract (cutBox, f);
+    float cplusplus = opUnion (plusSigns, f);
 
     Result res = Result (.0, 0);
 	res.d = min (cplusplus, floor);
@@ -262,15 +264,14 @@ void main ()
     // do the ray-march...
     Result res = trace (ro, rd);
     float fog = 1. / (1. + res.d * res.d * .1);
-    vec3 c = shade (ro, rd, res.d, res.id);
-	c *= fog;
+    vec3 color = shade (ro, rd, res.d, res.id);
+	color *= fog;
 
     // tonemapping, "gamma-correction", tint, vignette
-	c = c / (1. + c);
-    c = .2 * c + .8 * sqrt (c);
-    c *= vec3 (.9, .8, .7);
-    c *= .2 + .8*pow(16.*uvRaw.x*uvRaw.y*(1. - uvRaw.x)*(1. - uvRaw.y), .3);
+	color = color / (1. + color);
+    color = .2 * color + .8 * sqrt (color);
+    color *= vec3 (.9, .8, .7);
+    color *= .2 + .8*pow(16.*uvRaw.x*uvRaw.y*(1. - uvRaw.x)*(1. - uvRaw.y), .3);
 
-	fragColor = vec4(c, 1.);
+	fragColor = vec4(color, 1.);
 }
-
