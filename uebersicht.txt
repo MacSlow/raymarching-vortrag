@@ -26,7 +26,8 @@ II.) Grundlagen
 
 II.) Grundlagen
  - grundlegender Algorithmus
- - Geometrie: Ebene, Kugel, Quarder, Zylinder 
+ - Geometrie: Ebene, Kugel, Quarder, Zylinder...
+ - wie man an die ganzen SDFs kommt: von Kugel, Ebene, Zylinder, Quarder...
  - Transformation: "manipuliere den Raum, nicht das Objekt"
    * Wiederholung "unendliche Geometrien"
    * Verbiegen
