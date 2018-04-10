@@ -109,20 +109,20 @@ Result scene (in vec3 p)
 {
     float floor = p.y + .65;
 
-	vec3 center = (p+vec3(.125, .0, -.2)) * rotY (iTime);
-	float plusSigns = twoPlusSigns (center);
+    vec3 center = (p+vec3(.125, .0, -.2)) * rotY (iTime);
+    float plusSigns = twoPlusSigns (center);
 
     vec3 cCenter = center.yxz + vec3 (.0, .0, -1.2);
     float cylinder1 = sdCylinder (cCenter, vec2 (.6, .1));
     float cylinder2 = sdCylinder (cCenter, vec2 (.4, .25));
-    cCenter += vec3 (.0, .0, -.5);
-    float cutBox = sdBox (cCenter * rotY (70.), vec3 (.35, .15, .35), .0);
-    float f = opSubtract (cylinder2, cylinder1);
-    f = opSubtract (cutBox, f);
-    float cplusplus = opUnion (plusSigns, f);
+    cCenter += vec3 (.0, .0, .4125);
+    float cutBox = sdBox (cCenter * rotY (radians (45.)), vec3 (.35, .15, .35), .0);
+    float cRing = opSubtract (cylinder2, cylinder1);
+    cRing = opSubtract (cutBox, cRing);
+    float cplusplus = opUnion (plusSigns, cRing);
 
     Result res = Result (.0, 0);
-	res.d = min (cplusplus, floor);
+    res.d = min (cplusplus, floor);
     res.id = (res.d == floor ) ? 1 : 2;
 
     return res;
