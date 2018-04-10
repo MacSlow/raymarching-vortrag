@@ -40,7 +40,7 @@ struct Result {
 // basic sdf toolbox
 vec3 opRepeat (in vec3 p, in vec3 size) {return mod (p, 2. * size) - size;}
 float sdTorus (in vec3 p, in vec2 t) { vec2 q = vec2 (length (p.xz) - t.x, p.y); return length (q) - t.y; }
-float sdBox (in vec3 p, in vec3 size, in float r) { return length (max (abs (p) - size, .0)) - r; }
+float udRoundBox (in vec3 p, in vec3 size, in float r) { return length (max (abs (p) - size, .0)) - r; }
 float sdSphere (in vec3 p, float r) { return length (p) - r; }
 vec2 opRepeat2 (inout vec2 p,in vec2 s) {vec2 h=.5*s; vec2 c=floor((p+h)/s); p=mod(p+h,s)-h; return c;}
 
@@ -48,6 +48,12 @@ float sdCylinder (in vec3 p, in vec2 size)
 {
     vec2 d = abs (vec2 (length (p.xz), p.y)) - size;
     return min (max (d.x, d.y), .0) + length (max (d, .0));
+}
+
+float sdBox (in vec3 p, in vec3 b)
+{
+    vec3 d = abs (p) - b;
+    return min (max (d.x, max(d.y, d.z)), .0) + length (max (d, .0));
 }
 
 // PBR toolbox
@@ -95,11 +101,11 @@ float opCombine (in float d1, in float d2, in float r)
 
 float twoPlusSigns (in vec3 p)
 {
-    float verticalBar1 = sdBox (p, vec3 (.1, .1, .3), .0125);
-    float horizontalBar1 = sdBox (p, vec3 (.1, .3, .1), .0125);
+    float verticalBar1 = udRoundBox (p, vec3 (.1, .1, .3), .0125);
+    float horizontalBar1 = udRoundBox (p, vec3 (.1, .3, .1), .0125);
     p += vec3 (.0, .0, .9);
-    float verticalBar2 = sdBox (p, vec3 (.1, .1, .3), .0125);
-    float horizontalBar2 = sdBox (p, vec3 (.1, .3, .1), .0125);
+    float verticalBar2 = udRoundBox (p, vec3 (.1, .1, .3), .0125);
+    float horizontalBar2 = udRoundBox (p, vec3 (.1, .3, .1), .0125);
     float plusplus = opUnion (verticalBar1, horizontalBar1);
 
     return opUnion (plusplus, opUnion (verticalBar2, horizontalBar2));
@@ -112,13 +118,14 @@ Result scene (in vec3 p)
     vec3 center = (p+vec3(.125, .0, -.2)) * rotY (iTime);
     float plusSigns = twoPlusSigns (center);
 
-    vec3 cCenter = center.yxz + vec3 (.0, .0, -1.2);
+    vec3 cCenter = center.yxz + vec3 (.0, .0, -1.);
     float cylinder1 = sdCylinder (cCenter, vec2 (.6, .1));
     float cylinder2 = sdCylinder (cCenter, vec2 (.4, .25));
+    float cylinder3 = sdCylinder (cCenter + vec3 (.0, .0, .3), vec2 (.4, .25));
     cCenter += vec3 (.0, .0, .4125);
-    float cutBox = sdBox (cCenter * rotY (radians (45.)), vec3 (.35, .15, .35), .0);
-    float cRing = opSubtract (cylinder2, cylinder1);
-    cRing = opSubtract (cutBox, cRing);
+    float cutBox = sdBox (cCenter * rotY (radians (45.)), vec3 (.35, .15, .35));
+    float f = opUnion (cylinder2, cutBox);
+    float cRing = opSubtract (opUnion (cylinder2, cutBox), cylinder1);
     float cplusplus = opUnion (plusSigns, cRing);
 
     Result res = Result (.0, 0);
