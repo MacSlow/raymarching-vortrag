@@ -35,7 +35,7 @@ struct Result {
 // basic sdf toolbox
 vec3 opRepeat (in vec3 p, in vec3 size) {return mod (p, 2. * size) - size;}
 float sdTorus (in vec3 p, in vec2 t) { vec2 q = vec2 (length (p.xz) - t.x, p.y); return length (q) - t.y; }
-float sdBox (in vec3 p, in vec3 size, in float r) { return length (max (abs (p) - size, .0)) - r; }
+float udRoundBox (in vec3 p, in vec3 size, in float r) { return length (max (abs (p) - size, .0)) - r; }
 float sdSphere (in vec3 p, float r) { return length (p) - r; }
 vec2 opRepeat2 (inout vec2 p,in vec2 s) {vec2 h=.5*s; vec2 c=floor((p+h)/s); p=mod(p+h,s)-h; return c;}
 
@@ -108,7 +108,7 @@ Result scene (in vec3 p)
 	boxCenter *= rotY (-iTime);
 
 	float sphere = sdSphere (sphereCenter, .6);
-	float box = sdBox (boxCenter, vec3 (.35, .35, .7), .125);
+	float box = udRoundBox (boxCenter, vec3 (.35, .35, .7), .125);
     float d = opCombine (box, sphere, .25);
 	dd = d;
 

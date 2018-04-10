@@ -33,7 +33,7 @@ struct Result {
 };
 
 // basic sdf toolbox
-float sdBox (in vec3 p, in vec3 size, in float r) { return length (max (abs (p) - size+r, .0)) - r; }
+float udRoundBox (in vec3 p, in vec3 size, in float r) { return length (max (abs (p) - size+r, .0)) - r; }
 float sdSphere (in vec3 p, float r) { return length (p) - r; }
 
 // PBR toolbox
@@ -104,10 +104,10 @@ Result scene (in vec3 p)
 	vec3 cutBoxCenter = p;
 	cutBoxCenter.y += 0.04 * cos(10.*p.x) * sin (10.*p.z);
 	cutBoxCenter *= rotY (offsetY) * rotX (offsetX);
-	float cutBox1 = sdBox (cutBoxCenter, vec3 (.4), .05);
-	float cutBox2 = sdBox (cutBoxCenter, vec3 (.42, .35, .35), .05);
-	float cutBox3 = sdBox (cutBoxCenter, vec3 (.35, .42, .35), .05);
-	float cutBox4 = sdBox (cutBoxCenter, vec3 (.35, .35, .42), .05);
+	float cutBox1 = udRoundBox (cutBoxCenter, vec3 (.4), .05);
+	float cutBox2 = udRoundBox (cutBoxCenter, vec3 (.42, .35, .35), .05);
+	float cutBox3 = udRoundBox (cutBoxCenter, vec3 (.35, .42, .35), .05);
+	float cutBox4 = udRoundBox (cutBoxCenter, vec3 (.35, .35, .42), .05);
 
 	float f = opUnion (cutBox2, cutBox3);
 	f = opUnion (f, cutBox4);
@@ -118,7 +118,7 @@ Result scene (in vec3 p)
 	sphere = opSubtract (f, sphere);
 
 	vec3 cubeCenter = p + vec3 (-.5, .0, -.5);
-	float cube = sdBox (cubeCenter, vec3 (.4), .0);
+	float cube = udRoundBox (cubeCenter, vec3 (.4), .0);
 	cube = opSubtract (f, cube);
 
     float d = opUnion (cutBox, sphere);

@@ -17,12 +17,12 @@ out vec4 fragColor;
 
 precision highp float;
 
-float circle (in vec2 p, in float r)
+float sdSphere (in vec2 p, in float r)
 {
     return length (p) - r;
 }
 
-float rectangle (in vec2 p, in vec2 size, in float r)
+float udRoundRect (in vec2 p, in vec2 size, in float r)
 {
     return length (max (abs (p) - size + vec2(r), .0)) - r;
 }
@@ -60,8 +60,8 @@ void main()
     vec2 point1 = uv;
     vec2 point2 = uv + vec2 (mouse);
 
-    float rectangle = rectangle (opRot (point1, 45. * iTime), vec2 (1.25, 2.), .25);
-    float circle = circle (point2, 1.25);
+    float rectangle = udRoundRect (opRot (point1, 45. * iTime), vec2 (1.25, 2.), .25);
+    float circle = sdSphere (point2, 1.25);
     float d = opCombine (rectangle, circle, .75);
 
     float f = fract (d);
