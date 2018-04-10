@@ -16,9 +16,10 @@ int get_cheap_checksum_of (std::shared_ptr<std::string> filename)
     	return 0;
 
     unsigned sum = 0;
+    unsigned i = 0;
     while (!getline (file, line).eof ())
         for (auto c : line)
-            sum += static_cast<int> (c);
+            sum += static_cast<int> (c) * ++i;
 
     return sum;
 }
