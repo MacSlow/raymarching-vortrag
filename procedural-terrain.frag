@@ -66,7 +66,7 @@ float fbm (vec3 p)
 {
 	mat3 m1 = rotZ (1.1);
 	mat3 m2 = rotZ (-1.2);
-	mat3 m3 = rotZ (1.0);
+	mat3 m3 = rotZ (1.3);
 
     float result = .0;
     result = 0.5 * noise3d (p);
@@ -86,15 +86,15 @@ vec3 noise2d (in vec2 p)
     return vec3 (fbm (vec3 (p, .0)));
 }
 
-float mi;
+float material;
 float terrain (in vec3 p)
 {
-    float h = noise2d (.25 * p.xz).x * 1.75;
-    float h2 = noise2d (.5* p.xz).x * .2;
-    mi = .0;
-    float d = p.y - (h*h+h2);
-    float d2 = p.y;
-    if (d2 < d) {d = d2; mi = 1.;}
+    float largeDetail = noise2d (.2 * p.xz).x * 2.;
+    float smallDetail = noise2d (.4 * p.xz).x * .5;
+    material= .0;
+    float d = p.y - (largeDetail * largeDetail + smallDetail);
+    float d2 = p.y - .5;
+    if (d2 < d) {d = d2; material = 1.;}
     return d;
 }
 
@@ -131,7 +131,7 @@ float mshi = 100., mkd=.5;
 float dirlight (in vec3 ld)
 {
 	return mix (
-        (mshi + 8.) * 25. * pow (max (.0, dot (n, normalize (ld - rd))), mshi),
+        mshi * 15. * pow (max (.0, dot (n, normalize (ld - rd))), mshi),
         max (.0, dot (n, ld)) / 3.,
         mkd);
 }
@@ -146,20 +146,22 @@ void main()
     ro = vec3 (.0, 2.75, 1. - iTime);
     rd = normalize (vec3 (uv, -1.));
     float t = .1;
-    float tmax = 20.0;
+    float tmax = 30.0;
     vec3 col = vec3(.0);
     vec3 kc = vec3 (1.);
 
     for (int i = 0; i < 2; ++i) {
 	    float d = trace (ro, rd, t, tmax);
-        if (d > tmax) { col += vec3 (.2, .4, .8); break; }
+		float fog = d / tmax;
+        if (d > tmax) { col += mix (vec3 (.8, .7, .6), vec3 (.2, .4, .8), uv.y*uv.y); break; }
         p = ro + d * rd;
         n = normal (p);
 
         vec3 lPos = vec3 (1.);
 		vec3 lDir = normalize (lPos - p);
-
-        col += kc * dirlight (lPos);
+		vec3 water = vec3 (.05, .1, .2);
+        col += mix (kc * dirlight (lPos), water, material);
+		col = mix (col, vec3 (.075), pow (fog, 2.));
     }
 
     fragColor = vec4 (sqrt (col), 1.);
