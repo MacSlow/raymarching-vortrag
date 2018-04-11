@@ -132,7 +132,7 @@ float dirlight (in vec3 ld)
 {
 	return mix (
         mshi * 15. * pow (max (.0, dot (n, normalize (ld - rd))), mshi),
-        max (.0, dot (n, ld)) / 3.,
+        max (.0, dot (n, ld)) / 4.,
         mkd);
 }
 
@@ -143,7 +143,7 @@ void main()
     uv = uv * 2. - 1.;
     uv.x *= iResolution.x / iResolution.y;
 
-    ro = vec3 (.0, 2.75, 1. - iTime);
+    ro = vec3 (cos(iTime)*2., 3., 1. - iTime);
     rd = normalize (vec3 (uv, -1.));
     float t = .1;
     float tmax = 30.0;
