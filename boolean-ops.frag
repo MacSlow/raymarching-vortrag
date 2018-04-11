@@ -98,12 +98,12 @@ Result scene (in vec3 p)
 {
     float floor = p.y + .75;
 
-	float offsetX = 2. * (iMouse.x / iResolution.x * 2. - 1.);
-	float offsetY = 2. * (iMouse.y / iResolution.y * 2. - 1.);
+	float yaw = -2. * (iMouse.x / iResolution.x * 2. - 1.);
+	float pitch = -2. * (iMouse.y / iResolution.y * 2. - 1.);
 
 	vec3 cutBoxCenter = p;
 	cutBoxCenter.y += 0.04 * cos(10.*p.x) * sin (10.*p.z);
-	cutBoxCenter *= rotY (offsetY) * rotX (offsetX);
+	cutBoxCenter *= rotY (yaw) * rotX (pitch);
 	float cutBox1 = udRoundBox (cutBoxCenter, vec3 (.4), .05);
 	float cutBox2 = udRoundBox (cutBoxCenter, vec3 (.42, .35, .35), .05);
 	float cutBox3 = udRoundBox (cutBoxCenter, vec3 (.35, .42, .35), .05);
