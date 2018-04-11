@@ -16,10 +16,14 @@ out vec4 fragColor;
 
 precision highp float;
 
-float hash (float f)
+mat2 r2d (in float a)
 {
-	return fract (sin (f) * 45785.5453);
+	float c = cos(a);
+	float s = sin (a);
+	return mat2 (vec2 (c, s), vec2 (-s, c));
 }
+
+float hash (float f) { return fract (sin (f) * 45785.5453); }
 
 float noise3d (vec3 p)
 {
@@ -93,7 +97,7 @@ float terrain (in vec3 p)
     float smallDetail = noise2d (.4 * p.xz).x * .5;
     material= .0;
     float d = p.y - (largeDetail * largeDetail + smallDetail);
-    float d2 = p.y - .5;
+    float d2 = p.y - 1.;
     if (d2 < d) {d = d2; material = 1.;}
     return d;
 }
@@ -145,6 +149,7 @@ void main()
 
     ro = vec3 (cos(iTime)*2., 3., 1. - iTime);
     rd = normalize (vec3 (uv, -1.));
+	rd.xz *= r2d (.2*cos(iTime));
     float t = .1;
     float tmax = 30.0;
     vec3 col = vec3(.0);
@@ -153,7 +158,12 @@ void main()
     for (int i = 0; i < 2; ++i) {
 	    float d = trace (ro, rd, t, tmax);
 		float fog = d / tmax;
-        if (d > tmax) { col += mix (vec3 (.8, .7, .6), vec3 (.2, .4, .8), uv.y*uv.y); break; }
+        if (d > tmax) {
+			col += mix (vec3 (.8, .7, .6),
+						vec3 (.2, .4, .8),
+						uv.y*uv.y);
+			break;
+		}
         p = ro + d * rd;
         n = normal (p);
 
