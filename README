@@ -7,8 +7,8 @@ Build-dependencies are modest:
 	* SDL 2.0.5
 	* OpenGL 4.x
 
-Currently on Linux is really a tested target-platform. macOS should work too.
-Windows is still to be worked on. To build the binaries you do the usual...
+Currently Linux is really the only tested target-platform. macOS should work
+too. Windows is still to be worked on. To build the binaries you do the usual...
 
 	1> cd build
 	1> cmake ..
