@@ -56,17 +56,6 @@ float trace (in vec3 ro, in vec3 rd, in float t, in float tmax)
 	return t;
 }
 
-vec3 camera (in vec2 uv, in vec3 ro, in vec3 aim, in float zoom)
-{
-    vec3 camForward = normalize (vec3 (aim - ro));
-    vec3 worldUp = vec3 (.0, 1., .0);
-    vec3 camRight = normalize (cross (camForward, worldUp));
-    vec3 camUp = normalize (cross (camRight, camForward));
-    vec3 camCenter = normalize (ro + camForward * zoom);
-
-    return normalize ((camCenter + uv.x*camRight + uv.y*camUp) - ro);
-}
-
 void main ()
 {
     // normalizing and aspect-correction
@@ -76,11 +65,9 @@ void main ()
     uv.x *= iResolution.x / iResolution.y;
 
     // set up "camera", view origin (ro) and view direction (rd)
-    vec3 ro = vec3 (.0, 2.5, 1. - iTime);
-    vec3 aim = vec3 (0.0, 2.0, 0.0);
-    float zoom = 1.;
-    vec3 rd = camera (uv, ro, aim, zoom);
-	rd = normalize (vec3 (uv, -1.));
+    vec3 ro = vec3 (.9*cos (iTime), 2.5, .9*sin(iTime) + 1. - iTime);
+	vec3 rd = normalize (vec3 (uv, -1.));
+	rd.xy *= r2d (.2*cos(iTime));
 
     float t = .1;
     float tmax = 20.0;
