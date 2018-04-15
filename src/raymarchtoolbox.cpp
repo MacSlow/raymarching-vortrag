@@ -76,7 +76,7 @@ float scene (const vec3& p)
     return res;
 }
 
-float trace (const vec3& ro, const vec3& rd)
+float raymarch (const vec3& ro, const vec3& rd)
 {
     float t = .0;
 
@@ -152,7 +152,8 @@ Color computeColor (const UV& uv,
     vec3 p = vec3 (cuv[X], cuv[Y], .0f); 
     float b1 = sdBall (p - vec3 (2.f*cos (seconds), 2.f*sin (seconds), .0f), 1.25f);
     float b2 = sdBall (p - m, 2.f);
-    float d = smin (b1, b2, .75f);
+    // float d = smin (b1, b2, .75f);
+    float d = min (b1, b2);
 
     float f = fract (d);
 
