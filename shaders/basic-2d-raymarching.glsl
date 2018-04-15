@@ -60,9 +60,10 @@ void main()
     vec2 point1 = uv;
     vec2 point2 = uv + vec2 (mouse);
 
-    float rectangle = udRoundRect (opRot (point1, 45. * iTime), vec2 (1.25, 2.), .25);
+    float rectangle = udRoundRect (opRot (point1, 45. * iTime), vec2 (1.25, 2.), .0);
     float circle = sdSphere (point2, 1.25);
-    float d = opCombine (rectangle, circle, .75);
+    //float d = opCombine (rectangle, circle, .75);
+    float d = min (rectangle, circle);
 
     float f = fract (d);
 

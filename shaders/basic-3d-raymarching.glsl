@@ -104,12 +104,15 @@ Result scene (in vec3 p)
 	float offsetX = -2. * (iMouse.x / iResolution.x * 2. - 1.);
 	float offsetY = -2. * (iMouse.y / iResolution.y * 2. - 1.);
 	sphereCenter -= vec3 (offsetX, .25, offsetY);
+	//sphereCenter.xz = mod (sphereCenter.xz + 1.3, 2.6) - 1.3;
 	boxCenter -= vec3 (.0, .0, 1.25);
 	boxCenter *= rotY (-iTime);
+	//boxCenter.xz = mod (boxCenter.xz + 2., 4.) - 2.;
 
 	float sphere = sdSphere (sphereCenter, .6);
-	float box = udRoundBox (boxCenter, vec3 (.35, .35, .7), .125);
-    float d = opCombine (box, sphere, .25);
+	float box = udRoundBox (boxCenter, vec3 (.35, .35, .7), .0);
+    //float d = opCombine (box, sphere, .25);
+    float d = min (box, sphere);
 	dd = d;
 
     Result res = Result (.0, 0);
@@ -158,21 +161,68 @@ float shadow (in vec3 ro, in vec3 rd)
     return result;
 }
 
-vec3 shade (in vec3 ro, in vec3 rd, in float d, in int id)
+vec3 shadeFlat (in vec3 ro, in vec3 rd, in float d, in int id)
+{
+    vec3 color = (id == 1) ? vec3 (.9) : vec3 (.95, .05, .05);
+    return color;
+}
+
+vec3 shadeLambert (in vec3 ro, in vec3 rd, in float d, in int id)
+{
+    vec3 p = ro + d * rd;
+    vec3 nor = normal (p);
+
+    vec3 lightColor = vec3 (.8, .8, .9) * 20.;
+    vec3 lightPosition = p + vec3 (.5, .75, -1.5);
+    vec3 lightDir = normalize (lightPosition - p);
+    vec3 diffuse = (id == 1) ? vec3 (.9) : vec3 (.95, .05, .05);
+
+    return diffuse * max (dot (nor, lightDir), .0) * lightColor;
+}
+
+vec3 shadeBlinnPhong (in vec3 ro, in vec3 rd, in float d, in int id)
+{
+    vec3 p = ro + d * rd;
+    vec3 nor = normal (p);
+    vec3 lightPosition = p + vec3 (.5, .75, -1.5);
+    vec3 lightDir = normalize (lightPosition - p);
+    vec3 h = (lightDir - rd) / length (lightDir - rd);
+	float specular = pow (max (dot (nor, h), .0), 50.);
+	vec3 specularColor = vec3 (.9)*10.;
+
+	vec3 lambert = shadeLambert (ro, rd, d, id);
+	return lambert + specular * specularColor;
+}
+
+vec3 shadeBlinnPhongShadow (in vec3 ro, in vec3 rd, in float d, in int id)
+{
+    vec3 p = ro + d * rd;
+    vec3 nor = normal (p);
+    vec3 lightPosition = p + vec3 (.5, .75, -1.5);
+    vec3 lightDir = normalize (lightPosition - p);
+	float distanceToLight = distance (lightPosition, p);
+	float distanceToObject = trace (p + .01*nor, lightDir).d;
+	bool isShadowed = distanceToObject < distanceToLight;
+	vec3 blinnPhong = shadeBlinnPhong (ro, rd, d, id);
+
+	return blinnPhong * (isShadowed ? .1 : 1.);
+}
+
+vec3 shadePBR (in vec3 ro, in vec3 rd, in float d, in int id)
 {
     vec3 p = ro + d * rd;
     vec3 nor = normal (p);
 
     // "material" hard-coded for the moment
-    float mask1 = 1.;
+    float mask1 = .5 + .5 * cos (20.* p.x * p.z);
     float mask2 = 0.;
 	float mask = (id == 1) ? mask1 : mask2;
 	float f = fract (dd*2.);
     vec3 albedo1 = vec3 (1. - smoothstep (.025, .0125, f));
     vec3 albedo2 = vec3 (.95, .05, .05);
-    vec3 albedo = (id == 1) ? albedo1 : albedo2 ;
-    float metallic = .0;
-    float roughness = 1.;
+    vec3 albedo = (id == 1) ? albedo1 : albedo2;
+    float metallic  = (id == 1) ? .1 : .9; // mask1;
+    float roughness = (id == 1) ? .9 : .1; //1. - mask1;
     float ao = 1.;
 
     // lights hard-coded as well atm
@@ -256,14 +306,14 @@ void main ()
     // do the ray-march...
     Result res = trace (ro, rd);
     float fog = 1. / (1. + res.d * res.d * .1);
-    vec3 c = shade (ro, rd, res.d, res.id);
-	c *= fog;
+    vec3 c = shadeFlat (ro, rd, res.d, res.id);
 
     // tonemapping, "gamma-correction", tint, vignette
-	c = c / (1. + c);
-    c = .2 * c + .8 * sqrt (c);
-    c *= vec3 (.9, .8, .7);
-    c *= .2 + .8*pow(16.*uvRaw.x*uvRaw.y*(1. - uvRaw.x)*(1. - uvRaw.y), .3);
+	//c *= fog;
+	//c = c / (1. + c);
+    //c = .2 * c + .8 * sqrt (c);
+    //c *= vec3 (.9, .8, .7);
+    //c *= .2 + .8*pow(16.*uvRaw.x*uvRaw.y*(1. - uvRaw.x)*(1. - uvRaw.y), .3);
 
 	fragColor = vec4(c, 1.);
 }
