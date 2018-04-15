@@ -8,6 +8,24 @@ I.) Motiviation
  - erster Teil einer Vortragsreihe über Rendermethoden für's C++-Treffen
  - die Ausrede für SIMD & Parallelisierung (Threadripper/EPYC, Xeon Phi)
 
+Diagramme:
+ - pixel-grid "color a pixel"
+ - raymarching in 2d ("instant" hit)
+ - view-ray creation/camera/viewpoint
+ - raymarching in 3d (marching steps, 2 break-conditions)
+ - (deferred vs forward rendering)
+ - lambert shading
+ - blinn-phong
+ - (pbr)
+ - shadows / reflection
+ - terrain texture-lookup
+ - gamma-correction / tone-mapping / vignette
+ - normal calculation
+ - boolean ops
+ - smin, fOpColumn
+ - domain repetition (and folding) vs for-loops
+ - ball and plane
+
 II.) Grundlagen
  - Ursprung
  - Einordnung im Bereich Rendermethoden (Ray/tracing/marching/casting, Scan)
@@ -32,7 +50,7 @@ II.) Grundlagen
    * Wiederholung "unendliche Geometrien"
    * Verbiegen
  - Beleuchtung: Normalen, Schatten
- - Oberflächen: Shading-Modelle Gouraud, Blinn/Phong, Cook-Torrance, PBR
+ - Oberflächen: Shading-Modelle Gouraud, Lambert, Blinn/Phong, Cook-Torrance/PBR
  - Variation: (Perlin)-Noise für Geometrie und Texturen
  - Boolsche Operationen
    * CSG-like, min/max/not
@@ -51,8 +69,11 @@ III.) Implementation
 
 IV.) Resourcen & weiterführende Literatur
  - wie weit kann man diesen Ansatz treiben? -> Beispiele von iq
- - git-repo
- - John C. Hart
+ - git-repository http://github.com/MacSlow/raymarching-vortrag
+ - "Sphere Tracing: A Geometric Method for the Antialiased Ray Tracing of 
+    Implicit Surfaces" by John C. Hart
+    http://mathinfo.univ-reims.fr/IMG/pdf/hart94sphere.pdf
  - iq/ShaderToy
+ - Kleinert et alhttp://erleuchtet.org/~cupe/permanent/enhanced_sphere_tracing.pdf
 
 V.) Fragen
