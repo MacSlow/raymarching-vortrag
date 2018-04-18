@@ -85,7 +85,7 @@ vec4 gradient (float v) {
 		return d;
 	}
 
-	float trace (in vec3 ro, in vec3 rd, out int iter)
+	float raymarch (in vec3 ro, in vec3 rd, out int iter)
 	{
 	    float t = .0;
 
@@ -146,7 +146,7 @@ vec4 gradient (float v) {
 	    rd.xy *= rot2d (sin (iTime) * .15);
 
 	    int iter = 0;
-	    float d = trace (ro, rd, iter);
+	    float d = raymarch (ro, rd, iter);
 	    float depth = float (iter) / float (MAX_ITER);
 	    vec3 cc = gradient (depth).rgb;
 	    float fog = 1. / (1. + d * d * .1);

@@ -60,7 +60,7 @@
 	    return d;
 	}
 
-	float map (in vec3 p) {
+	float scene (in vec3 p) {
 	    vec3 pBottom = p;
 	    vec3 pTop = p;
 
@@ -109,14 +109,14 @@
 	    return min (metaBalls, min (hexBottom, hexTop));
 	}
 
-	float march (in vec3 ro, in vec3 rd, out int iter) {
+	float raymarch (in vec3 ro, in vec3 rd, out int iter) {
 	    float t = .0;
 	    float d = .0;
 	    iter = 0;
 	    for (int i = 0; i < 64; ++i) {
 	        iter++;
 	        vec3 p = ro + d * rd;
-	        t = map (p);
+	        t = scene (p);
 	        if (t < .0001) break;
 	        d += t*.975;
 	    }
@@ -125,11 +125,11 @@
 	}
 
 	vec3 normal (in vec3 p) {
-		float d = map (p);
+		float d = scene (p);
 	    vec3 e = vec3 (.001, .0, .0);
-	    return normalize (vec3 (map (p + e.xyy) - d,
-	                            map (p + e.yxy) - d,
-	                            map (p + e.yyx) - d));
+	    return normalize (vec3 (scene (p + e.xyy) - d,
+	                            scene (p + e.yxy) - d,
+	                            scene (p + e.yyx) - d));
 	}
 
 	vec3 shade (in vec3 ro, in vec3 p) {
@@ -174,7 +174,7 @@
 	    vec3 rd = camera (uv, ro, aim, zoom);
 
 	    int iter = 0;
-	    float d = march (ro, rd, iter);
+	    float d = raymarch (ro, rd, iter);
 	    vec3 p = ro + d * rd;
 	    
 	    vec3 n = normal (p);

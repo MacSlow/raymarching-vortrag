@@ -16,6 +16,52 @@ out vec4 fragColor;
 
 precision highp float;
 
+void pR45 (inout vec2 p)
+{
+	p = (p + vec2(p.y, -p.x))*sqrt(0.5);
+}
+
+float pMod1 (inout float p, in float size)
+{
+	float halfsize = size*.5;
+	float c = floor ((p + halfsize)/size);
+	p = mod (p + halfsize, size) - halfsize;
+	return c;
+}
+
+float opUnionColumns (in float a, in float b, in float r, in float n)
+{
+	if ((a < r) && (b < r)) {
+		vec2 p = vec2(a, b);
+		float columnradius = r*sqrt(2.)/((n - 1.)*2. + sqrt(2.));
+		pR45 (p);
+		p.x -= sqrt(2.)/2.*r;
+		p.x += columnradius*sqrt(2.);
+		if (mod(n,2.) == 1.) {
+			p.y += columnradius;
+		}
+
+		pMod1 (p.y, columnradius*2.);
+		float result = length(p) - columnradius;
+		result = min (result, p.x);
+		result = min (result, a);
+		return min (result, b);
+	} else {
+		return min (a, b);
+	}
+}
+
+float opUnionChamfer(in float a, in float b, in float r)
+{
+	return min (min (a, b), (a - r + b)*sqrt (.5));
+}
+
+float opUnionSmooth (in float d1, in float d2, in float r)
+{
+    float h = clamp (.5 + .5 * (d2 - d1) / r, .0, 1.);
+    return mix (d2, d1, h) - r * h * (1. - h);
+}
+
 float udBox (in vec3 p, in vec3 size, in float r)
 {
     return length (max (abs (p) - (size -r), .0)) - r;
@@ -62,10 +108,17 @@ float opSubtract (in float a, in float b)
 	return max (-a, b);
 }
 
-float map (in vec3 p)
+float scene (in vec3 p)
 {
     float warp = .2 + .05 * (.5 + .5 * cos (25.*p.y + 8.*iTime));
     float sphere = sdSphere (p, .1 + warp);
+	//vec3 np = p;
+	//np.x = opRepeat1 (np.x, .3);
+	//sphere = length (np.xz) - .05;
+	//sphere = opUnionSmooth (sphere, length (p.zy) - .05, .025);
+	//sphere = opUnionChamfer (sphere, length (p.zy) - .1, .015);
+	//sphere = opUnionColumns (sphere, length (p.zy) - .1, .03, 2.);
+	//sphere = opUnionColumns (sphere, length (p.zy) - .1, .03, 3.);
 
     vec3 p1 = p + vec3 (.355);
     p1 = opRepeat3 (p1, .35);
@@ -76,13 +129,13 @@ float map (in vec3 p)
     return opUnion (sphere, opUnion (-wallBox, opSubtract (cutBox, boxes)));
 }
 
-float march (in vec3 ro, in vec3 rd)
+float raymarch (in vec3 ro, in vec3 rd)
 {
     float t = .0;
     float d = .0;
     for (int i = 0; i < 64; ++i) {
         vec3 p = ro + d * rd;
-        t = map (p);
+        t = scene (p);
         if (t < .0001) break;
         d += t;
     }
@@ -93,9 +146,9 @@ float march (in vec3 ro, in vec3 rd)
 vec3 normal (in vec3 p)
 {
     vec2 e = vec2 (.001, .0);
-    return normalize (vec3 (map (p + e.xyy),
-                            map (p + e.yxy),
-                            map (p + e.yyx)) - map (p));
+    return normalize (vec3 (scene (p + e.xyy),
+                            scene (p + e.yxy),
+                            scene (p + e.yyx)) - scene (p));
 }
 
 vec3 shade (in vec3 ro, in vec3 rd, in float d)
@@ -169,7 +222,7 @@ void main ()
     vec3 rd = camera (uv, ro, aim, zoom);
 
     // primary-/view-ray
-    float d = march (ro, rd);
+    float d = raymarch (ro, rd);
     vec3 p = ro + d * rd;
     vec3 n = normal (p);
     vec3 col = shade (ro, rd, d);
@@ -177,7 +230,7 @@ void main ()
 
     // secondary-/reflection-ray
     vec3 rd2 = normalize (reflect (rd, n));
-    float d2 = march (p+n*0.1, rd2);
+    float d2 = raymarch (p+n*0.1, rd2);
     vec3 p2 = p + d2 * rd2;
     vec3 n2 = normal (p2);
     vec3 col2 = shade (p, rd2, d2);

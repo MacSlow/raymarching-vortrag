@@ -107,11 +107,12 @@ float opBend (inout vec3 p, float deg)
 float displace (vec3 p)
 {
     float result = 1.;
-    result =  sin (2. * p.x) * cos (2. * p.y) * sin (2. * p.z);
+	float factor = 2.;
+    result =  sin (factor * p.x) * cos (factor * p.y) * sin (factor * p.z);
     return result;
 }
 
-vec2 map (vec3 p)
+vec2 scene (vec3 p)
 {
     float dt = .0;
     float dp = .0;
@@ -140,16 +141,16 @@ vec3 normal (vec3 p)
 {
 	vec3 n;
     vec2 e = vec2 (.001, .0);
-	float d = map (p).x;
-    n.x = map (p + e.xyy).x - d;
-    n.y = map (p + e.yxy).x - d;
-    n.z = map (p + e.yyx).x - d;
+	float d = scene (p).x;
+    n.x = scene (p + e.xyy).x - d;
+    n.y = scene (p + e.yxy).x - d;
+    n.z = scene (p + e.yyx).x - d;
     return normalize (n);
 }
 
 const int MAX_STEPS = 80;
 
-vec2 march (vec3 ro, vec3 rd)
+vec2 raymarch (vec3 ro, vec3 rd)
 {
     float pixelSize = 1. / iResolution.x;
     bool forceHit = true;
@@ -162,11 +163,11 @@ vec2 march (vec3 ro, vec3 rd)
     float w = .5;
     float lastd = .0;
     float stepSize = .0;
-    float sign = map (ro).x < .0 ? -1. : 1.;
+    float sign = scene (ro).x < .0 ? -1. : 1.;
 
     for (int i = 0; i < MAX_STEPS; i++)
 	{
-        float signedd = sign * map (ro + rd * t).x;
+        float signedd = sign * scene (ro + rd * t).x;
         float d = abs (signedd);
         bool fail = w > 1. && (d + lastd) < stepSize;
 
@@ -189,7 +190,7 @@ vec2 march (vec3 ro, vec3 rd)
         	break;
 		}
 
-        candidate_error.y = map (ro + rd * t).y;
+        candidate_error.y = scene (ro + rd * t).y;
         candidate.y = candidate_error.y;
 
         t += stepSize;
@@ -207,7 +208,7 @@ float shadow (vec3 ro, vec3 rd)
     float result = 1.;
     float t = .1;
     for (int i = 0; i < 32; i++) {
-        float h = map (ro + t * rd).x;
+        float h = scene (ro + t * rd).x;
         if (h < 0.00001) return .0;
         result = min (result, 8. * h/t);
         t += h;
@@ -241,7 +242,7 @@ void main ()
     vec3 vv = normalize (cross (ww, uu));
     vec3 rd = normalize (p.x * uu + p.y * vv + 1.5 * ww);
 
-    vec2 t = march (ro, rd);
+    vec2 t = raymarch (ro, rd);
 
     vec3 col = vec3 (.8);
     if (t.y > .5) {
