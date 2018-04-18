@@ -22,9 +22,9 @@ Diagramme:
  - gamma-correction / tone-mapping / vignette
  - normal calculation
  - boolean ops
- - smin, fOpColumn
+ - smin/smax, fOpColumn
  - domain repetition (and folding) vs for-loops
- - ball and plane
+ - ball, plane, cylinder, box
 
 II.) Grundlagen
  - Ursprung
