@@ -132,7 +132,7 @@ float sdCylinder (in vec3 p, in vec2 size)
 
 float scene (in vec3 p)
 {
-    vec3 center = (p+vec3(.125, .0, -.2)) * rotY (iTime);
+    vec3 center = (p+vec3(.125, .0, -.2)) * rotY (-iTime);
     float plusSigns = twoPlusSigns (center);
 
     vec3 cCenter = center.yxz + vec3 (.0, .0, -1.);
