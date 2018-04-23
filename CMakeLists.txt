@@ -1,10 +1,12 @@
-cmake_minimum_required (VERSION 3.1.0)
+cmake_minimum_required (VERSION 3.9.0)
 
 project (raymarcher)
 
 set(CMAKE_CXX_STANDARD 14)
 
 set (CMAKE_EXPORT_COMPILE_COMMANDS "ON")
+
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/")
 
 find_package(SDL2 REQUIRED)
 include_directories (include ${SDL2_INCLUDE_DIRS})
@@ -38,8 +40,7 @@ target_link_libraries (raymarcher-nongl
 	-s
 )
 
-include (FindPkgConfig)
-pkg_check_modules (SDL2_IMAGE SDL2_image REQUIRED)
+find_package(SDL2_image REQUIRED)
 include_directories (raymarcher-gl/include ${SDL2_IMAGE_INCLUDE_DIRS})
 add_library (DisplayLib raymarcher-gl/src/display.cpp)
 add_library (OpenGLLib raymarcher-gl/src/opengl.cpp
