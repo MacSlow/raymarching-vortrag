@@ -6,8 +6,7 @@ set(CMAKE_CXX_STANDARD 14)
 
 set (CMAKE_EXPORT_COMPILE_COMMANDS "ON")
 
-include (FindPkgConfig)
-pkg_check_modules (SDL2 sdl2 REQUIRED)
+find_package(SDL2 REQUIRED)
 include_directories (include ${SDL2_INCLUDE_DIRS})
 
 add_compile_options(-DGL_GLEXT_PROTOTYPES)
@@ -29,6 +28,7 @@ add_library (RaymarchingLib src/raymarching.cpp
 	                        src/vec3.cpp)
 
 add_executable (raymarcher-nongl src/main.cpp)
+
 target_link_libraries (raymarcher-nongl
 	ApplicationLib
 	RaymarchingLib
