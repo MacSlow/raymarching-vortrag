@@ -1,5 +1,14 @@
 cmake_minimum_required (VERSION 3.9.0)
 
+# with system libraries (on linux):
+# cmake ..
+#
+# with developer libs:
+# cmake .. -DSDL2_DIR=D:/src/sdl/VC/SDL2-2.0.8 -DSDL2_IMAGE_DIR=D:\src\sdl\VC\SDL2_image-2.0.3
+#
+# On Windows:
+# cmake -D "Visual Studio 15 2017 Win64"
+
 project (raymarcher)
 
 set(CMAKE_CXX_STANDARD 14)
