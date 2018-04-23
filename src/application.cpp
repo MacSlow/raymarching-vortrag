@@ -26,8 +26,6 @@ void Application::initialize ()
 }
 
 Application::Application (size_t width, size_t height)
-    : _initialized (false), _window (NULL), _running (false), _paused (false),
-      _seconds (0), _allFrames (0), _min (0), _avg (0), _max (0)
 {
     initialize ();
 

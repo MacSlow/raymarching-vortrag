@@ -23,7 +23,7 @@ class Application {
   private:
     bool _initialized = false;
     SDL_Window* _window = nullptr;
-    bool _running = true;
+    bool _running = false;
     bool _paused = false;
     std::unique_ptr<Raymarching> _raymarching;
     unsigned _seconds = 0;

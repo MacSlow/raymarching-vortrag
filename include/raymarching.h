@@ -20,8 +20,8 @@ class Raymarching {
     void paint (const SDL_Window* window) const;
 
   private:
-    size_t _width = 0;
-    size_t _height = 0;
+    size_t _width;
+    size_t _height;
     std::chrono::time_point<std::chrono::high_resolution_clock> _startTimeStamp;
     SurfaceBuffer _bufferSurface;
 };
