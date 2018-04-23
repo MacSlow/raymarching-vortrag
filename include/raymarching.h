@@ -3,7 +3,6 @@
 
 #include <SDL.h>
 #include <vector>
-#include <array>
 #include <chrono>
 
 #include "raymarchtoolbox.h"

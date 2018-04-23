@@ -1,6 +1,8 @@
 #ifndef _RAYMARCHING_TOOLBOX_H
 #define _RAYMARCHING_TOOLBOX_H
 
+#include <array>
+
 #include "vec3.h"
 
 using Color = std::array<float, 3>;
