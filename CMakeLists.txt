@@ -11,8 +11,8 @@ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/")
 add_compile_options(-DGL_GLEXT_PROTOTYPES)
 
 if (MSVC)
-    add_compile_options(/W4)
-    message(FATAL_ERROR "TODO: add Visual Studio options.")
+	add_compile_options(/W4)
+    #message(FATAL_ERROR "TODO: add Visual Studio options.")
 elseif ("${CMAKE_CXX_COMPILER_ID}" MATCHES "GNU")
     add_compile_options(-Werror -Wall -pedantic -fno-omit-frame-pointer -Ofast -march=native -pthread -s)
 elseif ("${CMAKE_CXX_COMPILER_ID}" MATCHES "Clang")
@@ -54,7 +54,7 @@ target_link_libraries (raymarcher-gl
 	${OPENGL_LIBRARY} 
 	#-fsanitize=leak,address,undefined
 	${SDL2_LIBRARY}
-	${SDL2IMAGE_LIBRARY}
+	${SDL2_IMAGE_LIBRARIES}
 )
 
 add_custom_target (valgrind
