@@ -16,6 +16,9 @@ out vec4 fragColor;
 
 precision highp float;
 
+const int MAX_ITER = 64;
+const float EPSILON = .001;
+
 void pR45 (inout vec2 p)
 {
 	p = (p + vec2(p.y, -p.x))*sqrt(0.5);
@@ -162,10 +165,10 @@ float raymarch (in vec3 ro, in vec3 rd)
 {
     float t = .0;
     float d = .0;
-    for (int i = 0; i < 64; ++i) {
+    for (int i = 0; i < MAX_ITER; ++i) {
         vec3 p = ro + d * rd;
         t = scene (p);
-        if (t < .0001) break;
+        if (t < EPSILON) break;
         d += t;
     }
 
@@ -174,7 +177,7 @@ float raymarch (in vec3 ro, in vec3 rd)
 
 vec3 normal (in vec3 p)
 {
-    vec2 e = vec2 (.001, .0);
+    const vec2 e = vec2 (EPSILON, .0);
     return normalize (vec3 (scene (p + e.xyy),
                             scene (p + e.yxy),
                             scene (p + e.yyx)) - scene (p));
@@ -183,11 +186,11 @@ vec3 normal (in vec3 p)
 vec3 shade (in vec3 ro, in vec3 rd, in float d)
 {
     vec3 p = ro + d * rd;
-    vec3 ambient = vec3 (.05);
-    vec3 diffuseColor = vec3 (.9, .3, .3);
-    vec3 specularColor = vec3 (.9, .8, .7);
-    float shininess = 40.;
-    float diffuseStrength = .25;
+    const vec3 ambient = vec3 (.05);
+    const vec3 diffuseColor = vec3 (.9, .3, .3);
+    const vec3 specularColor = vec3 (.9, .8, .7);
+    const float shininess = 40.;
+    const float diffuseStrength = .25;
     float t = 3.*iTime;
 
     vec3 n = normal (p);
@@ -198,8 +201,8 @@ vec3 shade (in vec3 ro, in vec3 rd, in float d)
     float diffuse = max (dot (n, lDir), .0)*(1. / lDist)*diffuseStrength;
     float specular = pow (max (dot (hDir, n), .0), shininess);
 
-	vec3 diffuseColor2 = vec3 (.3, .9, .3);
-    vec3 specularColor2 = vec3 (.7, .8, .9);
+	const vec3 diffuseColor2 = vec3 (.3, .9, .3);
+    const vec3 specularColor2 = vec3 (.7, .8, .9);
     vec3 lPos2 = vec3 (.0, sin(t), .75*cos(t));
     float lDist2 = distance (lPos2, p);
     vec3 lDir2 = normalize (lPos2 - p);
@@ -207,8 +210,8 @@ vec3 shade (in vec3 ro, in vec3 rd, in float d)
     float diffuse2 = max (dot (n, lDir2), .0)*(1. / lDist2)*diffuseStrength;
     float specular2 = pow (max (dot (hDir2, n), .0), shininess);
 
-	vec3 diffuseColor3 = vec3 (.3, .3, .9);
-    vec3 specularColor3 = vec3 (.8, .9, .7);
+	const vec3 diffuseColor3 = vec3 (.3, .3, .9);
+    const vec3 specularColor3 = vec3 (.8, .9, .7);
     vec3 lPos3 = vec3 (sin (t), .5*cos(t), -1.);
     float lDist3 = distance (lPos3, p);
     vec3 lDir3 = normalize (lPos3 - p);
@@ -226,7 +229,7 @@ vec3 shade (in vec3 ro, in vec3 rd, in float d)
 vec3 camera (in vec2 uv, in vec3 ro, in vec3 aim, in float zoom)
 {
     vec3 camForward = normalize (vec3 (aim - ro));
-    vec3 worldUp = vec3 (.0, 1., .0);
+    const vec3 worldUp = vec3 (.0, 1., .0);
     vec3 camRight = normalize (cross (worldUp, camForward));
     vec3 camUp = normalize (cross (camForward, camRight));
     vec3 camCenter = ro + camForward * zoom;
@@ -244,10 +247,10 @@ void main ()
 
     // set up "camera", view origin (ro) and view direction (rd)
     float angle = radians (300. + 55. * iTime);
-    float dist = 1.5;
+    const float dist = 1.5;
     vec3 ro = vec3 (dist * cos (angle), cos (iTime), dist * sin (angle));
-    vec3 aim = vec3 (.0);
-    float zoom = 2.5;
+    const vec3 aim = vec3 (.0);
+    const float zoom = 2.5;
     vec3 rd = camera (uv, ro, aim, zoom);
 
     // primary-/view-ray
