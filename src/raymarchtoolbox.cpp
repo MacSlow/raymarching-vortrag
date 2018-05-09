@@ -46,77 +46,9 @@ float smoothstep (float v, float edge0, float edge1) {
     return t * t * (3.f - 2.f * t);
 }
 
-float point3d (const vec3& ro, const vec3& rd, const vec3& p, float r)
-{
-    float d = length (cross (p - ro, rd)) / length (rd);
-    return smoothstep (d, r - EPSILON, r);
-}
-
 float sdBall (const vec3& p, float r)
 {
 	return length (p) - r;
-}
-
-float sdPlane (const vec3& p, float h)
-{
-    return length (vec3 (.0f, p.y() + h, .0f));
-}
-
-float scene (const vec3& p)
-{
-	float res = .0f;
-
-    float floor = sdPlane (p, .6f);
-    float ball = sdBall (vec3 (p.x(), p.y(), p.z()) +
-                         vec3 (-.3f, -.1f, -.1f),
-                         .2f);
-
-    res = min (ball, floor);
-
-    return res;
-}
-
-float raymarch (const vec3& ro, const vec3& rd)
-{
-    float t = .0;
-
-    for (int i = 0; i < MAX_ITER; i++)
-    {
-        vec3 p = ro + rd * t;
-        float d = scene (p);
-        if (d < EPSILON) break;
-        t += d * STEP_SIZE;
-    }
-
-    return t;
-}
-
-vec3 normal (const vec3& p)
-{
-    float d = scene (p);
-    vec3 ex = vec3 (.001f, .0f, .0f);
-    vec3 ey = vec3 (.0f, .001f, .0f);
-    vec3 ez = vec3 (.0f, .0f, .001f);
-
-    return normalize (vec3 (scene  (p + ex) - d,
-                            scene  (p + ey) - d,
-                            scene  (p + ez) - d));
-}
-
-vec3 shade (const vec3& ro, const vec3& rd, float t)
-{
-    vec3 p = ro + rd * t;
-    vec3 n = normal (p);
-    vec3 ref = normalize (reflect (rd, n));
-    float ambient = .2f;
-    vec3 ambColor = vec3 (.15f, .1f, .1f);
-
-    vec3 lightPos = p + vec3 (.4f, .35f, -.5f);
-    vec3 lightDir = normalize (lightPos - p);
-    vec3 diffColor = vec3 (.95f, .85f, .75f);
-    float intensity = max (dot (n, lightDir), .0f);
-
-    return (ambColor*ambient) + (diffColor*intensity);
 }
 
 tuple<vec3, vec3> createCamera (const UV& uv,
@@ -138,9 +70,7 @@ tuple<vec3, vec3> createCamera (const UV& uv,
     return make_tuple (ro, rd);
 }
 
-Color computeColor (const UV& uv,
-                    const Seconds& seconds,
-                    const Resolution& res,
+Color computeColor (const UV& uv, const Seconds& seconds, const Resolution& res,
                     const Mouse& mouse)
 {
     Color color = {{uv[0], uv[1], .0f}};
@@ -152,8 +82,8 @@ Color computeColor (const UV& uv,
     vec3 p = vec3 (cuv[X], cuv[Y], .0f); 
     float b1 = sdBall (p - vec3 (2.f*cos (seconds), 2.f*sin (seconds), .0f), 1.25f);
     float b2 = sdBall (p - m, 2.f);
-    // float d = smin (b1, b2, .75f);
-    float d = min (b1, b2);
+    float d = smin (b1, b2, .75f);
+    // float d = min (b1, b2);
 
     float f = fract (d);
 
