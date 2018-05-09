@@ -34,18 +34,16 @@
 class Display
 {
 	public:
-		Display (const char* shaderfile,
-				 unsigned int width,
-				 unsigned int height,
-				 const char* imagefile0 = nullptr,
-				 const char* imagefile1 = nullptr,
-				 const char* imagefile2 = nullptr,
-				 const char* imagefile3 = nullptr);
-		~Display ();
+      Display (const char* shaderfile, unsigned int width, unsigned int height,
+               unsigned int targetFpsRate, const char* imagefile0 = nullptr,
+               const char* imagefile1 = nullptr,
+               const char* imagefile2 = nullptr,
+               const char* imagefile3 = nullptr);
+      ~Display ();
 
-		bool run ();
+      bool run ();
 
-	private:
+    private:
 		bool init ();
 		bool resize (unsigned int width, unsigned int height);
 		bool update ();		
@@ -54,9 +52,10 @@ class Display
 		bool _maximized;
 		unsigned int _width;
 		unsigned int _height;
-		bool _initialized;
-		SDL_Window* _window;
-		SDL_GLContext _context;
+        unsigned int _targetFpsRate;
+        bool _initialized;
+        SDL_Window* _window;
+        SDL_GLContext _context;
 		bool _running;
 		bool _paused;
 		unsigned int _mouse[2];

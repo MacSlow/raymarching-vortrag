@@ -30,18 +30,18 @@ using std::cout;
 int main (int argc, char const** argv)
 {
 	if (argc == 1) {
-		cout << "Usage: " << argv[0] << " <shader-file> [<width> <height> <texture-file> <texture-file> <texture-file> <texture-file>]\n";
-		return 1;
+        cout << "Usage: " << argv[0]
+             << " <shader-file> [<width> <height> <fps> <texture-file> "
+                "<texture-file> <texture-file> <texture-file>]\n";
+        return 1;
 	}
 
-	Display* display = new Display (argc >= 2 ? argv[1] : nullptr,
-									argc >= 3 ? atoi (argv[2]) : 640,
-									argc >= 4 ? atoi (argv[3]) : 360,
-									argc >= 5 ? argv[4] : nullptr,
-									argc >= 6 ? argv[5] : nullptr,
-									argc >= 7 ? argv[6] : nullptr,
-									argc >= 8 ? argv[7] : nullptr);
-	display->run ();
+    Display* display = new Display (
+        argc >= 2 ? argv[1] : nullptr, argc >= 3 ? atoi (argv[2]) : 640,
+        argc >= 4 ? atoi (argv[3]) : 360, argc >= 5 ? atoi (argv[4]) : 30,
+        argc >= 6 ? argv[5] : nullptr, argc >= 7 ? argv[6] : nullptr,
+        argc >= 8 ? argv[7] : nullptr, argc >= 9 ? argv[8] : nullptr);
+    display->run ();
 	delete display;
 
 	return 0;

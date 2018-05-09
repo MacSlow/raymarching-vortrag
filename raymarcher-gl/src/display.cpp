@@ -62,23 +62,15 @@ bool Display::init ()
     return _initialized;
 }
 
-Display::Display (const char* shaderfile,
-				  unsigned int width,
-				  unsigned int height,
-				  const char* imagefile0,
-				  const char* imagefile1,
-				  const char* imagefile2,
-				  const char* imagefile3) :
-	_maximized (false),
-	_width (width),
-	_height (height),
-	_initialized (false),
-	_window (NULL),
-	_running (false),
-	_paused (false),
-	_mouse {0, 0},
-	_lmbmouse {0, 0},
-	_file_watch_parameters {nullptr, 0}
+Display::Display (const char* shaderfile, unsigned int width,
+                  unsigned int height, unsigned int targetFpsRate,
+                  const char* imagefile0, const char* imagefile1,
+                  const char* imagefile2, const char* imagefile3)
+    : _maximized (false), _width (width), _height (height),
+      _targetFpsRate (targetFpsRate), _initialized (false), _window (NULL),
+      _running (false),
+      _paused (false), _mouse{0, 0}, _lmbmouse{0, 0}, _file_watch_parameters{
+                                                          nullptr, 0}
 {
 	init ();
 
@@ -197,8 +189,8 @@ bool Display::run ()
 		}
 
 		update ();
-		SDL_Delay (1000/60);
-	}
+        SDL_Delay (1000 / _targetFpsRate);
+    }
 
 	return true;
 }
