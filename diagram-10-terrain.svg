@@ -176,9 +176,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="0.70710678"
-     inkscape:cx="906.3529"
-     inkscape:cy="443.80613"
+     inkscape:zoom="0.80222222"
+     inkscape:cx="800"
+     inkscape:cy="450"
      inkscape:document-units="mm"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -198,7 +198,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -499,5 +499,16 @@
          d="M 113.67564,122.86087 C 79.432787,102.86573 14.547506,126.13027 14.218739,201.21059 14.054356,238.75075 13.844859,248.30009 38.345001,269.61049 62.845144,290.92089 157.74989,290.70633 157.52865,276.42023 157.30741,262.13412 143.6841,265.94326 143.6841,265.94326"
          style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.26458332px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;marker-start:url(#marker5372)" />
     </g>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:14.11111069px;line-height:125%;font-family:Ubuntu;-inkscape-font-specification:'Ubuntu, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       x="244.63026"
+       y="84.023613"
+       id="text88"><tspan
+         sodipodi:role="line"
+         id="tspan86"
+         x="244.63026"
+         y="84.023613"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:14.11111069px;font-family:Ubuntu;-inkscape-font-specification:'Ubuntu, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;stroke-width:0.26458332px">&quot;How to raise mountains&quot;</tspan></text>
   </g>
 </svg>

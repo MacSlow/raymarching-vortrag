@@ -33,12 +33,12 @@
      inkscape:snap-nodes="true"
      inkscape:snap-global="true"
      inkscape:zoom="0.80222222"
-     inkscape:cx="881.12951"
+     inkscape:cx="800"
      inkscape:cy="450"
      inkscape:window-x="0"
      inkscape:window-y="24"
      inkscape:window-maximized="1"
-     inkscape:current-layer="g436"
+     inkscape:current-layer="svg1417"
      showguides="true"
      inkscape:guide-bbox="true" />
   <defs
@@ -448,6 +448,17 @@
    style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:6.70877504px;font-family:Ubuntu;-inkscape-font-specification:'Ubuntu, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start"
    id="tspan941">specular</tspan> + Color<tspan
    id="tspan2533-2-3"
-   style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:6.70881128px;font-family:Ubuntu;-inkscape-font-specification:'Ubuntu, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;stroke-width:0.26458335px">diffuse</tspan> </tspan></text>
+   style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:6.70881128px;font-family:Ubuntu;-inkscape-font-specification:'Ubuntu, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;stroke-width:0.26458335px">diffuse</tspan></tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:14.11111164px;line-height:125%;font-family:Ubuntu;-inkscape-font-specification:'Ubuntu, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       x="41.423035"
+       y="35.811478"
+       id="text367"><tspan
+         sodipodi:role="line"
+         id="tspan365"
+         x="41.423035"
+         y="35.811478"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:14.11111164px;font-family:Ubuntu;-inkscape-font-specification:'Ubuntu, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;stroke-width:0.26458332px">Specular Highlights à la Blinn-Phong</tspan></text>
   </g>
 </svg>

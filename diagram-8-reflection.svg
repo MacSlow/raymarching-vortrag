@@ -32,9 +32,9 @@
      inkscape:snap-others="false"
      inkscape:snap-nodes="true"
      inkscape:snap-global="true"
-     inkscape:zoom="0.69244173"
-     inkscape:cx="833.96999"
-     inkscape:cy="445.79285"
+     inkscape:zoom="0.80222222"
+     inkscape:cx="800"
+     inkscape:cy="450"
      inkscape:window-x="0"
      inkscape:window-y="24"
      inkscape:window-maximized="1"
@@ -418,4 +418,15 @@
      id="path1421-0-9"
      inkscape:connector-curvature="0"
      sodipodi:nodetypes="cc" />
+  <text
+     xml:space="preserve"
+     style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:14.11111164px;line-height:125%;font-family:Ubuntu;-inkscape-font-specification:'Ubuntu, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+     x="14.511771"
+     y="24.076349"
+     id="text206"><tspan
+       sodipodi:role="line"
+       id="tspan204"
+       x="14.511771"
+       y="24.076349"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:14.11111164px;font-family:Ubuntu;-inkscape-font-specification:'Ubuntu, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;stroke-width:0.26458332px">Reflexions</tspan></text>
 </svg>
