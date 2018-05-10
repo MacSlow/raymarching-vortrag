@@ -72,7 +72,8 @@ OpenGL::OpenGL (unsigned int width,
 	_iChannel {0, 0, 0, 0},
 	_iDate (0)
 {
-	int success = glewInit ();
+    glewExperimental = GL_TRUE;
+    int success = glewInit ();
 	if (success != GLEW_OK) {
     	std::cout << "OpenGL initialization failed!\n";
 		SDL_ShowSimpleMessageBox (SDL_MESSAGEBOX_ERROR,
