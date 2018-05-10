@@ -27,7 +27,7 @@
 
 using std::cout;
 
-int main (int argc, char const** argv)
+int main (int argc, char* argv[])
 {
 	if (argc == 1) {
         cout << "Usage: " << argv[0]

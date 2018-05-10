@@ -42,7 +42,7 @@
 #include <string>
 
 #include <SDL.h>
-#include <SDL_opengl.h>
+#include <GL/glew.h>
 
 #include "opengl.h"
 #include "shaders.h"
@@ -72,6 +72,14 @@ OpenGL::OpenGL (unsigned int width,
 	_iChannel {0, 0, 0, 0},
 	_iDate (0)
 {
+	int success = glewInit ();
+	if (success != GLEW_OK) {
+    	std::cout << "OpenGL initialization failed!\n";
+		SDL_ShowSimpleMessageBox (SDL_MESSAGEBOX_ERROR,
+								  "Error",
+								  "OpenGL initialization failed!",
+								  NULL);
+	}
 }
 
 OpenGL::~OpenGL ()
