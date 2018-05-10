@@ -1,4 +1,4 @@
-cmake_minimum_required (VERSION 3.9.0)
+cmake_minimum_required (VERSION 3.5.0)
 
 # With System Libraries (on Linux or Windows/MSYS/MinGW):
 # cmake ..
