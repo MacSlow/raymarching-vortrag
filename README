@@ -1,0 +1,41 @@
+This is a temporary repo for preparing the talk about raymarching with C++ and
+OpenGL.
+
+Build-dependencies are:
+
+	* clang++ 4.x or g++ 6.x
+	* SDL 2.0.5
+	* SDL_image 2.0.3
+	* OpenGL 4.x
+	* GLEW 2.1.0
+	* cmake 3.5.x
+
+Currently Linux is the most frequently tested platform. macOS should work
+too. Windows (using MSYS/MinGW) is also supported. Visual-Studio support
+under Windows is being worked on. To build the binaries you do
+the usual...
+
+	1> cd build
+	1> cmake ..
+	1> make -j4
+	1> cd ..
+
+The usage of raymarcher-gl looks like this:
+
+	raymarcher-gl <shader-file> [<width> <height> <fps-rate> <texture-file> <texture-file> <texture-file> <texture-file>]
+
+Example use of the built executables:
+
+	1> build/raymarcher-nongl
+	1> build/raymarcher-gl basic-3d-raymarching.glsl
+	1> build/raymarcher-gl texture-terrain.glsl 720 360 60 data/noise-256x256.png
+
+Interaction - if available (depending on the shader) - allows some viewpoint or
+object/plane manipulation with the mouse. The <SPACE>-key pauses the rendering-loop
+of a program and the <ESC>-key quits a program.
+
+You can live edit any loaded (fragment) shader-file. The raymarcher-gl binary will
+recognize any changes and try to reload/recompile the updated shader. In case of an
+error, it will dump the error-messages from the OpenGL-driver to stdout. Fix or undo
+the error to get a valid graphics-output again.
+
