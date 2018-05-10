@@ -41,6 +41,7 @@ target_link_libraries (raymarcher-nongl
 					   RaymarchingLib
 					   #-fsanitize=leak,address,undefined
 					   ${SDL2_LIBRARIES}
+					   pthread
 					   -s)
 
 include_directories (raymarcher-gl/include
