@@ -5,9 +5,9 @@ Build-dependencies are:
 
 	* clang++ 4.x or g++ 6.x
 	* SDL 2.0.5
-	* SDL_image 2.0.3
+	* SDL_image 2.0.1
 	* OpenGL 4.x
-	* GLEW 2.1.0
+	* GLEW 1.13.0
 	* cmake 3.5.x
 
 Currently Linux is the most frequently tested platform. macOS should work
