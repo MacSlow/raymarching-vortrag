@@ -94,8 +94,8 @@ Color computeColor (const UV& uv, const Seconds& seconds, const Resolution& res,
 		color[2] = c;
     } else {
 		color[0] = .0f;
-		color[1] = .0f;
-		color[2] = 1.0f;
+        color[1] = .5f;
+        color[2] = .0f;
     }
 
     return color;
