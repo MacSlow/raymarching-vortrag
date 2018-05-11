@@ -71,7 +71,7 @@ void main()
     if (d > .0)
         col = vec3 (1. - smoothstep (.025, .0125, f));
     else
-        col = vec3 (1., .0, .0);
+        col = vec3 (.0, .5, .0);
 
     fragColor = vec4(col, 1.);
 }
