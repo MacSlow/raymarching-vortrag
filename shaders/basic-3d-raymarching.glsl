@@ -163,7 +163,7 @@ float shadow (in vec3 ro, in vec3 rd)
 
 vec3 shadeFlat (in vec3 ro, in vec3 rd, in float d, in int id)
 {
-    vec3 color = (id == 1) ? vec3 (.9) : vec3 (.95, .05, .05);
+    vec3 color = (id == 1) ? vec3 (.9) : vec3 (.05, .65, .05);
     return color;
 }
 
@@ -175,7 +175,7 @@ vec3 shadeLambert (in vec3 ro, in vec3 rd, in float d, in int id)
     vec3 lightColor = vec3 (.8, .8, .9) * 20.;
     vec3 lightPosition = p + vec3 (.5, .75, -1.5);
     vec3 lightDir = normalize (lightPosition - p);
-    vec3 diffuse = (id == 1) ? vec3 (.9) : vec3 (.95, .05, .05);
+    vec3 diffuse = (id == 1) ? vec3 (.9) : vec3 (.05, .65, .05);
 
     return diffuse * max (dot (nor, lightDir), .0) * lightColor;
 }
@@ -219,7 +219,7 @@ vec3 shadePBR (in vec3 ro, in vec3 rd, in float d, in int id)
 	float mask = (id == 1) ? mask1 : mask2;
 	float f = fract (dd*2.);
     vec3 albedo1 = vec3 (1. - smoothstep (.025, .0125, f));
-    vec3 albedo2 = vec3 (.95, .05, .05);
+    vec3 albedo2 = vec3 (.05, .65, .05);
     vec3 albedo = (id == 1) ? albedo1 : albedo2;
     float metallic  = (id == 1) ? .1 : .9; // mask1;
     float roughness = (id == 1) ? .9 : .1; //1. - mask1;
