@@ -339,7 +339,8 @@
      inkscape:connector-curvature="0" />
   <g
      id="g5098"
-     transform="rotate(-14.238946,217.64978,79.780632)">
+     transform="rotate(-14.238946,217.64978,79.780632)"
+     style="fill:#008000">
     <rect
        transform="rotate(32.820478)"
        y="-65.891068"
@@ -347,7 +348,7 @@
        height="27.800751"
        width="58.404831"
        id="rect1755"
-       style="opacity:1;fill:#999999;fill-opacity:1;stroke:none;stroke-width:0.52916664;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
+       style="opacity:1;fill:#008000;fill-opacity:1;stroke:none;stroke-width:0.52916664;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
     <path
        d="M 273.01164,57.060995 A 28.275541,28.275541 0 0 1 299.51618,86.993651 28.275541,28.275541 0 0 1 269.59278,113.50863 28.275541,28.275541 0 0 1 243.06735,83.594489 28.275541,28.275541 0 0 1 272.97223,57.058622"
        sodipodi:open="true"
@@ -359,7 +360,7 @@
        sodipodi:cx="271.29236"
        sodipodi:type="arc"
        id="path5062"
-       style="opacity:1;fill:#999999;fill-opacity:1;stroke:none;stroke-width:0.52916664;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
+       style="opacity:1;fill:#008000;fill-opacity:1;stroke:none;stroke-width:0.52916664;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
     <rect
        transform="rotate(62.595071)"
        y="-212.765"
@@ -367,7 +368,7 @@
        height="27.800751"
        width="58.404831"
        id="rect1755-0"
-       style="opacity:1;fill:#999999;fill-opacity:1;stroke:none;stroke-width:0.52916664;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
+       style="opacity:1;fill:#008000;fill-opacity:1;stroke:none;stroke-width:0.52916664;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
     <path
        d="M 253.14237,38.720106 A 28.275541,28.275541 0 0 1 279.6469,68.652762 28.275541,28.275541 0 0 1 249.7235,95.167745 28.275541,28.275541 0 0 1 223.19807,65.2536 28.275541,28.275541 0 0 1 253.10296,38.717733"
        sodipodi:open="true"
@@ -379,7 +380,7 @@
        sodipodi:cx="251.42308"
        sodipodi:type="arc"
        id="path5062-6"
-       style="opacity:1;fill:#999999;fill-opacity:1;stroke:none;stroke-width:0.52916664;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
+       style="opacity:1;fill:#008000;fill-opacity:1;stroke:none;stroke-width:0.52916664;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
   </g>
   <text
      xml:space="preserve"
@@ -428,5 +429,5 @@
        id="tspan204"
        x="14.511771"
        y="24.076349"
-       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:14.11111164px;font-family:Ubuntu;-inkscape-font-specification:'Ubuntu, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;stroke-width:0.26458332px">Reflexions</tspan></text>
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:14.11111164px;font-family:Ubuntu;-inkscape-font-specification:'Ubuntu, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;stroke-width:0.26458332px">Reflections</tspan></text>
 </svg>
