@@ -8,6 +8,56 @@ I.) Motiviation
  - erster Teil einer Vortragsreihe über Rendermethoden für's C++-Treffen
  - die Ausrede für SIMD & Parallelisierung (Threadripper/EPYC, Xeon Phi)
 
+Übersicht
+ - liebe Computergrafik
+ - Detlev hat's gehört
+ - -> kleine Vortragsreihe (hier nun Teil 1)
+
+Motivation
+ - Darstellung (statisch, meist aber interaktiv/animiert) von Objekten (meist 3D)
+ - nicht so bekannt wie typische Polygongrafik (Spiele, Simulationen, CAD)
+ - Vorteile gegeüber verbreiteter Polygongrafik
+   * semantisch sehr kompakte Beschreibung von Objekten (keine Dreiecke)
+   * Darstellung von Objekten für die es kein einfache Diskretisierung gibt
+  
+Geschichte/Entstehung
+ - 1996 von John C. Hart eingeführt mit Paper
+  * "Sphere tracing: a geometric method for the antialiased ray tracing of implicit surfaces"
+
+2D/Signed Distance Field
+ - 2D Szene mit Kreis
+ - C++-Beispiel
+ - mini-DSL
+ - vec3 
+
+Die Sicht der Dinge in 3D
+ - Sichtstrahl Erzeugung
+
+Der Raymarching-Algorithmus
+
+Beleuchtungsmodelle Oberflächen
+ - flat
+ - lambert
+ - blinn-phong
+ - blinn-phong-shadow
+ - pbr (smooth shadows)
+ - repeat space
+
+Licht/Schatten
+ - 
+
+Reflexion
+ - mirror room
+ - spheres/cylinders
+ - div. combine-ops
+
+Landscapes
+ - textured terrain
+ - procedural terrain
+
+Aussicht auf Teil 2
+Fragen
+
 Diagramme:
  - pixel-grid "color a pixel"
  - raymarching in 2d ("instant" hit)
