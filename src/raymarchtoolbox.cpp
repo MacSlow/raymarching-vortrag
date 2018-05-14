@@ -82,8 +82,8 @@ Color computeColor (const UV& uv, const Seconds& seconds, const Resolution& res,
     vec3 p = vec3 (cuv[X], cuv[Y], .0f); 
     float b1 = sdBall (p - vec3 (2.f*cos (seconds), 2.f*sin (seconds), .0f), 1.25f);
     float b2 = sdBall (p - m, 2.f);
-    float d = smin (b1, b2, .75f);
-    // float d = min (b1, b2);
+    // float d = smin (b1, b2, .75f);
+    float d = min (b1, b2);
 
     float f = fract (d);
 
