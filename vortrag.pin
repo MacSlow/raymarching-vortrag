@@ -10,8 +10,12 @@
 [text-align=center]
 [duration=50.0]
 
---- [bg-1.jpg][transition=text-slide-up]
+--- [bg-1.jpg][top][transition=text-slide-up]
 Sphere-Tracing/Ray-Marching in C++
+
+<small><sup>C++ User-Treffen in Aachen, 17. Mai 2018</sup></small>
+
+<small><sup>Mirco Müller, macslow@gmail.com</sup></small>
 # * shaders/mirror-room-c++.glsl
 # * liebe Computergrafik
 # * Detlev hat's gehört
@@ -20,7 +24,7 @@ Sphere-Tracing/Ray-Marching in C++
 Was Euch erwartet
 
 --- [bg-3.jpg][font=Ubuntu Normal 65px][text-align=left]
-# * hier und da sind Demos und Live-coding eingeworfen
+# * hier und da sind Demos und Live-Coding eingeworfen
 ① Motivation
 
 ② Geschichte
@@ -118,6 +122,11 @@ Von der Ebene zur Landschaft
 # * Reflexionen 
 --- [diagram-10-terrain.png]
 # * shaders/texture-terrain.glsl
+# * noch mehr Demos
+# * shaders/3d-metaballs.glsl - Beispiel für komplexere Objekte
+# * shaders/3d-truchet.glsl - Beispiel für unendliche Geometrie und Debug 
+# * shaders/4d-julia.glsl - Overstepping
+# * shaders/jelly.glsl - wenn man es zu weit treibt
 
 --- [bg-15.jpg]
 Zusammenfassung
@@ -137,6 +146,8 @@ Zusammenfassung
 • Reflexionen und Boolsche Operationen
 
 • Erzeugung von Landschaften
+
+• jede Menge Demos
 
 --- [bg-17.jpg]
 Aussicht auf Teil 2
@@ -160,17 +171,24 @@ Eure Aufmerksamkeit!
 
 --- [bg-1.jpg][font=Ubuntu Normal 65px][text-align=left]
 
-① https://github.com/MacSlow/raymarching-vortrag
+① Vortrag, PDF, Sourcen
+https://github.com/MacSlow/raymarching-vortrag
 
-② Buch "Physically Based Rendering"
+② Leseempfehlung: John C. Hart Paper von 1996
+"a geometric method for the antialiased ray tracing of implicit surfaces"
 
-③ iq's Homepage http://www.iquilezles.org
+③ Leseempfehlung: iq's Homepage
+http://www.iquilezles.org
 
-④ John C. Hart 1996 "a geometric method for the antialiased ray tracing of implicit surfaces"
+④ NVScene 2015 Vortrag von cupe
+https://www.youtube.com/watch?v=s8nFqwOho-s
 
-⑤ NVScene 2015 Vortrag von cupe - https://www.youtube.com/watch?v=s8nFqwOho-s
+⑤ Leseempfehlung: Keinert et. al. Paper von 2014
+"Enhanced Sphere Tracing"
+http://erleuchtet.org/~cupe/permanent/enhanced_sphere_tracing.pdf
 
-⑥ Keinert et. al. 2014 "Enhanced Sphere Tracing" http://erleuchtet.org/~cupe/permanent/enhanced_sphere_tracing.pdf
+⑥ Leseempfehlung: Pharr, Jakob, Humphreys - Buch von 2016
+"Physically Based Rendering - From Theory to Implementation"
 
 # ⑦ https://
 # ⑧ https://
