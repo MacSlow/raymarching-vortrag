@@ -1,0 +1,180 @@
+#!/usr/bin/env pinpoint
+
+# Standarteinstellungen
+[center]
+[font=Ubuntu Bold 100px]
+[shading-opacity=0.35]
+[transition=fade]
+[white][text-color=white]
+[fill]
+[text-align=center]
+[duration=50.0]
+
+--- [bg-1.jpg][transition=text-slide-up]
+Sphere-Tracing/Ray-Marching in C++
+# * shaders/mirror-room-c++.glsl
+# * liebe Computergrafik
+# * Detlev hat's gehört
+
+--- [bg-2.jpg]
+Was Euch erwartet
+
+--- [bg-3.jpg][font=Ubuntu Normal 65px][text-align=left]
+# * hier und da sind Demos und Live-coding eingeworfen
+① Motivation
+
+② Geschichte
+
+③ Grundlagen in 2D
+
+④ Schritt nach 3D
+
+⑤ Kernalgorithmus &amp; Objektdefinitionen
+
+⑥ Beleuchtungsmodelle
+
+⑦ Licht &amp; Schatten
+
+⑧ Reflexionen &amp; Boolsche Operationen
+
+⑨ Landschaften
+
+⑩ Zusammenfassung, Aussicht auf Teil 2 &amp; Fragen
+
+--- [bg-4.jpg]
+Motivation
+# * Vorteile bzw. Abgrenzung zu Polygongrafik
+# * Analogie: Raymarching : Polygongrafik -> Vektorgrafik : Rastergrafik
+
+--- [bg-5.jpg]
+Geschichte
+# * Einführung von Sphere Tracing durch John C. Hart 1996 Paper
+
+--- [bg-6.jpg]
+Grundlagen in 2D
+--- [diagram-2-raymarching-2d.png]
+# * Signed Distance Functions
+# * Teilmenge impliziter Funktionen
+# * 2D-only C++-Beispiel raymarcher-nongl
+# * raymarcher-nongl (min vs smin)
+# * mini DSL
+
+--- [bg-7.jpg]
+Schritt nach 3D
+--- [diagram-3-view-ray-creation.png]
+# * Sichtstrahlerzeugung
+
+--- [bg-8.jpg]
+Raymarching-Algorithmus
+--- [diagram-4-raymarching-in-3d.png]
+# * das Arbeitstier, elegant und vielseitig einsetzbar
+
+--- [bg-9.jpg]
+Beispiele für Objekte
+--- [diagram-11-objects.png]
+# * Ebene
+# * Kugel
+# * (unendlicher) Zylinder
+# * Würfel/Quader
+# * shaders/basic-3d-raymarching.glsl
+# * (shaders/basic-objects.glsl)
+
+--- [bg-10.jpg]
+Beleuchtungsmodelle
+--- [diagram-5-lambert-shading.png]
+# * Johann Heinrich Lambert, schweizer Mathematiker , 1726 - 1777
+# * ok, aber nicht wirklich komplett in physikalischer Realität verankert
+# * shaders/basic-3d-raymarching.glsl
+--- [diagram-6-blinn-phong-shading.png]
+# * Bùi Tường Phong, Jim Blinn, ca. 1975-1977
+# * "mit Glanzlichtern sieht es bestimmt viel besser aus" ;)
+# * shaders/basic-3d-raymarching.glsl
+# * state-of-the-art ist PBR
+# * PBR führe ich nicht ein (zu komplex -> eigener Vortrag)
+# * aber zeigen möchte ich es trotzdem
+
+--- [bg-11.jpg]
+Mehr Schatten als Licht
+--- [diagram-7-shadows.png]
+# * generische Natur vom Algorithmus erlaubt 
+# * vergleichbar mit Raytracing
+# * shaders/basic-3d-raymarching.glsl
+
+--- [bg-12.jpg]
+Spieglein, Spieglein an der Wand
+--- [diagram-8-reflection.png]
+# * Reflexionen 
+# * shaders/mirror-room.glsl
+# * etwas mit Geometrie und Operatoren herumspielen
+
+--- [bg-13.jpg]
+Boolsche Operationen
+--- [diagram-9-booleans.png]
+# * komplexere Objekte bauen
+# * shaders/boolean-ops.glsl
+
+--- [bg-14.jpg]
+Von der Ebene zur Landschaft
+# * Reflexionen 
+--- [diagram-10-terrain.png]
+# * shaders/texture-terrain.glsl
+
+--- [bg-15.jpg]
+Zusammenfassung
+--- [bg-16.jpg][font=Ubuntu Normal 65px][text-align=left]
+• Geschichte - 1996 von John C. Hart eingeführt
+
+• Grundlagen in 2D - Signed Distance Functions
+
+• Schritt nach 3D - matrizenlose 3D-Projektion
+
+• Raymarching-Algorithmus
+
+• Beleuchtungsmodelle - Lambert, Blinn-Phong, PBR
+
+• wie man an Schatten kommt
+
+• Reflexionen und Boolsche Operationen
+
+• Erzeugung von Landschaften
+
+--- [bg-17.jpg]
+Aussicht auf Teil 2
+# * mehr über Operatoren
+# * Krümmung/Faltung/Wiederholung vom Raum
+# * volumetrische Effekte: z.B. Wolken
+# * Kontaktschatten/Ambient Occlusion
+# * Tiefenunschärfe/Depth-of-field
+# * Überstrahlung/Bloom
+# * AA-Strategien
+# * Bau von sehr komplexeren Objekten
+# * bessere Materialien (Holz, Leder, Marmor, Blech, Plastik...)
+# * spezielle Wünsche?
+
+--- [bg-18.jpg]
+Gibt's Fragen?
+
+--- [bg-19.jpg]
+Besten Dank für
+Eure Aufmerksamkeit!
+
+--- [bg-1.jpg][font=Ubuntu Normal 65px][text-align=left]
+
+① https://github.com/MacSlow/raymarching-vortrag
+
+② Buch "Physically Based Rendering"
+
+③ iq's Homepage http://www.iquilezles.org
+
+④ John C. Hart 1996 "a geometric method for the antialiased ray tracing of implicit surfaces"
+
+⑤ NVScene 2015 Vortrag von cupe - https://www.youtube.com/watch?v=s8nFqwOho-s
+
+⑥ Keinert et. al. 2014 "Enhanced Sphere Tracing" http://erleuchtet.org/~cupe/permanent/enhanced_sphere_tracing.pdf
+
+# ⑦ https://
+# ⑧ https://
+# ⑨ http://
+# ⑩ http://
+# ⑪ https://
+
