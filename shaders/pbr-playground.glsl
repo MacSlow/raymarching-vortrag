@@ -156,7 +156,7 @@
 	    return res;
 	}
 
-	Result trace (in vec3 ro, in vec3 rd)
+	Result raymarch (in vec3 ro, in vec3 rd)
 	{
 	    Result res = Result (.0, 0);
 
@@ -314,7 +314,7 @@
 	    rd.xz *= r2d (cos (iTime) * .2);
 
 	    // do the ray-march...
-	    Result res = trace (ro, rd);
+	    Result res = raymarch (ro, rd);
 	    float fog = 1. / (1. + res.d * res.d * .1);
 	    vec3 c = shadePBR (ro, rd, res.d, res.id);
 
