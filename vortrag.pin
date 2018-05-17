@@ -10,7 +10,7 @@
 [text-align=center]
 [duration=50.0]
 
---- [bg-1.jpg][top][transition=text-slide-up]
+--- [bg-1.jpg][top][command=./demo-0.sh][transition=text-slide-up]
 Sphere-Tracing/Ray-Marching in C++
 
 <small><sup>C++ User-Treffen in Aachen, 17. Mai 2018</sup></small>
@@ -63,6 +63,9 @@ Grundlagen in 2D
 # * raymarcher-nongl (min vs smin)
 # * mini DSL
 
+--- [bg-6.jpg][command=./demo-1.sh]
+Demo
+
 --- [bg-7.jpg]
 Schritt nach 3D
 --- [diagram-3-view-ray-creation.png]
@@ -82,6 +85,9 @@ Beispiele für Objekte
 # * Würfel/Quader
 # * shaders/basic-3d-raymarching.glsl
 # * (shaders/basic-objects.glsl)
+
+--- [bg-9.jpg][command=./demo-2.sh]
+Demo
 
 --- [bg-10.jpg]
 Beleuchtungsmodelle
@@ -111,22 +117,32 @@ Spieglein, Spieglein an der Wand
 # * shaders/mirror-room.glsl
 # * etwas mit Geometrie und Operatoren herumspielen
 
+--- [bg-12.jpg][command=./demo-3.sh]
+Demo
+
 --- [bg-13.jpg]
 Boolsche Operationen
 --- [diagram-9-booleans.png]
 # * komplexere Objekte bauen
 # * shaders/boolean-ops.glsl
 
+--- [bg-13.jpg][command=./demo-4.sh]
+Demo
+
 --- [bg-14.jpg]
 Von der Ebene zur Landschaft
 # * Reflexionen 
 --- [diagram-10-terrain.png]
 # * shaders/texture-terrain.glsl
+--- [bg-14.jpg][command=./demo-5.sh]
+Demo
+
 # * noch mehr Demos
 # * shaders/3d-metaballs.glsl - Beispiel für komplexere Objekte
 # * shaders/3d-truchet.glsl - Beispiel für unendliche Geometrie und Debug 
 # * shaders/4d-julia.glsl - Overstepping
 # * shaders/jelly.glsl - wenn man es zu weit treibt
+# * shaders/warping-gyroid.glsl - jecke Geometrie
 
 --- [bg-15.jpg]
 Zusammenfassung
