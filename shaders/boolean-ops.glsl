@@ -94,8 +94,27 @@ float opIntersect (in float d1, in float d2)
     return max (d1, d2);
 }
 
+float slideExample (in vec3 p)
+{
+	float sphereA = sdSphere (p + vec3 (.15, .0, .0), .3);
+	float sphereB = sdSphere (p + vec3 (-.15, .0, .0), .3);
+
+	float sphereC = sdSphere (p + vec3 (.15 + 1.35, .0, .0), .3);
+	float sphereD = sdSphere (p + vec3 (-.15 + 1.35, .0, .0), .3);
+
+	float sphereE = sdSphere (p + vec3 (.15 + 2., .0, .0), .3);
+	float sphereF = sdSphere (p + vec3 (-.15 + 2., .0, .0), .3);
+
+	float sphereUnion = min (sphereA, sphereB);
+	float spheresSubtraction = max (-sphereC, sphereD);
+	float spheresIntersection = max (sphereE, sphereF);
+
+	return min (sphereUnion, min (spheresSubtraction, spheresIntersection));
+}
+
 Result scene (in vec3 p)
 {
+	p = p + vec3 (.0, .0, -.25);
     float floor = p.y + .75;
 
 	float yaw = -2. * (iMouse.x / iResolution.x * 2. - 1.);
@@ -115,6 +134,9 @@ Result scene (in vec3 p)
 
 	vec3 sphereCenter = p + vec3 (.5, .0, -.5);
 	float sphere = sdSphere (sphereCenter, .5);
+	vec3 exampleCenter = p + vec3 (-.75, -1.25, -.5);
+	exampleCenter.xz *= r2d (radians (35.));
+	sphere = min (sphere, slideExample (exampleCenter));
 	sphere = opSubtract (f, sphere);
 
 	vec3 cubeCenter = p + vec3 (-.5, .0, -.5);
@@ -126,10 +148,11 @@ Result scene (in vec3 p)
     Result res = Result (.0, 0);
 	res.d = opUnion (d, floor);
     res.id = (res.d == floor ) ? 1 : 2;
+
     return res;
 }
 
-Result trace (in vec3 ro, in vec3 rd)
+Result raymarch (in vec3 ro, in vec3 rd)
 {
     Result res = Result (.0, 0);
 
@@ -178,7 +201,7 @@ vec3 shade (in vec3 ro, in vec3 rd, in float d, in int id)
     float mask2 = 0.;
 	float mask = (id == 1) ? mask1 : mask2;
     vec3 albedo1 = vec3 (.9, .4, .2);
-    vec3 albedo2 = vec3 (.05, .25, .95);
+    vec3 albedo2 = vec3 (.05, .65, .05);
     vec3 albedo = (id == 1) ? albedo1 : albedo2 ;
     float metallic = .0;
     float roughness = 1.;
@@ -259,11 +282,11 @@ void main ()
     // set up "camera", view origin (ro) and view direction (rd)
     vec3 ro = vec3 (0.0, 2.0, -5.0);
     vec3 aim = vec3 (0.0, 2.0, 0.0);
-    float zoom = 1.;
+    float zoom = 3.;
     vec3 rd = camera (uv, ro, aim, zoom);
 
     // do the ray-march...
-    Result res = trace (ro, rd);
+    Result res = raymarch (ro, rd);
     float fog = 1. / (1. + res.d * res.d * .1);
     vec3 c = shade (ro, rd, res.d, res.id);
 	c *= fog;
