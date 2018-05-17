@@ -111,7 +111,7 @@ vec3 normal (in vec3 p)
                             terrain (p + e.yyx)) - terrain (p));
 }
 
-float trace (in vec3 ro, in vec3 rd, in float t, in float tmax)
+float raymarch (in vec3 ro, in vec3 rd, in float t, in float tmax)
 {
     float d = t;
     for (int i = 0; i < 64; ++i) {
@@ -156,7 +156,7 @@ void main()
     vec3 kc = vec3 (1.);
 
     for (int i = 0; i < 2; ++i) {
-	    float d = trace (ro, rd, t, tmax);
+	    float d = raymarch (ro, rd, t, tmax);
 		float fog = d / tmax;
         if (d > tmax) {
 			col += mix (vec3 (.8, .7, .6),
