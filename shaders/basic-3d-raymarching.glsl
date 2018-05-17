@@ -121,7 +121,7 @@ Result scene (in vec3 p)
     return res;
 }
 
-Result trace (in vec3 ro, in vec3 rd)
+Result raymarch (in vec3 ro, in vec3 rd)
 {
     Result res = Result (.0, 0);
 
@@ -201,7 +201,7 @@ vec3 shadeBlinnPhongShadow (in vec3 ro, in vec3 rd, in float d, in int id)
     vec3 lightPosition = p + vec3 (.5, .75, -1.5);
     vec3 lightDir = normalize (lightPosition - p);
 	float distanceToLight = distance (lightPosition, p);
-	float distanceToObject = trace (p + .01*nor, lightDir).d;
+	float distanceToObject = raymarch (p + .01*nor, lightDir).d;
 	bool isShadowed = distanceToObject < distanceToLight;
 	vec3 blinnPhong = shadeBlinnPhong (ro, rd, d, id);
 
@@ -304,7 +304,7 @@ void main ()
     vec3 rd = camera (uv, ro, aim, zoom);
 
     // do the ray-march...
-    Result res = trace (ro, rd);
+    Result res = raymarch (ro, rd);
     float fog = 1. / (1. + res.d * res.d * .1);
     vec3 c = shadeFlat (ro, rd, res.d, res.id);
 
