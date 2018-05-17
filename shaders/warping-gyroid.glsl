@@ -213,11 +213,11 @@ float shadow (vec3 ro, vec3 rd)
 {
     float result = 1.;
     float t = .1;
-    for (int i = 0; i < 32; i++) {
+    for (int i = 0; i < 64; i++) {
         float h = scene (ro + t * rd).x;
         if (h < .00001) return .0;
-        result = min (result, 8. * h/t);
-        t += h;
+        result = min (result, 4. * h/t);
+        t += h*.5;
     }
 
     return result;
