@@ -45,7 +45,7 @@ vec3 normal (in vec3 p)
                             scene (p + e.yyx)) - scene (p));
 }
 
-float trace (in vec3 ro, in vec3 rd, in float t, in float tmax)
+float raymarch (in vec3 ro, in vec3 rd, in float t, in float tmax)
 {
     float d = t;
     for (int i = 0; i < 99; ++i) {
@@ -71,7 +71,7 @@ void main ()
 
     float t = .1;
     float tmax = 20.0;
-    float d = trace (ro, rd, t, tmax);
+    float d = raymarch (ro, rd, t, tmax);
     vec3 c = vec3 (.0);
     vec3 n = normal (ro + d * rd);
     //c = vec3 (n);
