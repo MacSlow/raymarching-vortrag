@@ -16,15 +16,11 @@ Sphere-Tracing/Ray-Marching in C++
 <small><sup>C++ User-Treffen in Aachen, 17. Mai 2018</sup></small>
 
 <small><sup>Mirco Müller, macslow@gmail.com</sup></small>
-# * shaders/mirror-room-c++.glsl
-# * liebe Computergrafik
-# * Detlev hat's gehört
 
 --- [bg-2.jpg]
 Was Euch erwartet
 
 --- [bg-3.jpg][font=Ubuntu Normal 65px][text-align=left]
-# * hier und da sind Demos und Live-Coding eingeworfen
 ① Motivation
 
 ② Geschichte
@@ -60,8 +56,6 @@ Grundlagen in 2D
 # * Signed Distance Functions
 # * Teilmenge impliziter Funktionen
 # * 2D-only C++-Beispiel raymarcher-nongl
-# * raymarcher-nongl (min vs smin)
-# * mini DSL
 
 --- [bg-6.jpg][command=./demo-1.sh]
 Demo
@@ -69,22 +63,14 @@ Demo
 --- [bg-7.jpg]
 Schritt nach 3D
 --- [diagram-3-view-ray-creation.png]
-# * Sichtstrahlerzeugung
 
 --- [bg-8.jpg]
 Raymarching-Algorithmus
 --- [diagram-4-raymarching-in-3d.png]
-# * das Arbeitstier, elegant und vielseitig einsetzbar
 
 --- [bg-9.jpg]
 Beispiele für Objekte
 --- [diagram-11-objects.png]
-# * Ebene
-# * Kugel
-# * (unendlicher) Zylinder
-# * Würfel/Quader
-# * shaders/basic-3d-raymarching.glsl
-# * (shaders/basic-objects.glsl)
 
 --- [bg-9.jpg][command=./demo-2.sh]
 Demo
@@ -94,28 +80,19 @@ Beleuchtungsmodelle
 --- [diagram-5-lambert-shading.png]
 # * Johann Heinrich Lambert, schweizer Mathematiker , 1726 - 1777
 # * ok, aber nicht wirklich komplett in physikalischer Realität verankert
-# * shaders/basic-3d-raymarching.glsl
 --- [diagram-6-blinn-phong-shading.png]
 # * Bùi Tường Phong, Jim Blinn, ca. 1975-1977
-# * "mit Glanzlichtern sieht es bestimmt viel besser aus" ;)
-# * shaders/basic-3d-raymarching.glsl
-# * state-of-the-art ist PBR
-# * PBR führe ich nicht ein (zu komplex -> eigener Vortrag)
-# * aber zeigen möchte ich es trotzdem
+# * state-of-the-art ist aber PBR
+# * PBR zu komplex -> eigener Vortrag
+# * trotzdem zumindest demonstrieren
 
 --- [bg-11.jpg]
 Mehr Schatten als Licht
 --- [diagram-7-shadows.png]
-# * generische Natur vom Algorithmus erlaubt 
-# * vergleichbar mit Raytracing
-# * shaders/basic-3d-raymarching.glsl
 
 --- [bg-12.jpg]
 Spieglein, Spieglein an der Wand
 --- [diagram-8-reflection.png]
-# * Reflexionen 
-# * shaders/mirror-room.glsl
-# * etwas mit Geometrie und Operatoren herumspielen
 
 --- [bg-12.jpg][command=./demo-3.sh]
 Demo
@@ -123,26 +100,15 @@ Demo
 --- [bg-13.jpg]
 Boolsche Operationen
 --- [diagram-9-booleans.png]
-# * komplexere Objekte bauen
-# * shaders/boolean-ops.glsl
 
 --- [bg-13.jpg][command=./demo-4.sh]
 Demo
 
 --- [bg-14.jpg]
 Von der Ebene zur Landschaft
-# * Reflexionen 
 --- [diagram-10-terrain.png]
-# * shaders/texture-terrain.glsl
 --- [bg-14.jpg][command=./demo-5.sh]
 Demo
-
-# * noch mehr Demos
-# * shaders/3d-metaballs.glsl - Beispiel für komplexere Objekte
-# * shaders/3d-truchet.glsl - Beispiel für unendliche Geometrie und Debug 
-# * shaders/4d-julia.glsl - Overstepping
-# * shaders/jelly.glsl - wenn man es zu weit treibt
-# * shaders/warping-gyroid.glsl - jecke Geometrie
 
 --- [bg-15.jpg]
 Zusammenfassung
@@ -205,10 +171,4 @@ http://erleuchtet.org/~cupe/permanent/enhanced_sphere_tracing.pdf
 
 ⑥ Leseempfehlung: Pharr, Jakob, Humphreys - Buch von 2016
 "Physically Based Rendering - From Theory to Implementation"
-
-# ⑦ https://
-# ⑧ https://
-# ⑨ http://
-# ⑩ http://
-# ⑪ https://
 
