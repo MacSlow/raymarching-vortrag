@@ -5,6 +5,8 @@ uniform vec4 iMouse;
 in vec2 fragCoord;
 out vec4 fragColor;
 
+const float EPSILON = .0001;
+
 float hash (float f)
 {
 	return fract (sin (f) * 45734.5453);
@@ -141,10 +143,10 @@ vec2 scene (vec3 p)
 	return d1;
 }
 
-vec3 normal (vec3 p)
+vec3 normal (vec3 p, float epsilon)
 {
 	vec3 n;
-    vec2 e = vec2 (.0001, .0);
+    vec2 e = vec2 (epsilon, .0);
 	float d = scene (p).x;
     n.x = scene (p + e.xyy).x - d;
     n.y = scene (p + e.yxy).x - d;
@@ -253,7 +255,7 @@ void main ()
     vec3 col = vec3 (.8);
     if (t.y > .5) {
         vec3 pos = ro + t.x * rd;
-        vec3 nor = normal (pos);
+        vec3 nor = normal (pos, t.x*EPSILON);
         vec3 lig = normalize (vec3 (1., .8, .6));
         vec3 blig = normalize (vec3 (-lig.x, lig.y, -lig.z));
         vec3 ref = normalize (reflect (rd, nor));
@@ -275,7 +277,7 @@ void main ()
         if (t.y == 2.) {
             col *= floorMaterial (pos, nor);
         } else if (t.y == 3.) {
-            col *= vec3 (.0, .2, .8);
+            col *= vec3 (.9, .4, .0);
         }
 
         col += .6 * rim * amb;

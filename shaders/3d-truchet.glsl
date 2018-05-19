@@ -18,7 +18,7 @@ precision highp float;
 
 const int MAX_ITER    = 128;
 const float STEP_SIZE = .95;
-const float EPSILON   = .001;
+const float EPSILON   = .0002;
 const vec4 red     = vec4 (1.0, 0.0, 0.0, 1.0);
 const vec4 green   = vec4 (0.0, 1.0, 0.0, 1.0);
 const vec4 blue    = vec4 (0.0, 0.0, 1.0, 1.0);
@@ -101,9 +101,9 @@ vec4 gradient (float v) {
 	    return t;
 	}
 
-	vec3 normal (in vec3 p)
+	vec3 normal (in vec3 p, in float epsilon)
 	{
-	    vec3 e = vec3(.0001, .0, .0);
+	    vec3 e = vec3(epsilon, .0, .0);
 	    float d = scene (p);
 	    vec3 n = vec3 (scene (p + e.xyy) - d,
 	                   scene (p + e.yxy) - d,
@@ -123,7 +123,7 @@ vec4 gradient (float v) {
 
 	    vec3 lightPos = p + vec3 (cos (iTime) * .5, .5, sin (iTime) * .5);
 	    vec3 lightDir = normalize (vec3 (lightPos - p));
-	    vec3 nor = normal (p);
+	    vec3 nor = normal (p, d*EPSILON);
 	    vec3 ref = normalize (reflect (rd, nor));
 
 	    float diffuse = max (dot (lightDir, nor), .0);

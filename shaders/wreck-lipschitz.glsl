@@ -16,6 +16,8 @@ out vec4 fragColor;
 
 precision highp float;
 
+const float EPSILON = .0002;
+
 float udBox (in vec3 p, in vec3 size, in float r)
 {
     return length (max (abs (p) - (size -r), .0)) - r;
@@ -114,16 +116,16 @@ float raymarch (in vec3 ro, in vec3 rd)
     for (int i = 0; i < 96; ++i) {
         vec3 p = ro + d * rd;
         t = scene (p);
-        if (abs(t) < .001*(1. + .125*t)) break;
+        if (abs(t) < EPSILON*(1. + .125*t)) break;
         d += t * .5;
     }
 
     return d;
 }
 
-vec3 normal (in vec3 p)
+vec3 normal (in vec3 p, in float epsilon)
 {
-    vec2 e = vec2 (.0002, .0);
+    vec2 e = vec2 (epsilon, .0);
     return normalize (vec3 (scene (p + e.xyy),
                             scene (p + e.yxy),
                             scene (p + e.yyx)) - scene (p));
@@ -139,7 +141,7 @@ vec3 shade (in vec3 ro, in vec3 rd, in float d)
     float diffuseStrength = .25;
     float t = 3.*iTime;
 
-    vec3 n = normal (p);
+    vec3 n = normal (p, d*EPSILON);
     vec3 lPos = 1.5 * vec3 (cos (t), 1., sin (t));
     float lDist = distance (lPos, p);
     vec3 lDir = normalize (lPos - p);
@@ -201,7 +203,7 @@ void main ()
     // primary-/view-ray
     float d = raymarch (ro, rd);
     vec3 p = ro + d * rd;
-    vec3 n = normal (p);
+    vec3 n = normal (p, d*EPSILON);
     vec3 col = shade (ro, rd, d);
     col = mix (col, vec3 (.95, .85, .7), pow (1. - 1. / d, 10.));
 
@@ -209,7 +211,7 @@ void main ()
     vec3 rd2 = normalize (reflect (rd, n));
     float d2 = raymarch (p + n*.001, rd2);
     vec3 p2 = p + d2 * rd2;
-    vec3 n2 = normal (p2);
+    vec3 n2 = normal (p2, EPSILON);
     vec3 col2 = shade (p, rd2, d2);
     col += (.1 + .05*(.5 + .5 * cos (5.*iTime))) * col2;
 
@@ -217,7 +219,7 @@ void main ()
     vec3 rd3 = normalize (reflect (rd2, n2));
     float d3 = raymarch (p2 + n2*.001, rd3);
     vec3 p3 = p2 + d3 * rd3;
-    vec3 n3 = normal (p3);
+    vec3 n3 = normal (p3, EPSILON);
     vec3 col3 = shade (p, rd3, d3);
     col += (.05 + .025*(.5 + .5 * cos (5.*iTime))) * col3;
 
