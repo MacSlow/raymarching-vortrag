@@ -135,8 +135,8 @@ vec3 shade (in vec3 ro, in vec3 rd, in float d)
     vec3 ambient = vec3 (.05);
     vec3 diffuseColor = vec3 (.9, .3, .3);
     vec3 specularColor = vec3 (.9, .8, .7);
-    float shininess = 40.;
-    float diffuseStrength = .25;
+    float shininess = 70.;
+    float diffuseStrength = .5;
     float t = 3.*iTime;
 
     vec3 n = normal (p);
@@ -200,6 +200,7 @@ void main ()
 
     // primary-/view-ray
     float d = raymarch (ro, rd);
+	float fog = 1. / (1. + d*d*.07);
     vec3 p = ro + d * rd;
     vec3 n = normal (p);
     vec3 col = shade (ro, rd, d);
@@ -221,7 +222,8 @@ void main ()
     vec3 col3 = shade (p, rd3, d3);
     col += (.05 + .025*(.5 + .5 * cos (5.*iTime))) * col3;
 
-    // tint, tone-mapping, gamma-correction, vingette
+    // fog, tint, tone-mapping, gamma-correction, vingette
+    col *= fog;
     col *= vec3 (.85, .9, .95);
     col = col / (.85 + col);
     col = .1 * col + .9 * sqrt (col);

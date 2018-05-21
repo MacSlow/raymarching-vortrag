@@ -249,6 +249,7 @@ void main ()
     vec3 rd = normalize (p.x * uu + p.y * vv + 1.5 * ww);
 
     vec2 t = raymarch (ro, rd);
+	float fog = 1. / (1. + t.x*t.x*.001);
 
     vec3 col = vec3 (.8);
     if (t.y > .5) {
@@ -275,14 +276,15 @@ void main ()
         if (t.y == 2.) {
             col *= floorMaterial (pos, nor);
         } else if (t.y == 3.) {
-            col *= vec3 (.0, .2, .8);
+            col *= vec3 (.95, .65, .1);
         }
 
         col += .6 * rim * amb;
         col += .6 * spe * sha * amb;
     }
 
-    // gamma-correction, tint, vignette
+    // fog, tone-mapping, tint, gamma-correction, vignette
+	col *= fog;
 	col = col / (.85 + col);
     col *= vec3 (.95, .9, .85);
     col = .2 * col + .8 * sqrt (col);
