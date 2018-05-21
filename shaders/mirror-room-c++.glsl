@@ -16,8 +16,8 @@ out vec4 fragColor;
 
 precision highp float;
 
-const int MAX_ITER = 64;
-const float EPSILON = .001;
+const int MAX_ITER = 96;
+const float EPSILON = .0002;
 
 void pR45 (inout vec2 p)
 {
@@ -168,16 +168,17 @@ float raymarch (in vec3 ro, in vec3 rd)
     for (int i = 0; i < MAX_ITER; ++i) {
         vec3 p = ro + d * rd;
         t = scene (p);
-        if (t < EPSILON) break;
-        d += t;
+        //if (t < EPSILON) break;
+        if (abs(t) < EPSILON*(1. + .125*t)) break;
+        d += t*.5;
     }
 
     return d;
 }
 
-vec3 normal (in vec3 p)
+vec3 normal (in vec3 p, in float epsilon)
 {
-    const vec2 e = vec2 (EPSILON, .0);
+    const vec2 e = vec2 (epsilon, .0);
     return normalize (vec3 (scene (p + e.xyy),
                             scene (p + e.yxy),
                             scene (p + e.yyx)) - scene (p));
@@ -193,7 +194,7 @@ vec3 shade (in vec3 ro, in vec3 rd, in float d)
     const float diffuseStrength = .25;
     float t = 3.*iTime;
 
-    vec3 n = normal (p);
+    vec3 n = normal (p, d*EPSILON);
     vec3 lPos = vec3 (cos (t), 1., sin (t));
     float lDist = distance (lPos, p);
     vec3 lDir = normalize (lPos - p);
@@ -256,17 +257,17 @@ void main ()
     // primary-/view-ray
     float d = raymarch (ro, rd);
     vec3 p = ro + d * rd;
-    vec3 n = normal (p);
+    vec3 n = normal (p, d*EPSILON);
     vec3 col = shade (ro, rd, d);
     col = mix (col, vec3 (.95, .85, .7), pow (1. - 1. / d, 10.));
 
     // secondary-/reflection-ray
     vec3 rd2 = normalize (reflect (rd, n));
-    float d2 = raymarch (p+n*0.1, rd2);
+    float d2 = raymarch (p + n*EPSILON, rd2);
     vec3 p2 = p + d2 * rd2;
-    vec3 n2 = normal (p2);
+    vec3 n2 = normal (p2, EPSILON);
     vec3 col2 = shade (p, rd2, d2);
-    col += (.1 + .3*(.5 + .5 * cos (10.*iTime))) * col2;
+    col += (.1 + .05*(.5 + .5 * cos (5.*iTime))) * col2;
 
     // gamma-correction, tint, vingette
     col = .2 * col + .8 * sqrt (col);
