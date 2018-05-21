@@ -256,6 +256,7 @@ void main ()
 
     // primary-/view-ray
     float d = raymarch (ro, rd);
+	float fog = 1. / (1. + d*d*.07);
     vec3 p = ro + d * rd;
     vec3 n = normal (p, d*EPSILON);
     vec3 col = shade (ro, rd, d);
@@ -269,9 +270,11 @@ void main ()
     vec3 col2 = shade (p, rd2, d2);
     col += (.1 + .05*(.5 + .5 * cos (5.*iTime))) * col2;
 
-    // gamma-correction, tint, vingette
-    col = .2 * col + .8 * sqrt (col);
+    // fog, tint, tone-mapping, gamma-correction, vingette
+    col *= fog;
     col *= vec3 (.7, .8, .9);
+    col = col / (.85 + col);
+    col = .2 * col + .8 * sqrt (col);
     col *= .2 + .8 * pow (16. * uvRaw.x * uvRaw.y * (1. - uvRaw.x) * (1. - uvRaw.y), .3);
 
     fragColor = vec4(col, 1.);
