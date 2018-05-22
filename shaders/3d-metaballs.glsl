@@ -154,8 +154,8 @@
 
 	    float diff = max (dot (n, lnDir), .0);
 	    float diff2 = max (dot (n, lnDir2), .0);
-		vec3 h = normalize (lDir + rd);
-		vec3 h2 = normalize (lDir2 + rd);
+		vec3 h = normalize (lDir - rd);
+		vec3 h2 = normalize (lDir2 - rd);
 	    float spec = pow (max (dot (h, n), .0), 20.);
 	    float spec2 = pow (max (dot (h2, n), .0), 40.);
 
