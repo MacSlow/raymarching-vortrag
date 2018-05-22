@@ -177,6 +177,7 @@
 
 	void main () {
 		vec2 uv = fragCoord.xy;
+		vec2 uvRaw = uv;
 	    uv = uv *2. - 1.;
 	    uv.x *= iResolution.x / iResolution.y;
 
@@ -199,13 +200,14 @@
 		float refd = raymarch (p + .01*n, refl, iter);
 		vec3 refp = p + refd*refl;
 		vec3 refc = shade (p, refl, refd);
-		float fakeFresnel = pow (1. - max (dot (n, -rd), .0), 2.);
-		col += .25*fakeFresnel*refc;
+		float fakeFresnel = pow (1. - max (dot (n, -rd), .0), 1.75);
+		col += .75*fakeFresnel*fakeFresnel*refc;
 
 		col *= fog;
 	    col = mix (col, vec3 (.95, .85, .7), pow (1. - 1. / d, 17.));
 	    col = col / (.75 + col);
 	    col = .2 * col + .8 * sqrt (col);
+		col *= .7 + .3 * pow (16. * uvRaw.x * uvRaw.y * (1. - uvRaw.x) * (1. - uvRaw.y), .3);
 
 		fragColor = vec4 (col, 1.);
 	}
