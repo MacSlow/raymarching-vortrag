@@ -159,9 +159,12 @@
 	    float spec = pow (max (dot (h, n), .0), 20.);
 	    float spec2 = pow (max (dot (h2, n), .0), 40.);
 
-		return amb +
-               sha * attenuation * (diff * diffC + spec * specC) +
-               sha2 * attenuation2 * (diff2 * diffC2 + spec2 * specC2);
+	    vec3 diffTerm = sha * attenuation * diff * diffC;
+	    vec3 diffTerm2 = sha2 * attenuation2 * diff2 * diffC2;
+	    vec3 specTerm = (sha > .1) ? spec * specC : vec3 (.0);
+	    vec3 specTerm2 = (sha2 > .1) ? spec2 * specC2 : vec3 (.0);
+
+		return amb + diffTerm + specTerm + diffTerm2 + specTerm2;
 	}
 
 	vec3 camera (in vec2 uv, in vec3 ro, in vec3 aim, in float zoom)
