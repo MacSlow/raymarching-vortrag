@@ -111,6 +111,17 @@ vec4 gradient (float v) {
 	    return normalize(n);
 	}
 
+    float shadow (in vec3 p, in vec3 n, in vec3 lPos)
+	{
+		float distanceToLight = distance (p, lPos);
+		int ignored = 0;
+		float distanceToObject = raymarch (p + .01*n,
+										   normalize (lPos - p),
+										   ignored);
+		bool isShadowed = distanceToObject < distanceToLight;
+		return isShadowed ? .1 : 1.;
+	}
+
 	vec3 shade (in vec3 ro, in vec3 rd, in float d)
 	{
 	    vec3 p = ro + d * rd;
@@ -128,8 +139,10 @@ vec4 gradient (float v) {
 
 	    float diffuse = max (dot (lightDir, nor), .0);
 	    float specular = pow (clamp (dot (ref, lightDir), .0, 1.), shininess);
-
-	    return ambient * ambColor + diffuse * diffColor + specular * specColor;
+		float sha = shadow (p, nor, lightPos);
+		float lightDistance = distance (p, lightPos);
+		float attenuation = .85 / (lightDistance*lightDistance);
+	    return ambient * ambColor + sha * attenuation * (diffuse * diffColor + specular * specColor);
 	}
 
 	void main ()
