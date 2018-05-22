@@ -204,7 +204,7 @@
 		vec3 refp = p + refd*refl;
 		vec3 refc = shade (p, refl, refd);
 		float fakeFresnel = pow (1. - max (dot (n, -rd), .0), 1.75);
-		col += .75*fakeFresnel*fakeFresnel*refc;
+		col += .35*fakeFresnel*fakeFresnel*refc;
 
 		col *= fog;
 	    col = mix (col, vec3 (.95, .85, .7), pow (1. - 1. / d, 17.));
