@@ -195,6 +195,13 @@
 	    vec3 n = normal (p, d*EPSILON);
 	    vec3 col = shade (ro, rd, d);
 
+		vec3 refl = normalize (reflect (rd, n));
+		float refd = raymarch (p + .01*n, refl, iter);
+		vec3 refp = p + refd*refl;
+		vec3 refc = shade (p, refl, refd);
+		float fakeFresnel = pow (1. - max (dot (n, -rd), .0), 2.);
+		col += .25*fakeFresnel*refc;
+
 		col *= fog;
 	    col = mix (col, vec3 (.95, .85, .7), pow (1. - 1. / d, 17.));
 	    col = col / (.75 + col);
