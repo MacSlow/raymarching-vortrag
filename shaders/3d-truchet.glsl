@@ -68,7 +68,7 @@ vec4 gradient (float v) {
 	
 		p.x -= iTime * .25;
 
-	    vec3 cellParam = vec3 (.5, .07, .5);
+	    vec3 cellParam = vec3 (.5, .01 + .1 * (.5 + .5 * cos (3.*iTime)), .5);
 
 	    float selector = fract(sin(dot(floor(p) + 13.37, vec3(7., 157., 113.)))*43758.5453);
 
@@ -129,20 +129,23 @@ vec4 gradient (float v) {
 	    vec3 ambColor = vec3 (.1, .05, .05);
 	    vec3 diffColor = vec3 (1.9, 1.4, 1.2);
 	    vec3 specColor = vec3 (.95, .85, .85);
-	    float shininess = 60.;
-	    float ambient = .75;
+	    float shininess = 40.;
 
-	    vec3 lightPos = p + vec3 (cos (iTime) * .5, .5, sin (iTime) * .5);
-	    vec3 lightDir = normalize (vec3 (lightPos - p));
+	    vec3 lightPos = ro + vec3 (cos (iTime) * .5, .5, sin (iTime) * .5);
+	    vec3 lightDir = lightPos - p;
+	    vec3 lightNDir = normalize (lightDir);
 	    vec3 nor = normal (p, d*EPSILON);
-	    vec3 ref = normalize (reflect (rd, nor));
+	    vec3 h = normalize (lightDir - rd);
 
-	    float diffuse = max (dot (lightDir, nor), .0);
-	    float specular = pow (clamp (dot (ref, lightDir), .0, 1.), shininess);
+	    float diffuse = max (dot (lightNDir, nor), .0);
+	    float specular = pow (max (dot (h, nor), .0), shininess);
 		float sha = shadow (p, nor, lightPos);
 		float lightDistance = distance (p, lightPos);
 		float attenuation = .85 / (lightDistance*lightDistance);
-	    return ambient * ambColor + sha * attenuation * (diffuse * diffColor + specular * specColor);
+		vec3 diffTerm = sha * attenuation * diffuse * diffColor;
+		vec3 specTerm = (sha > .1) ? specular * specColor : vec3 (.0);
+
+	    return ambColor + diffTerm + specTerm;
 	}
 
 	void main ()
