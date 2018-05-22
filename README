@@ -1,5 +1,5 @@
-This is a temporary repo for preparing the talk about raymarching with C++ and
-OpenGL.
+This is the repository of an introductory talk about raymarching held at
+our local C++-user-group meeting in Aachen, Germany during May 2018.
 
 Screencasts for the some of the supplied examples:
 	* metaballs - https://www.youtube.com/embed/FW-8AaYzP_w
