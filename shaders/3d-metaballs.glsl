@@ -17,12 +17,8 @@
 
 	precision highp float;
 
-    const float EPSILON = .001;
-
-	float fbm (in vec2 p) {
-		float v = 1.;//texture (iChannel0, p).r;
-	    return v;
-	}
+    const float EPSILON = .0001;
+    const int MAX_ITER = 96;
 
 	mat2 r2d (in float a) {
 		float c = cos (radians (a));
@@ -50,16 +46,6 @@
 	float sdHexPrism (in vec3 p, in vec2 h) {
 	    vec3 q = abs (p);
 	    return max (q.z - h.y, max ((q.x * .866025 + q.y * .5), q.y) - h.x);
-	}
-
-	float sdThing (in vec3 p) {
-	    p.xz *= r2d(20.*iTime);
-	    p.yz *= r2d(-40.*iTime);
-	    float r = 1.25 + .75 * (.5 + .5 * cos (p.y * 7.))*
-	                     .75 * (.5 + .5 * cos (p.x * 7.))*
-	                     .75 * (.5 + .5 * cos (p.z * 7.));
-		float d = length (p) - r;
-	    return d;
 	}
 
 	float scene (in vec3 p) {
@@ -106,8 +92,6 @@
 	    float hexBottom = sdHexPrism (pBottom + vec3 (.0, .0, -3.), vec2 (.25, .75 + .2 * sin(cellBottom.y)*cos(cellBottom.x)));
 	    float hexTop = sdHexPrism (pTop + vec3 (.0, .0, -3.), vec2 (.25, .75 + .2 * sin(cellTop.y)*cos(cellTop.x)));
 
-	    //float thing = sdThing (p-vec3 (.0, .0, 6.));
-
 	    return min (metaBalls, min (hexBottom, hexTop));
 	}
 
@@ -115,11 +99,11 @@
 	    float t = .0;
 	    float d = .0;
 	    iter = 0;
-	    for (int i = 0; i < 64; ++i) {
+	    for (int i = 0; i < MAX_ITER; ++i) {
 	        iter++;
 	        vec3 p = ro + d * rd;
 	        t = scene (p);
-	        if (abs (t) < .0001 * (1. + .125*t)) break;
+	        if (abs (t) < EPSILON * (1. + .125*t)) break;
 	        d += t*.7;
 	    }
 
@@ -148,7 +132,7 @@
 
 	vec3 shade (in vec3 ro, in vec3 rd, in float d) {
 		vec3 p = ro + d*rd;
-	    vec3 amb = vec3 (.01);
+	    vec3 amb = vec3 (.1);
 		vec3 diffC = vec3 (1., .5, .3);
 	    vec3 specC = vec3 (1., .95, .9);
 		vec3 diffC2 = vec3 (.3, .5, 1.);
@@ -196,7 +180,6 @@
 	    uv = uv *2. - 1.;
 	    uv.x *= iResolution.x / iResolution.y;
 
-	    // set up "camera", view origin (ro) and view direction (rd)
 	    float angle = radians (300. + 55. * iTime);
 	    float dist = 3. + cos (1.5*iTime);
 	    vec3 ro = vec3 (dist * cos (angle), .0, dist * sin (angle));
@@ -211,9 +194,9 @@
 	    
 	    vec3 n = normal (p, d*EPSILON);
 	    vec3 col = shade (ro, rd, d);
+
 		col *= fog;
 	    col = mix (col, vec3 (.95, .85, .7), pow (1. - 1. / d, 17.));
-
 	    col = col / (.75 + col);
 	    col = .2 * col + .8 * sqrt (col);
 
