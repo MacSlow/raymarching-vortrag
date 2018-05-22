@@ -33,8 +33,8 @@ The usage of raymarcher-gl looks like this:
 Example use of the built executables:
 
 	1> build/raymarcher-nongl
-	1> build/raymarcher-gl basic-3d-raymarching.glsl
-	1> build/raymarcher-gl texture-terrain.glsl 720 360 60 data/noise-256x256.png
+	1> build/raymarcher-gl shaders/basic-3d-raymarching.glsl
+	1> build/raymarcher-gl shaders/texture-terrain.glsl 720 360 60 data/noise-256x256.png
 
 Interaction - if available (depending on the shader) - allows some viewpoint or
 object/plane manipulation with the mouse. The <SPACE>-key pauses the rendering-loop
