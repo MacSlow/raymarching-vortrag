@@ -67,9 +67,9 @@
 	    vec3 pTop = p;
 
 	    float r1 = .1 + .3 * (.5 + .5 * sin (2. * iTime));
-	    float r2 = .15 + .2 * (.5 + .5 * sin (3. * iTime));
-	    float r3 = .2 + .2 * (.5 + .5 * sin (4. * iTime));
-	    float r4 = .25 + .1 * (.5 + .5 * sin (5. * iTime));
+	    float r2 = .1 + .25 * (.5 + .5 * sin (3. * iTime));
+	    float r3 = .1 + .3 * (.5 + .5 * sin (4. * iTime));
+	    float r4 = .1 + .25 * (.5 + .5 * sin (5. * iTime));
 
 	    float t = 2. * iTime;
 	    vec3 offset1 = vec3 (-.1*cos(t), .1, -.2*sin(t));
