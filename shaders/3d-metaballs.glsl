@@ -17,6 +17,8 @@
 
 	precision highp float;
 
+    const float EPSILON = .001;
+
 	float fbm (in vec2 p) {
 		float v = 1.;//texture (iChannel0, p).r;
 	    return v;
@@ -117,34 +119,48 @@
 	        iter++;
 	        vec3 p = ro + d * rd;
 	        t = scene (p);
-	        if (t < .0001) break;
-	        d += t*.975;
+	        if (abs (t) < .0001 * (1. + .125*t)) break;
+	        d += t*.7;
 	    }
 
 	    return d;
 	}
 
-	vec3 normal (in vec3 p) {
+	vec3 normal (in vec3 p, in float epsilon) {
 		float d = scene (p);
-	    vec3 e = vec3 (.001, .0, .0);
+	    vec3 e = vec3 (epsilon, .0, .0);
 	    return normalize (vec3 (scene (p + e.xyy) - d,
 	                            scene (p + e.yxy) - d,
 	                            scene (p + e.yyx) - d));
 	}
 
-	vec3 shade (in vec3 ro, in vec3 p) {
+	float shadow (in vec3 p, in vec3 lPos)
+    {
+		float distanceToLight = distance (p, lPos);
+		vec3 n = normal (p, EPSILON);
+		int ignored = 0;
+		float distanceToObject = raymarch (p + .01*n,
+										   normalize (lPos - p),
+										   ignored);
+		bool isShadowed = distanceToObject < distanceToLight;
+		return isShadowed ? .1 : 1.;
+    }
+
+	vec3 shade (in vec3 ro, in vec3 rd, in float d) {
+		vec3 p = ro + d*rd;
 	    vec3 amb = vec3 (.01);
 		vec3 diffC = vec3 (1., .0, .0);
-	    vec3 specC = vec3 (.0);
+	    vec3 specC = vec3 (1.);
 
-	    vec3 n = normal (p);
+	    vec3 n = normal (p, d*EPSILON);
 	    vec3 lPos = ro + vec3 (.5, 1.0, -3.);
 	    vec3 lDir = lPos - p;
 	    vec3 lnDir = normalize (lDir);
-	    float sha = 1.;
+	    float sha = shadow (p, lPos);
 
 	    float diff = max (dot (n, lnDir), .0);
-	    float spec = .0;
+		vec3 h = normalize (lDir + rd);
+	    float spec = pow (max (dot (h, n), .0), 20.);
 	    
 		return amb + sha * (diff * diffC + spec * specC);
 	}
@@ -175,14 +191,16 @@
 
 	    int iter = 0;
 	    float d = raymarch (ro, rd, iter);
+		float fog = 1. / (1. + d*d*.05);
 	    vec3 p = ro + d * rd;
 	    
-	    vec3 n = normal (p);
-	    vec3 col = shade (ro, p);
-	    col = mix (col, vec3 (.95, .85, .7), pow (1. - 1. / d, 10.));
+	    vec3 n = normal (p, d*EPSILON);
+	    vec3 col = shade (ro, rd, d);
+		col *= fog;
+	    col = mix (col, vec3 (.95, .85, .7), pow (1. - 1. / d, 17.));
 
-	    //col = col / (1. + col);
-	    col = sqrt (col);
+	    col = col / (.75 + col);
+	    col = .2 * col + .8 * sqrt (col);
 
 		fragColor = vec4 (col, 1.);
 	}
