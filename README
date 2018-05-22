@@ -38,7 +38,8 @@ Example use of the built executables:
 
 Interaction - if available (depending on the shader) - allows some viewpoint or
 object/plane manipulation with the mouse. The <SPACE>-key pauses the rendering-loop
-of a program and the <ESC>-key quits a program.
+of a program, <F11> toggles between fullscreen and windowed and the <ESC>-key quits
+a program.
 
 You can live edit any loaded (fragment) shader-file. The raymarcher-gl binary will
 recognize any changes and try to reload/recompile the updated shader. In case of an
