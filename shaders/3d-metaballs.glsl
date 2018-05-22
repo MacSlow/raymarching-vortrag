@@ -161,8 +161,8 @@
 
 	    vec3 diffTerm = sha * attenuation * diff * diffC;
 	    vec3 diffTerm2 = sha2 * attenuation2 * diff2 * diffC2;
-	    vec3 specTerm = (sha > .1) ? spec * specC : vec3 (.0);
-	    vec3 specTerm2 = (sha2 > .1) ? spec2 * specC2 : vec3 (.0);
+	    vec3 specTerm = (sha > .1) ? attenuation * spec * specC : vec3 (.0);
+	    vec3 specTerm2 = (sha2 > .1) ? attenuation2 * spec2 * specC2 : vec3 (.0);
 
 		return amb + diffTerm + specTerm + diffTerm2 + specTerm2;
 	}

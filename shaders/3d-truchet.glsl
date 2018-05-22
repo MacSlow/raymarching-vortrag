@@ -143,7 +143,7 @@ vec4 gradient (float v) {
 		float lightDistance = distance (p, lightPos);
 		float attenuation = .85 / (lightDistance*lightDistance);
 		vec3 diffTerm = sha * attenuation * diffuse * diffColor;
-		vec3 specTerm = (sha > .1) ? specular * specColor : vec3 (.0);
+		vec3 specTerm = (sha > .1) ? attenuation * specular * specColor : vec3 (.0);
 
 	    return ambColor + diffTerm + specTerm;
 	}
