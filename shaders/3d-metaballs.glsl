@@ -149,20 +149,35 @@
 	vec3 shade (in vec3 ro, in vec3 rd, in float d) {
 		vec3 p = ro + d*rd;
 	    vec3 amb = vec3 (.01);
-		vec3 diffC = vec3 (1., .0, .0);
-	    vec3 specC = vec3 (1.);
+		vec3 diffC = vec3 (1., .5, .3);
+	    vec3 specC = vec3 (1., .95, .9);
+		vec3 diffC2 = vec3 (.3, .5, 1.);
+	    vec3 specC2 = vec3 (.9, .95, 1.);
 
 	    vec3 n = normal (p, d*EPSILON);
 	    vec3 lPos = ro + vec3 (.5, 1.0, -3.);
+	    vec3 lPos2 = ro + vec3 (-1., 1.2, 2.);
 	    vec3 lDir = lPos - p;
+	    vec3 lDir2 = lPos2 - p;
 	    vec3 lnDir = normalize (lDir);
+	    vec3 lnDir2 = normalize (lDir2);
 	    float sha = shadow (p, lPos);
+	    float sha2 = shadow (p, lPos2);
+		float lDist = distance (p, lPos);
+		float lDist2 = distance (p, lPos2);
+		float attenuation = 8. / (lDist*lDist);
+		float attenuation2 = 8. / (lDist2*lDist2);
 
 	    float diff = max (dot (n, lnDir), .0);
+	    float diff2 = max (dot (n, lnDir2), .0);
 		vec3 h = normalize (lDir + rd);
+		vec3 h2 = normalize (lDir2 + rd);
 	    float spec = pow (max (dot (h, n), .0), 20.);
-	    
-		return amb + sha * (diff * diffC + spec * specC);
+	    float spec2 = pow (max (dot (h2, n), .0), 40.);
+
+		return amb +
+               sha * attenuation * (diff * diffC + spec * specC) +
+               sha2 * attenuation2 * (diff2 * diffC2 + spec2 * specC2);
 	}
 
 	vec3 camera (in vec2 uv, in vec3 ro, in vec3 aim, in float zoom)
