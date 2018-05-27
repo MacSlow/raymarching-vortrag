@@ -68,7 +68,7 @@ vec4 gradient (float v) {
 	
 		p.x -= iTime * .25;
 
-	    vec3 cellParam = vec3 (.5, .01 + .1 * (.5 + .5 * cos (3.*iTime)), .5);
+	    vec3 cellParam = vec3 (.5, .06 + .04 * (.5 + .5 * cos (3.*iTime)), .5);
 
 	    float selector = fract(sin(dot(floor(p) + 13.37, vec3(7., 157., 113.)))*43758.5453);
 
@@ -92,10 +92,10 @@ vec4 gradient (float v) {
 	    for (int i = 0; i < MAX_ITER; i++)
 	    {
 	        iter = i;
-	        vec3 p = ro + t * rd;
+	        vec3 p = ro + t*rd;
 	        float d = scene (p);
-	        if (d < EPSILON) break;
-	        t += d * STEP_SIZE;
+	        if (abs (d) < EPSILON*(1. + .125*d)) break;
+	        t += d*STEP_SIZE;
 	    }
 
 	    return t;
