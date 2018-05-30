@@ -211,20 +211,14 @@ vec2 raymarch (vec3 ro, vec3 rd)
 	return candidate;
 }
 
-// uses improved shadow-version by Sebastian Aaltonen as
-// demonstrated by iq here https://www.shadertoy.com/view/lsKcDD
 float shadow (vec3 ro, vec3 rd)
 {
     float result = 1.;
     float t = .1;
-	float ph = 1e10;
     for (int i = 0; i < 64; i++) {
         float h = scene (ro + t * rd).x;
         if (h < .00001) return .0;
-        float y = h*h/(2.*ph);
-        float d = sqrt (h*h - y*y);
-        result = min (result, 10.*d/max (.0, t - y));
-        ph = h;
+        result = min (result, 4. * h/t);
         t += h*.5;
     }
 
