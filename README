@@ -1,7 +1,7 @@
-This is a temporary repo for preparing the talk about raymarching with C++ and
-OpenGL.
+This is the repository of an introductory talk about raymarching held at
+our local C++-user-group meeting in Aachen, Germany during May 2018.
 
-Screencasts for the some of the supplied examples:
+Screencasts for some of the supplied examples:
 	* metaballs - https://www.youtube.com/embed/FW-8AaYzP_w
 	* gyroid - https://www.youtube.com/embed/QqFFAoQWzTY
 	* distortion - https://www.youtube.com/embed/uQ0vd2YQ9CM
@@ -33,12 +33,13 @@ The usage of raymarcher-gl looks like this:
 Example use of the built executables:
 
 	1> build/raymarcher-nongl
-	1> build/raymarcher-gl basic-3d-raymarching.glsl
-	1> build/raymarcher-gl texture-terrain.glsl 720 360 60 data/noise-256x256.png
+	1> build/raymarcher-gl shaders/basic-3d-raymarching.glsl
+	1> build/raymarcher-gl shaders/texture-terrain.glsl 720 360 60 data/noise-256x256.png
 
 Interaction - if available (depending on the shader) - allows some viewpoint or
 object/plane manipulation with the mouse. The <SPACE>-key pauses the rendering-loop
-of a program and the <ESC>-key quits a program.
+of a program, <F11> toggles between fullscreen and windowed and the <ESC>-key quits
+a program.
 
 You can live edit any loaded (fragment) shader-file. The raymarcher-gl binary will
 recognize any changes and try to reload/recompile the updated shader. In case of an
