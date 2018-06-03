@@ -46,3 +46,6 @@ recognize any changes and try to reload/recompile the updated shader. In case of
 error, it will dump the error-messages from the OpenGL-driver to stdout. Fix or undo
 the error to get a valid graphics-output again.
 
+In the directory experimental-shaders are a bunch of shaders not featured or
+mentioned in the talk itself. They are more of a playground to try out some
+ideas.
