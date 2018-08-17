@@ -65,7 +65,7 @@ float mandelbulb (vec3 pos, in float n, in float bail, in int iter)
 
 float map (in vec3 p)
 {
-	float d = mandelbulb (p, 8., 4., 8);
+	float d = mandelbulb (p, 8. + 8.*(.5 + .5*cos(iTime)), 4., 8);
     return d;
 }
 
