@@ -86,6 +86,42 @@ float map (in vec3 p)
     return max (d, -box);
 }
 
+float distriGGX (in vec3 N, in vec3 H, in float roughness)
+{
+    float a2     = roughness * roughness;
+    float NdotH  = max (dot (N, H), .0);
+    float NdotH2 = NdotH * NdotH;
+
+    float nom    = a2;
+    float denom  = (NdotH2 * (a2 - 1.) + 1.);
+    denom        = PI * denom * denom;
+
+    return nom / denom;
+}
+
+float geomSchlickGGX (in float NdotV, in float roughness)
+{
+    float nom   = NdotV;
+    float denom = NdotV * (1. - roughness) + roughness;
+
+    return nom / denom;
+}
+
+float geomSmith (in vec3 N, in vec3 V, in vec3 L, in float roughness)
+{
+    float NdotV = max (dot (N, V), .0);
+    float NdotL = max (dot (N, L), .0);
+    float ggx1 = geomSchlickGGX (NdotV, roughness);
+    float ggx2 = geomSchlickGGX (NdotL, roughness);
+
+    return ggx1 * ggx2;
+}
+
+vec3 fresnelSchlick (in float cosTheta, in vec3 F0, float roughness)
+{
+    return F0 + (max (F0, vec3(1. - roughness)) - F0) * pow (1. - cosTheta, 5.);
+}
+
 vec3 normal (in vec3 p, in float epsilon)
 {
     float d = map (p);
@@ -95,6 +131,71 @@ vec3 normal (in vec3 p, in float epsilon)
                    map (p + e.yyx) - d);
 
     return normalize (n);
+}
+
+vec3 shadePBR (in vec3 ro, in vec3 rd, in float d)
+{
+    vec3 p = ro + d * rd;
+    vec3 nor = normal (p, d*EPSILON);
+
+    // "material" hard-coded for the moment
+    vec3 albedo = vec3 (.25);
+    float metallic = .35;
+    float roughness = .25;
+
+    // lights hard-coded as well atm
+    vec3 lightColors[2];
+    lightColors[0] = vec3 (.7, .4, .2)*7.;
+    lightColors[1] = vec3 (.2, .7, .4)*9.;
+
+    vec3 lightPositions[2];
+    float t = iTime;
+    float c = cos (t);
+    float s = sin (t);
+    lightPositions[0] = vec3 (1.14, 1.5, -1.75);
+    lightPositions[1] = vec3 (-.125, 1.5, 1.75);
+
+    vec3 N = normalize (nor);
+    vec3 V = normalize (ro - p);
+
+    vec3 F0 = vec3 (.04);
+    F0 = mix (F0, albedo, metallic);
+    vec3 kD = vec3 (.0);
+
+    // reflectance equation
+    vec3 Lo = vec3 (.0);
+    for (int i = 0; i < 2; ++i)
+    {
+        // calculate per-light radiance
+        vec3 L = normalize (lightPositions[i] - p);
+        vec3 H = normalize (V + L);
+        float dist = distance (p, lightPositions[i]);
+        float attenuation = 4./(dist*dist);
+        vec3 radiance = lightColors[i]*attenuation;
+
+        // cook-torrance brdf
+        float aDirect = pow (roughness + 1., 2.);
+        float aIBL =  roughness * roughness;
+        float NDF = distriGGX (N, H, roughness);
+        float G = geomSmith (N, V, L, roughness);
+        vec3 F = fresnelSchlick (max (dot (H, V), .0), F0, roughness);
+
+        vec3 kS = F;
+        kD = vec3 (1.) - kS;
+        kD *= 1. - metallic;
+
+        vec3 nominator = NDF * G * F;
+        float denominator = 4. * max (dot (N, V), .0) * max (dot (N, L), .0);
+        vec3 specular = nominator / max (denominator, .001);
+
+        // add to outgoing radiance Lo
+        float NdotL = max (dot (N, L), .0);
+        Lo += (kD*albedo/PI + specular)*radiance*NdotL;
+    }
+
+    vec3 ambient = kD * albedo;
+
+    return ambient + Lo;
 }
 
 Result raymarch (in Ray ray)
@@ -133,33 +234,6 @@ float shadow (in Ray ray, in vec3 lPos)
     return 1.;
 }
 
-vec3 shade (in Result res)
-{
-    vec3 amb = vec3 (.1);
-    vec3 diffM = vec3 (.9, .25, .2);
-    vec3 diffL = vec3 (.95, .9, .3)*3.;
-    vec3 diffL2 = vec3 (.5, .7, .85)*2.;
-    vec3 specM = vec3 (1.);
-    vec3 specL = vec3 (1.);
-    vec3 lPos = vec3 (.4, 1., -1.25);
-    vec3 lPos2 = vec3 (-.25, .5, 1.);
-    vec3 lDir = normalize (lPos - res.point);
-    vec3 lDir2 = normalize (lPos2 - res.point);
-
-    float diff = clamp (dot (res.normal, lDir), .0, 1.);
-    float diff2 = clamp (dot (res.normal, lDir2), .0, 1.);
-    vec3 h = normalize (lDir + res.point);
-    vec3 h2 = normalize (lDir2 + res.point);
-    float shininess = 60.;
-    float spec = pow (clamp (dot (res.normal, h), .0, 1.), shininess);
-    float spec2 = pow (clamp (dot (res.normal, h2), .0, 1.), shininess);
-    float sha = shadow (Ray (res.point + .001 * res.normal, lDir), lPos);
-    float sha2 = shadow (Ray (res.point + .001 * res.normal, lDir2), lPos2);
-
-    return amb + sha * (diff * diffM * diffL + spec * specM * specL) +
-        sha2 * (diff2 * diffM * diffL2 + spec2 * specM * specL);
-}
-
 void main ()
 {
     vec2 uv = fragCoord.xy;
@@ -185,7 +259,7 @@ void main ()
 
     Ray ray = Ray (ro, rd);
     Result res = raymarch (ray);
-    vec3 col = shade (res);
+    vec3 col = shadePBR (ro, rd, res.dist);
     float fog = float (res.iter) / float (MAX_ITER);
     col *= 1. - (fog * fog);
 
