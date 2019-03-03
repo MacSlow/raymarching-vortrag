@@ -112,16 +112,17 @@ Result scene (in vec3 p)
     vec2 cellIndex1 = opRepeat2 (hexCenter1.xy, repeatPattern);
     vec2 cellIndex2 = opRepeat2 (hexCenter2.xy, repeatPattern);
 	vec2 size = vec2 (radius, height);
-	float variance1 = .1*sin(noise2d (cellIndex1).x*iTime);
-	float variance2 = .1*sin(noise2d (cellIndex2).y*iTime);
-	float hex1 = sdHexPrism (hexCenter1 + vec3 (.0, .0, variance1), size );
-	float hex2 = sdHexPrism (hexCenter2 + vec3 (.0, .0, variance2), size );
+	float variance1 = .1*sin (noise2d (cellIndex1).x*iTime);
+	float variance2 = .1*sin (noise2d (cellIndex2).y*iTime);
+	float hex1 = sdHexPrism (hexCenter1 + vec3 (.0, .0, variance1), size);
+	float hex2 = sdHexPrism (hexCenter2 + vec3 (.0, .0, variance2), size);
 	float d = hex1;
 	d = min (d, hex2);
 
     Result res = Result (.0, 0);
 	res.d = d;
     res.id = 2;
+
     return res;
 }
 
@@ -174,7 +175,7 @@ vec3 shadePBR (in vec3 ro, in vec3 rd, in float d, in int id)
     float mask1 = .5 + .5 * cos (20.* p.x * p.z);
     float mask2 = 0.;
 	float mask = (id == 1) ? mask1 : mask2;
-    vec3 albedo = vec3 (.05, .65, .05);
+    vec3 albedo = vec3 (.45, .3, .65);
     float metallic  = (id == 1) ? .1 : .9;
     float roughness = (id == 1) ? .9 : .1;
     float ao = 1.;
@@ -183,12 +184,12 @@ vec3 shadePBR (in vec3 ro, in vec3 rd, in float d, in int id)
     vec3 lightColors[3];
     lightColors[0] = vec3 (.5, .7, .9) * 10.;
     lightColors[1] = vec3 (.9, .7, .5) * 20.;
-    lightColors[2] = vec3 (.3, .8, .5) * 30.;
+    lightColors[2] = vec3 (.7, .9, .5) * 30.;
 
     vec3 lightPositions[3];
-    lightPositions[0] = p + vec3 (.5, .75, -1.5);
-    lightPositions[1] = p + vec3 (-.3, .25, -.5);
-    lightPositions[2] = p + vec3 (-.5, 1.5, -2.);
+    lightPositions[0] = p + vec3 (.9, .6, -1.5);
+    lightPositions[1] = p + vec3 (-.6, .4, -.75);
+    lightPositions[2] = p + vec3 (-.6, .5, .75);
 
 	vec3 N = normalize (nor);
     vec3 V = normalize (ro - p);
