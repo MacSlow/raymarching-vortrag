@@ -90,7 +90,8 @@ float scene (in vec3 p, in float t)
 
     float variation = 6. + 4.*(.5 + .5*cos (14.*t));
     vec3 offset = vec3 (-5.,-1., 1.)*t*.5;
-    float structure = noise (3.*noiseCenter + offset, variation) - .65 + (sin (t) + 1.)*.05;
+	float f = 3. + 2.5*(.5 + .5*cos (2.5*t));
+    float structure = noise (f*noiseCenter + offset, variation) - .65 + (sin (t) + 1.)*.05;
 
     float box = sdBox (boxCenter, vec3 (6.));
     float ball = sdSphere (ballCenter, 1.5 + .5*(.5 + .5*cos (t)));
