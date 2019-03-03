@@ -130,9 +130,9 @@ float shadow (in vec3 p, vec3 n, vec3 lPos)
     return result;
 }
 
-vec3[4] materials = vec3[4] (vec3 (.0, 1., .0),
-                             vec3 (1., .5, .25),
-                             vec3 (.25, .5, 1.),
+vec3[4] materials = vec3[4] (vec3 (1.0, 1., 1.0),
+                             vec3 (1., 1., 1.),
+                             vec3 (.1, .1, .1),
                              vec3 (1., .0, .0));
 
 vec3 shade (in vec3 ro, in vec3 rd, in float d, in vec3 n, in int matId)
