@@ -34,8 +34,7 @@ struct Result {
 const Result nullResult = Result (.0, .0);
 
 mat2 r2d (in float a) { float r = radians (a); float c = cos (r); float s = sin (r); return mat2(vec2(c, s), vec2(-s, c));}
-//float hash (float f) { return fract (sin (f)*4.5453); }
-float hash (float f) { return fract (sin (f)*45843.349); }
+float hash (float f) { return fract (sin (f)*4.5453); }
 float noise3d (vec3 p) {
     vec3 u = floor (p);
     vec3 v = fract (p);
@@ -84,7 +83,7 @@ float fbm (vec3 p) {
     return result;
 }
 
-Result march (in Ray ray, in bool typeToggle) {
+Result march (in Ray ray) {
 	float max_density = .0;
 	float density = .0;
     Result res = nullResult;
@@ -93,16 +92,10 @@ Result march (in Ray ray, in bool typeToggle) {
         p.xy *= r2d (2.*iTime);
         p.yz *= r2d (-3.*iTime);
         p.zx *= r2d (4.*iTime);
-        if (typeToggle) {
-        	//res.density += .01*noise3d (12.*p);
-        	density = .75*noise3d (17.*p);
-        } else {
-        	//res.density += .01*fbm (12.*p);
-        	density = .75*fbm (17.*p);
-        }
+        density = .75*fbm (17.*p);
 		max_density = max_density < density ? density : max_density;
         if (max_density > 1. || res.dist > FAR) break;
-        res.dist += STEP_SIZE;// + .01*noise3d (20.*p);
+        res.dist += STEP_SIZE;
     }
 
 	res.density = max_density;
@@ -124,21 +117,17 @@ void main () {
     uv = uv * 2. - 1.;
     uv.x *= iResolution.x / iResolution.y;
 
-    float t = .00625*iTime;
-    vec3 ro = vec3 (3.*cos (t), sin (t), 3.*sin (t));
+    float t = radians(.625*iTime);
+    vec3 ro = vec3 (cos (t), .1*sin (t), sin (t));
     vec3 lookAt = vec3 (.0);
     float zoom = 2.75;
     Ray ray = camera (ro, lookAt, zoom, uv);
     Result res;
-    if (uv.x < .0) {
-    	res = march (ray, true);
-    } else {
-        res = march (ray, false);
-    }
+    res = march (ray);
     vec3 col = mix (vec3(.0), vec3(1., .95, .8), res.density*res.density);
 
     col = col / (1. + col);
-    col = .3*col + .7*sqrt (col);
+    col = .5*col + .5*sqrt (col);
 
 	fragColor = vec4 (col, 1.);
 }
