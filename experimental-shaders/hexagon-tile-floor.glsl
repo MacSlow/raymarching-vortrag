@@ -16,9 +16,9 @@ out vec4 fragColor;
 
 precision highp float;
 
-const int MAX_ITER    = 64;
-const float STEP_SIZE = .75;
-const float EPSILON   = .001;
+const int MAX_ITER    = 96;
+const float STEP_SIZE = .5;
+const float EPSILON   = .0005;
 const float PI = 3.14159265359;
 
 mat2 r2d (in float a) { float c = cos(a); float s = sin (a); return mat2 (vec2 (c, s), vec2 (-s, c));}
