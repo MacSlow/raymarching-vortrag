@@ -17,9 +17,10 @@ out vec4 fragColor;
 
 precision highp float;
 
-const int MAX_ITER = 128;
+const int MAX_ITER = 96;
 const float STEP_SIZE = .005;
-const float FAR = .5;
+const float FAR = 1.;
+const float DENSITY = 1.;
 
 struct Ray {
     vec3 ro;
@@ -33,8 +34,16 @@ struct Result {
 
 const Result nullResult = Result (.0, .0);
 
-mat2 r2d (in float a) { float r = radians (a); float c = cos (r); float s = sin (r); return mat2(vec2(c, s), vec2(-s, c));}
-float hash (float f) { return fract (sin (f)*4.5453); }
+mat2 r2d (in float a)
+{
+	float r = radians (a);
+	float c = cos (r);
+	float s = sin (r);
+	return mat2(vec2(c, s), vec2(-s, c));
+}
+
+float hash (float f) { return fract (sin (f)*45843.349); }
+
 float noise3d (vec3 p) {
     vec3 u = floor (p);
     vec3 v = fract (p);
@@ -68,17 +77,16 @@ mat3 rotZ (float degree) {
 }
 
 float fbm (vec3 p) {
-	mat3 m1 = rotZ (1.1);
-	mat3 m2 = rotZ (-2.2);
-	mat3 m3 = rotZ (3.3);
+	mat3 m1 = rotZ (.1);
+	mat3 m2 = rotZ (.2);
+	mat3 m3 = rotZ (.3);
 
     float result = .0;
-    result = .5 * noise3d (p); p *= m1 * 2.02;
-    result += .25 * noise3d (p); p *= m2 * 2.03;
-    result += .125 * noise3d (p); p *= m3 * 2.04;
-    result += .0625 * noise3d (p); p *= m2 * -2.05;
-    result += .01325 * noise3d (p);
-    result /= (.5 + .25 + .125 + .0625 + .01325);
+    result = noise3d (p); p *= m1 * 2.02;
+    result += .5 * noise3d (p); p *= m2 * 2.03;
+    result += .25 * noise3d (p); p *= m3 * 2.04;
+    result += .125 * noise3d (p); p *= m1 * 2.05;
+    result /= (1. + .5 + .25 + .125);
 
     return result;
 }
@@ -89,12 +97,14 @@ Result march (in Ray ray) {
     Result res = nullResult;
     for (int i = 0; i < MAX_ITER; ++i) {
         vec3 p = ray.ro + res.dist*ray.rd;
-        p.xy *= r2d (2.*iTime);
-        p.yz *= r2d (-3.*iTime);
-        p.zx *= r2d (4.*iTime);
+		p.x -= .03*iTime;
+        p.xy *= r2d (12.);
+        p.yz *= r2d (34.);
+        p.zx *= r2d (72.);
         density = .75*fbm (17.*p);
+		vec4 col = vec4 (mix (vec3 (.9), vec3 (.0), density), density);
 		max_density = max_density < density ? density : max_density;
-        if (max_density > 1. || res.dist > FAR) break;
+        if (max_density > DENSITY || res.dist > FAR) break;
         res.dist += STEP_SIZE;
     }
 
@@ -117,17 +127,16 @@ void main () {
     uv = uv * 2. - 1.;
     uv.x *= iResolution.x / iResolution.y;
 
-    float t = radians(.625*iTime);
-    vec3 ro = vec3 (cos (t), .1*sin (t), sin (t));
+    vec3 ro = vec3 (1., .0, .0);
     vec3 lookAt = vec3 (.0);
-    float zoom = 2.75;
+    float zoom = 3.;
     Ray ray = camera (ro, lookAt, zoom, uv);
     Result res;
     res = march (ray);
-    vec3 col = mix (vec3(.0), vec3(1., .95, .8), res.density*res.density);
+    vec3 col = mix (vec3(.0), vec3(1., .95, .9), res.density*res.density);
 
     col = col / (1. + col);
-    col = .5*col + .5*sqrt (col);
+    col = .1*col + .9*sqrt (col);
 
 	fragColor = vec4 (col, 1.);
 }
