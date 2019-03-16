@@ -68,13 +68,13 @@ float fbm (in vec2 p)
 float scene (in vec3 p) {
 	float t = 2.*iTime;
     vec3 pBottom = p;
-	pBottom.x += iTime;
+	pBottom.x += 3.*iTime;
     float bottom = pBottom.y + 1. + .25*fbm(pBottom.xz);
 
-    float t4 = 1.5 * iTime;
-    float t5 = 1.75 * iTime;
-    float t6 = .75 * iTime;
-    float t7 = 2. * iTime;
+    float t4 = 2. * iTime;
+    float t5 = 2.5 * iTime;
+    float t6 = 1.75 * iTime;
+    float t7 = 2.5 * iTime;
     float r1 = .1 + .3 * (.5 + .5 * sin (2.*t4));
     float r2 = .1 + .25 * (.5 + .5 * sin (3.*t5));
     float r3 = .1 + .3 * (.5 + .5 * sin (4.*t6));
