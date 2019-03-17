@@ -114,7 +114,7 @@ float scene (in vec3 p) {
     return min (metaBalls, min (bottom, top));
 }
 
-float raymarch (in vec3 ro, in vec3 rd) {
+float raymarch (in vec3 ro, in vec3 rd, inout int iter) {
     float t = .0;
     float d = .0;
     for (int i = 0; i < MAX_ITER; ++i) {
@@ -122,6 +122,7 @@ float raymarch (in vec3 ro, in vec3 rd) {
         t = scene (p);
         if (abs (t) < EPSILON * (1. + .125*t)) break;
         d += t*STEP_BIAS;
+		iter = i;
     }
 
     return d;
@@ -172,11 +173,13 @@ void main () {
     float zoom = 2. + .5*cos (iTime);
     vec3 rd = camera (uv, ro, aim, zoom);
 
-    float d = raymarch (ro, rd);
+	int iter = 0;
+    float d = raymarch (ro, rd, iter);
 	float fog = 1. / (1. + d*d*.25);
+	float glow = float (iter) / float (MAX_ITER);
     vec3 p = ro + d * rd;
 	    
-    vec3 col = shade (ro, rd, d);
+    vec3 col = shade (ro, rd, d) + pow (glow, 1.05) * vec3 (1.);
 
 	col *= fog;
     col = col / (.75 + col);
