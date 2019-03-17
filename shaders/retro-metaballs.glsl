@@ -54,14 +54,21 @@ float noise (in vec2 p)
     return dot (n, vec3 (70.));
 }
 
-float fbm (in vec2 p)
+float fbm (in vec2 p, in int iters)
 {
-    mat2 rot = r2d (27.5);
-    float d = noise (p); p *= rot;
-    d += .5*noise (p); p *= rot;
-    d += .25*noise (p); p *= rot;
-    d += .125*noise (p); p *= rot;
-    d /= (1. + .5 + .25 + .125);
+    mat2 rot = r2d (35.);
+    float d = .0;
+	float f = 1.;
+	float fsum = .0;
+
+	for (int i = 0; i < iters; ++i) {
+		d += f*noise (p);
+		p *= rot;
+		fsum += f;
+		f *= .5;
+	}
+    d /= fsum;
+
     return d;
 }
 
@@ -69,7 +76,7 @@ float scene (in vec3 p) {
 	float t = 2.*iTime;
     vec3 pBottom = p;
 	pBottom.x += 3.*iTime;
-    float bottom = pBottom.y + 1. + .25*fbm(pBottom.xz);
+    float bottom = pBottom.y + 1. + .25*fbm(pBottom.xz, 5);
 
     float t4 = 2. * iTime;
     float t5 = 2.5 * iTime;
