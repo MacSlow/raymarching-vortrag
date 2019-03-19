@@ -115,10 +115,7 @@ float scene (in vec3 p) {
     ball2 = sdSphere (p + offset8, r4);
     metaBalls = opCombine (metaBalls, opCombine (ball1, ball2, .2), r4);
 
-    vec3 pTop = p;
-    float top = -(pTop.y - 3.);
-
-    return min (metaBalls, min (bottom, top));
+    return min (metaBalls, bottom);
 }
 
 float raymarch (in vec3 ro, in vec3 rd, inout int iter) {
