@@ -66,20 +66,42 @@ float grid (in vec2 p)
 void main()
 {
     vec2 uv = fragCoord.xy;
+	vec2 uvRaw = uv;
     uv = uv * 2. - 1.;
     uv.x *= iResolution.x/iResolution.y;
 	uv *= 1. + .5*length(fragCoord.xy*2. - 1.);
+
+	float offsetScale = .0175;
+	vec2 offsetGreen = vec2(offsetScale*length(fragCoord.xy*2. - 1.));
+	vec2 offsetBlue = vec2(-offsetScale*length(fragCoord.xy*2. - 1.));
 
     vec3 col = vec3 (1., .95, .9);
 	float layerLarge = 3.*grid(uv);
 	float layerMedium = .75*grid(2.*uv*r2d(3.));
 	float layerSmall = .25*grid(3.*uv*r2d(6.));
 	float layerTiny = .125*grid(3.*uv*r2d(9.));
-    col += 4.*(layerLarge + layerMedium + layerSmall + layerTiny);
+
+	vec2 uvGreen = uv + offsetGreen;
+	float layerLargeGreen = 3.*grid(uvGreen);
+	float layerMediumGreen = .75*grid(2.*uvGreen*r2d(3.));
+	float layerSmallGreen = .25*grid(3.*uvGreen*r2d(6.));
+	float layerTinyGreen = .125*grid(3.*uvGreen*r2d(9.));
+
+	vec2 uvBlue = uv + offsetBlue;
+	float layerLargeBlue = 3.*grid(uvBlue);
+	float layerMediumBlue = .75*grid(2.*uvBlue*r2d(3.));
+	float layerSmallBlue = .25*grid(3.*uvBlue*r2d(6.));
+	float layerTinyBlue = .125*grid(3.*uvBlue*r2d(9.));
+
+	// fake chromatic aberration
+    col.r += 4.*(layerLarge + layerMedium + layerSmall + layerTiny);
+    col.g += 4.*(layerLargeGreen + layerMediumGreen + layerSmallGreen + layerTinyGreen);
+    col.b += 4.*(layerLargeBlue + layerMediumBlue + layerSmallBlue + layerTinyBlue);
 
     col = pow (col, vec3 (1./2.2));
 	col *= 1. - .6*length (fragCoord.xy*2. - 1.);
     col = col / (1. + col);
+	col *= mix (1., .75, .5 + .5*cos (900.*uvRaw.y));
 
     fragColor = vec4 (col, 1.);
 }
