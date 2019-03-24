@@ -169,9 +169,10 @@ void main () {
 	vec2 uvRaw = uv;
     uv = uv*2. - 1.;
     uv.x *= iResolution.x/iResolution.y;
+	uv *= 1. + .5*length(fragCoord.xy*2. - 1.);
 
     float angle = radians (300. + 30.*iTime);
-    float dist = 3.;
+    float dist = 2.5;
     vec3 ro = vec3 (dist*cos (angle), 2., dist*sin (angle));
     vec3 aim = vec3 (.0);
     float zoom = 2. + .5*cos (iTime);
@@ -189,6 +190,7 @@ void main () {
     col = col / (.75 + col);
     col = .1 * col + .9*sqrt (col);
 	col *= .8 + .2 * pow (16.*uvRaw.x*uvRaw.y*(1. - uvRaw.x)*(1. - uvRaw.y), .3);
+	col *= mix (1., .75, .5 + .5*cos (900.*uvRaw.y));
 
 	fragColor = vec4 (col, 1.);
 }
