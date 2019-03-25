@@ -57,8 +57,8 @@ float sdSphere (in vec3 p, in float radius)
 
 float sdBox (in vec3 p, in vec3 b)
 {
-	vec3 d = abs(p) - b;
-	return min(max(d.x,max(d.y,d.z)),0.0) + length(max(d,0.0));
+	vec3 d = abs (p) - b;
+	return min (max (d.x, max (d.y, d.z)), .0) + length (max (d, .0));
 }
 
 mat2 r2d (in float degree)
