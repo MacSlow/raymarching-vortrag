@@ -96,6 +96,16 @@ add_custom_target (tiny
 	COMMAND mv ./compact ./raymarcher-nongl
 )
 
+add_custom_target (tiny-gl
+	DEPENDS raymarcher-gl
+	COMMAND sstrip ./raymarcher-gl
+	COMMAND gzip -cn9 ./raymarcher-gl >small
+	COMMAND cat ../data/tiny-gl ./small >compact
+	COMMAND chmod +x ./compact
+	COMMAND rm ./small ./raymarcher-gl
+	COMMAND mv ./compact ./raymarcher-gl
+)
+
 # only used under Linux
 add_custom_target (tidy
 	DEPENDS raymarcher-nongl
