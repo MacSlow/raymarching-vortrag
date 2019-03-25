@@ -136,8 +136,8 @@ float raymarch (in vec3 ro, in vec3 rd)
     for (int i = 0; i < 64; ++i) {
         vec3 p = ro + d * rd;
         t = scene (p);
-        if (t < .0001) break;
-        d += t;
+        if (t < .00001) break;
+        d += t*.75;
     }
 
     return d;
@@ -151,14 +151,22 @@ vec3 normal (in vec3 p)
                             scene (p + e.yyx)) - scene (p));
 }
 
+float shadow (in vec3 p, in vec3 n, in vec3 lPos)
+ {
+    float lDist = distance (p, lPos);
+    vec3 lDir = normalize (lPos - p); 
+    float dist = raymarch (p + .01*n, lDir);
+    return dist < lDist ? .1 : 1.; 
+}
+
 vec3 shade (in vec3 ro, in vec3 rd, in float d)
 {
     vec3 p = ro + d * rd;
-    vec3 ambient = vec3 (.05);
-    vec3 diffuseColor = vec3 (.9, .3, .3);
-    vec3 specularColor = vec3 (.9, .8, .7);
+    vec3 ambient = vec3 (.025);
+    vec3 diffuseColor = vec3 (.2, .1, .1);
+    vec3 specularColor = vec3 (1.);
     float shininess = 40.;
-    float diffuseStrength = .25;
+    float diffuseStrength = .975;
     float t = 3.*iTime;
 
     vec3 n = normal (p);
@@ -169,7 +177,7 @@ vec3 shade (in vec3 ro, in vec3 rd, in float d)
     float diffuse = max (dot (n, lDir), .0)*(1. / lDist)*diffuseStrength;
     float specular = pow (max (dot (hDir, n), .0), shininess);
 
-	vec3 diffuseColor2 = vec3 (.3, .9, .3);
+	vec3 diffuseColor2 = vec3 (.1, .2, .1);
     vec3 specularColor2 = vec3 (.7, .8, .9);
     vec3 lPos2 = vec3 (.0, sin(t), .75*cos(t));
     float lDist2 = distance (lPos2, p);
@@ -178,7 +186,7 @@ vec3 shade (in vec3 ro, in vec3 rd, in float d)
     float diffuse2 = max (dot (n, lDir2), .0)*(1. / lDist2)*diffuseStrength;
     float specular2 = pow (max (dot (hDir2, n), .0), shininess);
 
-	vec3 diffuseColor3 = vec3 (.3, .3, .9);
+	vec3 diffuseColor3 = vec3 (.1, .1, .2);
     vec3 specularColor3 = vec3 (.8, .9, .7);
     vec3 lPos3 = vec3 (sin (t), .5*cos(t), -1.);
     float lDist3 = distance (lPos3, p);
@@ -187,10 +195,14 @@ vec3 shade (in vec3 ro, in vec3 rd, in float d)
     float diffuse3 = max (dot (n, lDir3), .0)*(1. / lDist3)*diffuseStrength;
     float specular3 = pow (max (dot (hDir3, n), .0), shininess);
 
+	float sha = shadow (p, n, lPos);
+	float sha2 = shadow (p, n, lPos2);
+	float sha3 = shadow (p, n, lPos3);
+
     vec3 col = ambient +
-			   diffuse * diffuseColor + specular * specularColor +
-			   diffuse2 * diffuseColor2 + specular2 * specularColor2 +
-			   diffuse3 * diffuseColor3 + specular3 * specularColor3;
+			   sha*(diffuse * diffuseColor + specular * specularColor) +
+			   sha*(diffuse2 * diffuseColor2 + specular2 * specularColor2) +
+			   sha*(diffuse3 * diffuseColor3 + specular3 * specularColor3);
     return col;
 }
 
@@ -230,16 +242,17 @@ void main ()
 
     // secondary-/reflection-ray
     vec3 rd2 = normalize (reflect (rd, n));
-    float d2 = raymarch (p+n*0.1, rd2);
-    vec3 p2 = p + d2 * rd2;
-    vec3 n2 = normal (p2);
+    float d2 = raymarch (p + n*.01, rd2);
+    vec3 p2 = p + d2*rd2;
     vec3 col2 = shade (p, rd2, d2);
-    col += (.1 + .3*(.5 + .5 * cos (10.*iTime))) * col2;
+    col += (.1 + .3*(.5 + .5*cos (10.*iTime)))*col2;
 
-    // gamma-correction, tint, vingette
-    col = .2 * col + .8 * sqrt (col);
+    // tone-mapping, tint, vingette, raster-effect, gamma-correction
+	col = col / (1. + col); 
     col *= vec3 (.7, .8, .9);
-    col *= .2 + .8 * pow (16. * uvRaw.x * uvRaw.y * (1. - uvRaw.x) * (1. - uvRaw.y), .3);
+    col *= .1 + .9 * pow (16. * uvRaw.x * uvRaw.y * (1. - uvRaw.x) * (1. - uvRaw.y), .3);
+	col *= mix (1., .75, .5 + .5*cos (700.*uvRaw.y));
+	col = pow (col, vec3 (1./2.2));
 
     fragColor = vec4(col, 1.);
 }
