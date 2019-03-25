@@ -184,14 +184,14 @@ void main () {
 	float glow = float (iter) / float (MAX_ITER);
     vec3 p = ro + d * rd;
 	    
-    vec3 col = shade (ro, rd, d) + pow (glow, 1.05) * vec3 (1.);
+    vec3 col = shade (ro, rd, d) + pow (glow, 1.05)*vec3 (1.);
 
-	col *= fog;
-    col = col / (.75 + col);
-    col = .1 * col + .9*sqrt (col);
-	col *= .8 + .2 * pow (16.*uvRaw.x*uvRaw.y*(1. - uvRaw.x)*(1. - uvRaw.y), .3);
-	col *= mix (1., .75, .5 + .5*cos (900.*uvRaw.y));
+    col *= fog;
+    col = col / (1. + col);
+    col *= .8 + .2*pow (16.*uvRaw.x*uvRaw.y*(1. - uvRaw.x)*(1. - uvRaw.y), .3);
+    col *= mix (1., .75, .5 + .5*cos (900.*uvRaw.y));
+    col = pow (col, vec3 (1./2.2));
 
-	fragColor = vec4 (col, 1.);
+    fragColor = vec4 (col, 1.);
 }
 
