@@ -98,10 +98,10 @@ void main()
     col.g += 4.*(layerLargeGreen + layerMediumGreen + layerSmallGreen + layerTinyGreen);
     col.b += 4.*(layerLargeBlue + layerMediumBlue + layerSmallBlue + layerTinyBlue);
 
-    col = pow (col, vec3 (1./2.2));
-	col *= 1. - .6*length (fragCoord.xy*2. - 1.);
+	col *= 1. - .675*length (fragCoord.xy*2. - 1.);
     col = col / (1. + col);
-	col *= mix (1., .75, .5 + .5*cos (900.*uvRaw.y));
+	col *= mix (1., .5, .5 + .5*cos (900.*uvRaw.y));
+    col = pow (col, vec3 (1./2.2));
 
     fragColor = vec4 (col, 1.);
 }
