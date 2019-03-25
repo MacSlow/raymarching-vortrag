@@ -88,22 +88,22 @@ add_custom_target (report
 # only used under Linux
 add_custom_target (tiny
 	DEPENDS raymarcher-nongl
-	COMMAND sstrip ./raymarcher-nongl
-	COMMAND gzip -cn9 ./raymarcher-nongl >small
-	COMMAND cat ../data/tiny ./small >compact
-	COMMAND chmod +x ./compact
-	COMMAND rm ./small ./raymarcher-nongl
-	COMMAND mv ./compact ./raymarcher-nongl
+	COMMAND sstrip raymarcher-nongl
+	COMMAND xz -z -9 -e -T0 raymarcher-nongl
+	COMMAND cat ../data/tiny raymarcher-nongl.xz >compact
+	COMMAND chmod +x compact
+	COMMAND rm raymarcher-nongl.xz
+	COMMAND mv compact raymarcher-nongl
 )
 
 add_custom_target (tiny-gl
 	DEPENDS raymarcher-gl
-	COMMAND sstrip ./raymarcher-gl
-	COMMAND gzip -cn9 ./raymarcher-gl >small
-	COMMAND cat ../data/tiny-gl ./small >compact
-	COMMAND chmod +x ./compact
-	COMMAND rm ./small ./raymarcher-gl
-	COMMAND mv ./compact ./raymarcher-gl
+	COMMAND sstrip raymarcher-gl
+	COMMAND xz -z -9 -e -T0 raymarcher-gl
+	COMMAND cat ../data/tiny-gl raymarcher-gl.xz >compact
+	COMMAND chmod +x compact
+	COMMAND rm raymarcher-gl.xz
+	COMMAND mv compact raymarcher-gl
 )
 
 # only used under Linux
