@@ -194,12 +194,12 @@ vec3 shadePBR (in vec3 ro, in vec3 rd, in float d, in int id)
 
     // lights hard-coded as well atm
     vec3 lightColors[2];
-    lightColors[0] = vec3 (.3, .3, .9) * 20.;
-    lightColors[1] = vec3 (.9, .9, .3) * 20.;
+    lightColors[0] = vec3 (.7, .7, .9) * 40.;
+    lightColors[1] = vec3 (.9, .9, .7) * 40.;
 
     vec3 lightPositions[2];
-    lightPositions[0] = p + vec3 (.5, 2.75, .5);
-    lightPositions[1] = p + vec3 (-.3, .25, -.5);
+    lightPositions[0] = vec3 (.5, 2.75, .5);
+    lightPositions[1] = vec3 (-.3, .25, -.5);
 
 	vec3 N = normalize (nor);
     vec3 V = normalize (ro - p);
@@ -215,9 +215,9 @@ vec3 shadePBR (in vec3 ro, in vec3 rd, in float d, in int id)
         // calculate per-light radiance
         vec3 L = normalize(lightPositions[i] - p);
         vec3 H = normalize(V + L);
-        float distance    = length(lightPositions[i] - p);
-        float attenuation = 1. / (distance * distance);
-        vec3 radiance     = lightColors[i] * attenuation;
+        float ldist = distance (lightPositions[i], p);
+        float attenuation = 5./(ldist*ldist);
+        vec3 radiance = lightColors[i]*attenuation;
 	        
         // cook-torrance brdf
         float aDirect = .125 * pow (roughness + 1., 2.);
@@ -237,7 +237,7 @@ vec3 shadePBR (in vec3 ro, in vec3 rd, in float d, in int id)
         // add to outgoing radiance Lo
         float NdotL = max(dot(N, L), 0.0);                
         Lo += (kD * albedo / PI + specular) * radiance * NdotL; 
-	    Lo *= shadow (p, N, L, distance);
+	    Lo *= shadow (p, N, L, ldist);
     }
 
     vec3 ambient = kD*albedo*ao;
