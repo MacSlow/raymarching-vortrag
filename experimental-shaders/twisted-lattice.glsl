@@ -117,6 +117,10 @@ Result scene (in vec3 p)
 	p.x -= cos (iTime);
 	p.z -= sin (iTime);
 
+    // bye-bye Lipschitz continuity... but it looks cool :)
+    p.xy *= r2d (3.*cos (p.z));
+    p.yz *= r2d (3.*sin (p.x));
+
 	vec3 cylinderCenter = p;
 	vec3 size = vec3 (3.5);
 	cylinderCenter = mod (cylinderCenter + .5*size, size) - .5*size;
@@ -259,7 +263,7 @@ void main()
 	vec2 uv = uvRaw;
     uv = uv * 2. - 1.;
     uv.x *= iResolution.x / iResolution.y;
-	uv *= 1. + 1.*length (uv);
+	uv *= 1. + .5*length (uv);
 
     // set up "camera", view origin (ro) and view direction (rd)
 	vec3 offset = vec3 (.0, .0, .0);
