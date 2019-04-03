@@ -17,10 +17,11 @@ out vec4 fragColor;
 
 precision highp float;
 
-const int MAX_ITER    = 64;
-const float STEP_SIZE = .95;
+const int MAX_ITER    = 48;
+const float STEP_SIZE = 1.1;
 const float EPSILON   = .001;
 const float PI = 3.14159265359;
+const int AA_SIZE = 3;
 
 mat2 r2d (in float a) {
     float rad = radians (a);
@@ -118,8 +119,8 @@ Result scene (in vec3 p)
 	p.z -= sin (iTime);
 
     // bye-bye Lipschitz continuity... but it looks cool :)
-    p.xy *= r2d (3.*cos (p.z));
-    p.yz *= r2d (3.*sin (p.x));
+    p.xy *= r2d (3.*p.z);
+    p.yz *= r2d (3.*p.x);
 
 	vec3 cylinderCenter = p;
 	vec3 size = vec3 (3.5);
@@ -194,8 +195,8 @@ vec3 shadePBR (in vec3 ro, in vec3 rd, in float d, in int id)
 
     // lights hard-coded as well atm
     vec3 lightColors[2];
-    lightColors[0] = vec3 (.7, .7, .9) * 40.;
-    lightColors[1] = vec3 (.9, .9, .7) * 40.;
+    lightColors[0] = vec3 (.5, .5, .9) * 60.;
+    lightColors[1] = vec3 (.9, .9, .7) * 60.;
 
     vec3 lightPositions[2];
     lightPositions[0] = vec3 (.5, 2.75, .5);
@@ -260,40 +261,59 @@ void main()
 {
     // normalizing and aspect-correction
 	vec2 uvRaw = fragCoord.xy;
-	vec2 uv = uvRaw;
-    uv = uv * 2. - 1.;
-    uv.x *= iResolution.x / iResolution.y;
-	uv *= 1. + .5*length (uv);
 
     // set up "camera", view origin (ro) and view direction (rd)
-	vec3 offset = vec3 (.0, .0, .0);
-    vec3 ro = offset + vec3 (.0, 1., 2.);
-    vec3 aim = offset + vec3 (.0, .0, .0);
-    float zoom = 1.125;
-    vec3 rd = camera (uv, ro, aim, zoom);
+	vec3 ro = vec3 (.0, 1., 2.);
+    vec3 aim = vec3 (.0);
+    float zoom = 2.;
 
-    // do the ray-march...
-    Result res = raymarch (ro, rd);
-    float fog = 1. / (1. + res.d * res.d * .05);
-    vec3 c = shadePBR (ro, rd, res.d, res.id);
+	float fog = .0;
+	Result res;
+	vec3 color = vec3 (.0);
 
-    // do the reflections
-    if (res.id == 2) {
-        vec3 n = normal (ro + res.d*rd);
-        ro = (ro + res.d*rd) +.01*n;
-        rd = normalize (reflect (rd, n));
-        c += .05*shadePBR (ro, rd, res.d, res.id);
-    }
+	for (int x = 0; x < AA_SIZE; ++x) {
+		for (int y = 0; y < AA_SIZE; ++y) {
 
-    // fog, tonemapping, tint, vignette, gamma-correction
-	c *= fog;
-	c = mix (c, vec3 (.3), pow (1. - 1. / res.d, 20.));
-	c = c / (1. + c);
-    c *= vec3 (.9, .8, .7);
-    c *= .2 + .8*pow(16.*uvRaw.x*uvRaw.y*(1. - uvRaw.x)*(1. - uvRaw.y), .3);
-    c = pow (c, vec3 (1./2.2));
-	c *= mix (1., .5, cos (1100.*uvRaw.y));
+			// anti-alias offset
+			vec2 pixelOffset = vec2 (float (x), float (y))/float  (AA_SIZE) - .5;
 
-	fragColor = vec4(c, 1.);
+			// normalize, aspect-correct and 'bulge' UVs
+			vec2 uv = (fragCoord.xy + pixelOffset/iResolution.xy);
+			uv = uv * 2. - 1.;
+			uv.x *= iResolution.x / iResolution.y;
+			uv *= 1. + .5*length (uv);
+
+			// create ray for view direction
+    		vec3 rd = camera (uv, ro, aim, zoom);
+
+		    // do the ray-march...
+			res = raymarch (ro, rd);
+			fog = 1. / (1. + res.d * res.d * .05);
+			vec3 ctmp = shadePBR (ro, rd, res.d, res.id);
+			ctmp *= fog;
+
+			// do the reflections
+			/*if (res.id == 2) {
+				vec3 p = ro + res.d*rd;
+				vec3 n = normal (p);
+				ro = p +.01*n;
+				rd = normalize (reflect (rd, n));
+				Result res2 = raymarch (ro, rd);
+				c += .05*shadePBR (ro, rd, res2.d, res2.id);
+			}*/
+			color += ctmp;
+		}
+	}
+	color /= float (AA_SIZE*AA_SIZE);
+
+    // distance-mist, tonemapping, tint, vignette, raster-lines, gamma-correction
+	color = mix (color, vec3 (.9, .85, .7), pow (1. - 1. / res.d, 30.));
+	color = color / (1. + color);
+    color *= vec3 (.9, .8, .7);
+    color *= .2 + .8*pow(16.*uvRaw.x*uvRaw.y*(1. - uvRaw.x)*(1. - uvRaw.y), .3);
+	color *= mix (1., .5, cos (1100.*uvRaw.y));
+    color = pow (color, vec3 (1./2.2));
+
+	fragColor = vec4(color, 1.);
 }
 
