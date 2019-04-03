@@ -111,6 +111,10 @@ float fOpUnionColumns(float a, float b, float r, float n) {
     }   
 }
 
+float udRoundedBox (in vec3 p, in vec3 size, in float r) {
+	return length (max (vec3 (.0), abs (p) - size)) - r;
+}
+
 Result scene (in vec3 p)
 {
 	p.xz *= r2d (34.*iTime);
@@ -125,9 +129,9 @@ Result scene (in vec3 p)
 	vec3 cylinderCenter = p;
 	vec3 size = vec3 (3.5);
 	cylinderCenter = mod (cylinderCenter + .5*size, size) - .5*size;
-	float cylinder = length (cylinderCenter.xz) - .3;
+	float cylinder = length (cylinderCenter.xz) - .1;
 	cylinder = min (cylinder, length (cylinderCenter.yz) - .3);
-	cylinder = min (cylinder, length (cylinderCenter.xy) - .3);
+	cylinder = min (cylinder, udRoundedBox (cylinderCenter, vec3 (.1, .2, 2.), .075));
     float d = cylinder;
 
     vec3 ballCenter = p;
