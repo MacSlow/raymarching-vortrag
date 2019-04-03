@@ -134,6 +134,16 @@ float shadow (in vec3 p, in vec3 lpos)
 	return isShadowed ? .3 : 1.;
 }
 
+float ao (vec3 p, vec3 n, float stepsize, int iterations, float intensity) {
+    float ao = .0;
+    float dist = .0;
+    for (int a = 1; a <= iterations; ++a) {
+        dist = float (a)*stepsize;
+        ao += max (.0, (dist - scene (p + n*dist))/dist);
+    }
+    return 1. - ao*intensity;
+}
+
 // rusty old blinn/phong shading model
 vec3 shade (in vec3 p, in vec3 rd, in vec3 n)
 {
@@ -169,8 +179,10 @@ vec3 shade (in vec3 p, in vec3 rd, in vec3 n)
 	// there is only one 'material'
     vec3 matertialColor = vec3 (.4, .7, .6);
 
-    return att1*shadow (p, lightPosition1) * (matertialColor*diffuseColor1 + sp1*vec3 (1.))+
-           att2*shadow (p, lightPosition2) * (matertialColor*diffuseColor2 + sp2*vec3 (1.));
+	float ao = ao (p, n, .15, 4, .15);
+
+    return ao*att1*shadow (p, lightPosition1) * (matertialColor*diffuseColor1 + sp1*vec3 (1.))+
+           ao*att2*shadow (p, lightPosition2) * (matertialColor*diffuseColor2 + sp2*vec3 (1.));
 }
 
 vec3 camera (in vec2 uv, in vec3 ro, in vec3 aim, in float zoom)
