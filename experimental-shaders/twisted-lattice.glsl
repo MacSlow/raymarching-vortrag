@@ -21,7 +21,7 @@ const int MAX_ITER    = 48;
 const float STEP_SIZE = 1.1;
 const float EPSILON   = .001;
 const float PI = 3.14159265359;
-const int AA_SIZE = 3;
+const int AA_SIZE = 2;
 
 mat2 r2d (in float a) {
     float rad = radians (a);
@@ -115,6 +115,8 @@ float udRoundedBox (in vec3 p, in vec3 size, in float r) {
 	return length (max (vec3 (.0), abs (p) - size)) - r;
 }
 
+vec3 cylinderCenter;
+
 Result scene (in vec3 p)
 {
 	p.xz *= r2d (34.*iTime);
@@ -126,7 +128,7 @@ Result scene (in vec3 p)
     p.xy *= r2d (3.*p.z);
     p.yz *= r2d (3.*p.x);
 
-	vec3 cylinderCenter = p;
+	cylinderCenter = p;
 	vec3 size = vec3 (3.5);
 	cylinderCenter = mod (cylinderCenter + .5*size, size) - .5*size;
 	float cylinder = length (cylinderCenter.xz) - .1;
@@ -186,16 +188,19 @@ float ao (vec3 p, vec3 n, float stepsize, int iter, float i) {
 	}
 	return 1. - ao*i;
 }
+
 vec3 shadePBR (in vec3 ro, in vec3 rd, in float d, in int id)
 {
     vec3 p = ro + d * rd;
     vec3 nor = normal (p);
 
     // "material" hard-coded for the moment
-    vec3 albedo = vec3 (.65);
-    float metallic  = .9;
-    float roughness = .1;
-    float ao = ao (p, nor, .075, 4, .75);
+	vec3 s = cylinderCenter;
+	float m = smoothstep (.1, .9, .5 + .5*cos (26.9*(s.x + s.y + s.z)));
+    float metallic  = mix (.4, .6, m);
+    float roughness = mix (.6, .4, m);
+    vec3 albedo = mix (vec3 (.4, .2, .1), vec3 (.8, .7, .6), m);
+    float ao = ao (p, nor, .05, 8, .2);
 
     // lights hard-coded as well atm
     vec3 lightColors[2];
@@ -315,7 +320,7 @@ void main()
 	color = color / (1. + color);
     color *= vec3 (.9, .8, .7);
     color *= .2 + .8*pow(16.*uvRaw.x*uvRaw.y*(1. - uvRaw.x)*(1. - uvRaw.y), .3);
-	color *= mix (1., .5, cos (1100.*uvRaw.y));
+	//color *= mix (1., .5, cos (1100.*uvRaw.y));
     color = pow (color, vec3 (1./2.2));
 
 	fragColor = vec4(color, 1.);
