@@ -227,8 +227,8 @@ vec3 shade (in vec3 ro, in vec3 rd, in float d, in int id) {
 
     // lights hard-coded as well atm
     vec3 lightColors[2];
-    lightColors[0] = vec3 (.7, .8, .9)*3.;
-    lightColors[1] = vec3 (.9, .8, .7)*6.;
+    lightColors[0] = vec3 (.7, .8, .9)*6.;
+    lightColors[1] = vec3 (.9, .8, .7)*9.;
 
     vec3 lightPositions[2];
     lightPositions[0] = vec3 (-1.5, 1.0, -3.);
@@ -248,9 +248,9 @@ vec3 shade (in vec3 ro, in vec3 rd, in float d, in int id) {
         // calculate per-light radiance
         vec3 L = normalize(lightPositions[i] - p);
         vec3 H = normalize(V + L);
-        float distance    = length(lightPositions[i] - p);
-        float attenuation = 20. / (distance * distance);
-        vec3 radiance     = lightColors[i] * attenuation;
+        float ldist = length(lightPositions[i] - p);
+        float attenuation = 7. / (ldist*ldist);
+        vec3 radiance = lightColors[i] * attenuation;
         
         // cook-torrance brdf
         float aDirect = pow (roughness + 1., 2.);
@@ -275,10 +275,10 @@ vec3 shade (in vec3 ro, in vec3 rd, in float d, in int id) {
         }
     }
 
-    vec3 diffuse    = albedo;
-    vec3 ambient    = (kD * diffuse) * ao;
+    vec3 diffuse = albedo;
+    vec3 ambient = (kD * diffuse) * ao;
 
-    return 3.*ambient + Lo;
+    return ambient + Lo;
 }
 
 vec3 camera (in vec2 uv, in vec3 ro, in vec3 aim, in float zoom) {
@@ -339,9 +339,6 @@ void main () {
             d = march (ro, rd, id);
             vec3 n = normal (ro + d * rd, d*EPSILON);
             vec3 ctmp = shade (ro, rd, d, id);
-            if (id != 1 && id != 2) {
-                ctmp = vec3 (.0);
-            }
             col += ctmp;
         }
     }
