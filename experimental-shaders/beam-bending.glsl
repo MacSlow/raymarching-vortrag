@@ -1,4 +1,4 @@
-//build/raymarcher-gl talk-training.glsl 640 360 30 data/noise-256x256.png
+//build/raymarcher-gl experimental-shaders/beam-bending.glsl 640 360 30 data/noise-256x256.png
 #version 420
 uniform vec3 iResolution;
 uniform sampler2D iChannel0;
