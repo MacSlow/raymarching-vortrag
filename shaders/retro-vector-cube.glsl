@@ -96,6 +96,7 @@ void main() {
     vec2 uv = fragCoord.xy* 2. - 1.;
     uv.x *= iResolution.x/iResolution.y;
     uv *= 1. + .4*length(uv);
+	uv.x += .0035*cos(40.*uv.y + 2.*iTime);
 
     boxType box;
     box.p[0] = vec4 ( 0.1,  0.1,  0.1, 1.0);
