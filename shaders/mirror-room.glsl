@@ -199,10 +199,9 @@ vec3 shade (in vec3 ro, in vec3 rd, in float d)
 	float sha2 = shadow (p, n, lPos2);
 	float sha3 = shadow (p, n, lPos3);
 
-    vec3 col = ambient +
-			   sha*(diffuse * diffuseColor + specular * specularColor) +
-			   sha*(diffuse2 * diffuseColor2 + specular2 * specularColor2) +
-			   sha*(diffuse3 * diffuseColor3 + specular3 * specularColor3);
+    vec3 col = sha*(ambient + diffuse * diffuseColor + specular * specularColor) +
+			   sha*(ambient + diffuse2 * diffuseColor2 + specular2 * specularColor2) +
+			   sha*(ambient + diffuse3 * diffuseColor3 + specular3 * specularColor3);
     return col;
 }
 
@@ -235,6 +234,7 @@ void main ()
 
     // primary-/view-ray
     float d = raymarch (ro, rd);
+	float fog = 1. / (1. + d*d*.2);
     vec3 p = ro + d * rd;
     vec3 n = normal (p);
     vec3 col = shade (ro, rd, d);
@@ -248,10 +248,11 @@ void main ()
     col += (.1 + .3*(.5 + .5*cos (10.*iTime)))*col2;
 
     // tone-mapping, tint, vingette, raster-effect, gamma-correction
+	col *= fog;
 	col = col / (1. + col); 
     col *= vec3 (.7, .8, .9);
     col *= .1 + .9 * pow (16. * uvRaw.x * uvRaw.y * (1. - uvRaw.x) * (1. - uvRaw.y), .3);
-	col *= mix (1., .75, .5 + .5*cos (700.*uvRaw.y));
+	col *= mix (1., .5, .5 + .5*cos (700.*uvRaw.y));
 	col = pow (col, vec3 (1./2.2));
 
     fragColor = vec4(col, 1.);

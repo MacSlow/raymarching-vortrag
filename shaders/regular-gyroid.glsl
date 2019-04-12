@@ -102,7 +102,7 @@ vec3 shade (vec3 ro, vec3 rd, float d, vec3 n, vec3 lp, vec3 lc, float li, int i
 	float sp = pow (max (.0, dot (n, h)), shiny);
 	vec3 am = vec3 (.05);
 	float ao = ao (p, n, .1, .1);
-	return am + ao*att*s*(diff*lc*li*mat + sp*vec3 (1.));
+	return ao*att*s*(am + diff*lc*li*mat + sp*vec3 (1.));
 }
 
 vec3 cam (vec2 uv, vec3 ro, vec3 aim, float zoom) {
@@ -128,6 +128,7 @@ void main ()
 	int id = 0;
 	vec3 pout = vec3 (.0);
 	float d = march (ro, rd, id, pout);
+	float fog = 1. / (1. + d*d*.025);
 	vec3 p = ro + d*rd;
 	vec3 n = norm (p);
 	vec3 col = shade (ro, rd, d, n, vec3 (2., 1.5, 3.), vec3 (.9, .85, .5), 6.,id, pout);
@@ -135,6 +136,7 @@ void main ()
 	col += shade (ro, rd, d, n, vec3 (-3., 1., .5), vec3 (.9, .5, .3), 4.,id, pout);
 	col += shade (ro, rd, d, n, vec3 (1., .5, -3.), vec3 (.5), 9.,id, pout);
 
+	col *= fog;
 	col = col / (1. + col);
 	col *= 1. - .65*length(uvRaw*2.-1.);
 	col = pow (col, vec3 (1./2.2));

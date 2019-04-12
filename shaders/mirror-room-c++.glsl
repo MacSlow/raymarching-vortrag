@@ -256,7 +256,7 @@ void main ()
 
     // primary-/view-ray
     float d = raymarch (ro, rd);
-	float fog = 1. / (1. + d*d*.07);
+	float fog = 1. / (1. + d*d*.2);
     vec3 p = ro + d * rd;
     vec3 n = normal (p, d*EPSILON);
     vec3 col = shade (ro, rd, d);
