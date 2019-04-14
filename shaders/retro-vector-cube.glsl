@@ -92,6 +92,35 @@ mat4 rotZ (float angle)
     return mat;
 }
 
+boxType apply (boxType box, mat4 model) {
+	boxType b = box;
+    b.p[0] = model*box.p[0];
+    b.p[1] = model*box.p[1];
+    b.p[2] = model*box.p[2];
+    b.p[3] = model*box.p[3];
+    b.p[4] = model*box.p[4];
+    b.p[5] = model*box.p[5];
+    b.p[6] = model*box.p[6];
+    b.p[7] = model*box.p[7];
+	return b;
+}
+
+vec3 drawCube (vec2 uv, boxType box, float scale) {
+    vec3 col = glowLine (uv, scale*box.p[0].xy/box.p[0].z, scale*box.p[1].xy/box.p[1].z, red);
+    col += glowLine (uv, scale*box.p[1].xy/box.p[1].z, scale*box.p[2].xy/box.p[2].z, green);
+    col += glowLine (uv, scale*box.p[2].xy/box.p[2].z, scale*box.p[3].xy/box.p[3].z, orange);
+    col += glowLine (uv, scale*box.p[3].xy/box.p[3].z, scale*box.p[0].xy/box.p[0].z, cyan);
+    col += glowLine (uv, scale*box.p[4].xy/box.p[4].z, scale*box.p[5].xy/box.p[5].z, blue);
+    col += glowLine (uv, scale*box.p[5].xy/box.p[5].z, scale*box.p[6].xy/box.p[6].z, red);
+    col += glowLine (uv, scale*box.p[6].xy/box.p[6].z, scale*box.p[7].xy/box.p[7].z, yellow);
+    col += glowLine (uv, scale*box.p[7].xy/box.p[7].z, scale*box.p[4].xy/box.p[4].z, green);
+    col += glowLine (uv, scale*box.p[0].xy/box.p[0].z, scale*box.p[4].xy/box.p[4].z, blue);
+    col += glowLine (uv, scale*box.p[1].xy/box.p[1].z, scale*box.p[5].xy/box.p[5].z, cyan);
+    col += glowLine (uv, scale*box.p[2].xy/box.p[2].z, scale*box.p[6].xy/box.p[6].z, green);
+    col += glowLine (uv, scale*box.p[3].xy/box.p[3].z, scale*box.p[7].xy/box.p[7].z, magenta);
+	return col;
+}
+
 void main() {
     vec2 uv = fragCoord.xy* 2. - 1.;
     uv.x *= iResolution.x/iResolution.y;
@@ -108,30 +137,30 @@ void main() {
     box.p[6] = vec4 (-0.1, -0.1, -0.1, 1.0);
     box.p[7] = vec4 (-0.1,  0.1, -0.1, 1.0);
 
+	boxType box2 = box;
+	boxType box3 = box;
+	boxType box4 = box;
+
     float t = 8. + 14.*iTime;
     mat4 rot3d = rotX (-4.*t)*rotY (3.*t)*rotZ (2.*t);
     mat4 model = trans (vec3 (.0, .0, -.275))*rot3d;
-    box.p[0] = model * box.p[0];
-    box.p[1] = model * box.p[1];
-    box.p[2] = model * box.p[2];
-    box.p[3] = model * box.p[3];
-    box.p[4] = model * box.p[4];
-    box.p[5] = model * box.p[5];
-    box.p[6] = model * box.p[6];
-    box.p[7] = model * box.p[7];
+	box = apply (box, model);
+	vec3 boxCol = .5*drawCube (uv, box, 1.);
 
-    vec3 boxCol = glowLine (uv, box.p[0].xy / box.p[0].z, box.p[1].xy / box.p[1].z, red);
-    boxCol += glowLine (uv, box.p[1].xy / box.p[1].z, box.p[2].xy / box.p[2].z, green);
-    boxCol += glowLine (uv, box.p[2].xy / box.p[2].z, box.p[3].xy / box.p[3].z, orange);
-    boxCol += glowLine (uv, box.p[3].xy / box.p[3].z, box.p[0].xy / box.p[0].z, cyan);
-    boxCol += glowLine (uv, box.p[4].xy / box.p[4].z, box.p[5].xy / box.p[5].z, blue);
-    boxCol += glowLine (uv, box.p[5].xy / box.p[5].z, box.p[6].xy / box.p[6].z, red);
-    boxCol += glowLine (uv, box.p[6].xy / box.p[6].z, box.p[7].xy / box.p[7].z, yellow);
-    boxCol += glowLine (uv, box.p[7].xy / box.p[7].z, box.p[4].xy / box.p[4].z, green);
-    boxCol += glowLine (uv, box.p[0].xy / box.p[0].z, box.p[4].xy / box.p[4].z, blue);
-    boxCol += glowLine (uv, box.p[1].xy / box.p[1].z, box.p[5].xy / box.p[5].z, cyan);
-    boxCol += glowLine (uv, box.p[2].xy / box.p[2].z, box.p[6].xy / box.p[6].z, green);
-    boxCol += glowLine (uv, box.p[3].xy / box.p[3].z, box.p[7].xy / box.p[7].z, magenta);
+    mat4 rot3d2 = rotX (-4.025*t)*rotY (3.025*t)*rotZ (2.025*t);
+    mat4 model2 = trans (vec3 (.0, .0, -.275))*rot3d2;
+	box2 = apply (box2, model2);
+	boxCol += .5*drawCube (uv, box2, .8);
+
+    mat4 rot3d3 = rotX (-4.05*t)*rotY (3.05*t)*rotZ (2.05*t);
+    mat4 model3 = trans (vec3 (.0, .0, -.275))*rot3d3;
+	box3 = apply (box3, model3);
+	boxCol += .5*drawCube (uv, box3, .6);
+
+    mat4 rot3d4 = rotX (-4.075*t)*rotY (3.075*t)*rotZ (2.075*t);
+    mat4 model4 = trans (vec3 (.0, .0, -.275))*rot3d4;
+	box4 = apply (box4, model4);
+	boxCol += .5*drawCube (uv, box4, .4);
 
     boxCol = boxCol / (1. + boxCol);
     boxCol = sqrt (boxCol);
