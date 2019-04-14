@@ -106,14 +106,14 @@ vec3 shade (vec3 ro,
 	float att = 5. / (ld*ld);
 	vec3 mat = vec3 (.2);
 	if (id == 1) {
-		mat = mix (vec3 (.3, .25, .1),
-				   vec3 (.25, .3, .2),
-                   smoothstep(.0, .9, cos (20.*p.x) * sin(20.*p.z)));
+		mat = mix (vec3 (.0, .0, .0),
+				   vec3 (.5, .5, .5),
+                   smoothstep(.4, .6, cos (5.*p.x) * sin(5.*p.z+5.*iTime)));
 	}
 	if (id == 2) {
-		mat = mix (vec3 (.0, .3, .1),
-				   vec3 (.0, .1, .3),
-				   smoothstep (.0, .9, cos (5.*p.x) + sin (5.*p.y)));
+		mat = mix (vec3 (.0, .0, .0),
+				   vec3 (.5, .5, .5),
+				   smoothstep (.0, .9, sin (25.*p.y + 12.*iTime)));
 	}
 	if (id == 3) {
 		mat = vec3 (.9, .5, .2);
@@ -126,13 +126,13 @@ vec3 shade (vec3 ro,
 	float hf = .0;
     float fac = 1.;
     if (id == 1) {
-		lf = texture (iChannel0, .5*p.xz).r;
-		hf = texture (iChannel0, 2.*p.xz).r;
+		lf = texture (iChannel0, .5*p.xz + vec2 (.0, .5*iTime)).r;
+		hf = texture (iChannel0, 2.*p.xz + vec2 (.0, 2.*iTime)).r;
 		fac = lf + hf;
 	}
     if (id == 2) {
-		lf = texture (iChannel0, .5*p.xy).r;
-		hf = texture (iChannel0, 2.*p.xy).r;
+		lf = texture (iChannel0, .5*p.xy + vec2 (.0, .5*iTime)).r;
+		hf = texture (iChannel0, 2.*p.xy + vec2 (.0, 2.*iTime)).r;
 		fac = lf + hf;
 	}
 	shiny *= fac;
