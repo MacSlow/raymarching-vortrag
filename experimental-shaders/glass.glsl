@@ -32,11 +32,14 @@ float map (vec3 p, inout int id, inout vec3 pout) {
 	float ground = p.y + 1.;
 	float wall = p.z + 1.;
 	vec3 pbox = p + vec3 (.0, -.4, -.2);
-	pbox.xz *= r2d (34.*iTime);
-	pbox.yz *= r2d (46.*iTime);
+	pbox.xz *= r2d (14.*iTime);
+	pbox.yz *= r2d (26.*iTime);
 	float r = .75 + .1*(.5+.5*cos(4.*iTime + 9.*pbox.y));
 	float box = sdBox (pbox, vec3 (.6), .05);
-	float ball = length(p - vec3 (2.5*cos (1.*iTime), .1, .2)) - .75;
+	p -= vec3 (2.5*cos (1.25*iTime), .75, .2);
+	p.xz *= r2d (-60.*iTime);
+	p.yz *= r2d (-90.*iTime);
+	float ball = sdBox (p , vec3 (.4), .05);
 	box = (isInside? -1. : 1.)*smin (box, ball, .5);
 	float d = min (ground, min (wall, box));
 	if (d == ground) {id = 1; pout = p;}
@@ -157,7 +160,7 @@ void main ()
 	uv.x *= iResolution.x/iResolution.y;
 	uv *= 1. + .25*length (uv);
 
-	vec3 ro = vec3 (cos (iTime), 1. + .5*(.5+.5*cos(5.*iTime)), 2.5);
+	vec3 ro = vec3 (cos (iTime), 1. + .125*(.5+.5*cos(5.*iTime)), 2.5);
 	vec3 rd = cam (uv, ro, vec3 (.0), 1.7);
 	int id = 0;
 	vec3 pout = vec3 (.0);
@@ -186,6 +189,7 @@ void main ()
 	col += fac*shade (ro, rd, d, n, lp2, lc2, li2, id, pout);
 	col += fac*shade (ro, rd, d, n, lp3, lc3, li3, id, pout);
 	if (id == 3) {
+		n = normalize (n + texture (iChannel0, 1.75*p.xy).r);
 		ro = p - .05*n;
 		float ior = .75;
 		rd = normalize (refract (rd, n, ior));
@@ -212,6 +216,7 @@ void main ()
 		   reflectionBounce < 2;
 		   ++reflectionBounce) {
 		if (id == 3) {
+			n = normalize (n + texture (iChannel0, 1.75*p.xy).r);
 			ro = p + .01*n;
 			rd = reflect (rd, n);
 			d = march (ro, rd, id, pout);
@@ -220,7 +225,7 @@ void main ()
 			vec3 rcol = shade (ro, rd, d, n, lp1, lc1, li1, id, pout);
 			rcol += shade (ro, rd, d, n, lp2, lc2, li2, id, pout);
 			rcol += shade (ro, rd, d, n, lp3, lc3, li3, id, pout);
-			float fakeFresnel = pow (1. - max (dot (n, -rd), .0), 2.5);
+			float fakeFresnel = pow (max (dot (n, -rd), .0), 3.);
 			col += fakeFresnel*rcol;
 		}
 	}
