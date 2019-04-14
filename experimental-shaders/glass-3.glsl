@@ -213,26 +213,28 @@ void main ()
 		col += shade (ro, rd, d, n, lp2, lc2, li2, id, pout);
 		col += shade (ro, rd, d, n, lp3, lc3, li3, id, pout);
 
-		n = normalize (n + texture (iChannel0, 1.75*p.xy).r);
-		ro = p - .05*n;
-		rd = normalize (refract (rd, n, ior));
-		isInside = true;
-		d = march (ro, rd, id, pout);
-		p = ro + d*rd;
-		n = norm (p);
-		col += shade (ro, rd, d, n, lp1, lc1, li1, id, pout);
-		col += shade (ro, rd, d, n, lp2, lc2, li2, id, pout);
-		col += shade (ro, rd, d, n, lp3, lc3, li3, id, pout);
+		if (id == 3) {
+			n = normalize (n + texture (iChannel0, 1.75*p.xy).r);
+			ro = p - .05*n;
+			rd = normalize (refract (rd, n, ior));
+			isInside = true;
+			d = march (ro, rd, id, pout);
+			p = ro + d*rd;
+			n = norm (p);
+			col += shade (ro, rd, d, n, lp1, lc1, li1, id, pout);
+			col += shade (ro, rd, d, n, lp2, lc2, li2, id, pout);
+			col += shade (ro, rd, d, n, lp3, lc3, li3, id, pout);
 
-		ro = p - .01*n;
-		rd = normalize (refract (rd, n, ior));
-		isInside = false;
-		d = march (ro, rd, id, pout);
-		p = ro + d*rd;
-		n = norm (p);
-		col += shade (ro, rd, d, n, lp1, lc1, li1, id, pout);
-		col += shade (ro, rd, d, n, lp2, lc2, li2, id, pout);
-		col += shade (ro, rd, d, n, lp3, lc3, li3, id, pout);
+			ro = p - .01*n;
+			rd = normalize (refract (rd, n, ior));
+			isInside = false;
+			d = march (ro, rd, id, pout);
+			p = ro + d*rd;
+			n = norm (p);
+			col += shade (ro, rd, d, n, lp1, lc1, li1, id, pout);
+			col += shade (ro, rd, d, n, lp2, lc2, li2, id, pout);
+			col += shade (ro, rd, d, n, lp3, lc3, li3, id, pout);
+		}
 	}
 
 	for (int reflectionBounce = 0;
