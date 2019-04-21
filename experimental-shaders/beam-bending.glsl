@@ -15,6 +15,10 @@ mat2 r2d (float deg) {
 	return mat2 (c,s,-s,c);
 }
 
+float plane (vec3 p, vec3 n, float h) {
+	return dot (p, normalize (n)) + h;
+}
+
 float texNoise (vec2 p) {
 	return texture (iChannel0, p).r;
 }
@@ -28,8 +32,15 @@ float map (vec3 p, inout int id, inout vec3 pout) {
 	float size = 3.;
 	float offset = cos (.2*iTime);
 	float offset2 = cos (iTime);
-	float ground = p.y + size + offset2 + .75*texNoise (offset+.05*p.xz+.1*iTime);
-	ground = min (ground, -p.y + size + offset2 + .75*texNoise (offset-.1*iTime+.075*p.xz + 1.));
+	float bump = size + offset2 + .75*texNoise (offset+.05*p.xz+.1*iTime);
+	vec3 n = vec3 (.15, 1., .1);
+	n.xz *= r2d (34.*iTime+64.);
+	float ground = plane (p, n, bump);
+	float bump2 = size + offset2 + .75*texNoise (offset-.1*iTime+.075*p.xz + 1.);
+	vec3 n2 = vec3 (-.05, -1., -.075);
+	n2.xz *= r2d (45.*iTime);
+	ground = min (ground, plane (p, n2, bump2));
+
 	float wall = p.z + 3.*size;
 	wall = min (wall, -p.z + 3.*size);
 	wall = min (wall, p.x + 2.*size);
@@ -151,7 +162,7 @@ void main ()
 	}
 	c=c/(1.25+c*.5);
 	c*=1.-.65*length(uvRaw*2.-1.);
-	c*=mix(1.,.75,cos(500.*uvRaw.y));
+	c*=mix(1.,.75,cos(800.*uvRaw.y));
 	c=pow(c,vec3(1./2.2));
 
     fragColor = vec4(c,1.);
