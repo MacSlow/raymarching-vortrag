@@ -99,6 +99,7 @@ Display::Display (const char* shaderfile, unsigned int width,
 		return;
 	}
 
+	SDL_ShowCursor (SDL_DISABLE);
 	SDL_Surface* icon = IMG_Load (DATA_DIR"/icon.png");
 	SDL_SetWindowIcon (_window, icon);
 	SDL_FreeSurface (icon);
