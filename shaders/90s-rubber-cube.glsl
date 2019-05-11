@@ -190,7 +190,7 @@ void main ()
     vec3 fg;
 	vec3 c = vec3 (.0);
 
-	const float numSamples = 12.;
+	const float numSamples = 16.;
 	for (float samples = .0; samples < numSamples; ++samples) {
 		float t = iTime - samples/numSamples/60.;
     	d = march (ro, rd, id, pout, iter, t);
