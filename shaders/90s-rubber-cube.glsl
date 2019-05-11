@@ -1,3 +1,4 @@
+// build/raymarcher-gl shaders/90s-rubber-cube.glsl 512 512 60 data/noise-256x256.png
 #version 420
 uniform vec3 iResolution;
 uniform float iTime;
