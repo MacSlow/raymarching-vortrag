@@ -58,8 +58,8 @@ target_link_libraries (raymarcher-gl
 						DisplayLib
 						OpenGLLib
 						FileWatchLib
-						#GL # for Linux
-						opengl32 # for Windows/MSYS/MinGW
+						GL # for Linux
+						#opengl32 # for Windows/MSYS/MinGW
 						#-fsanitize=leak,address,undefined
 						${SDL2_LIBRARIES}
 						${SDL2_IMAGE_LIBRARIES}
