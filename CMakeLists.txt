@@ -45,9 +45,16 @@ target_link_libraries (raymarcher-nongl
 					   -s)
 
 include_directories (raymarcher-gl/include
+					 raymarcher-gl/3rd-party/imgui
 					 ${SDL2_INCLUDE_DIRS}
 					 ${SDL2_IMAGE_INCLUDE_DIRS}
 					 ${GLEW_INCLUDE_DIRS})
+add_library (ImGUILib raymarcher-gl/3rd-party/imgui/imgui.cpp
+					  raymarcher-gl/3rd-party/imgui/imgui_draw.cpp
+					  raymarcher-gl/3rd-party/imgui/imgui_impl_opengl3.cpp
+					  raymarcher-gl/3rd-party/imgui/imgui_impl_sdl2.cpp
+					  raymarcher-gl/3rd-party/imgui/imgui_tables.cpp
+					  raymarcher-gl/3rd-party/imgui/imgui_widgets.cpp)
 add_library (DisplayLib raymarcher-gl/src/display.cpp)
 add_library (OpenGLLib raymarcher-gl/src/opengl.cpp
 	                   raymarcher-gl/src/texture.cpp)
@@ -55,16 +62,17 @@ add_library (FileWatchLib raymarcher-gl/src/file-watch.cpp)
 
 add_executable (raymarcher-gl raymarcher-gl/src/main.cpp)
 target_link_libraries (raymarcher-gl
-						DisplayLib
-						OpenGLLib
-						FileWatchLib
-						GL # for Linux
-						#opengl32 # for Windows/MSYS/MinGW
-						#-fsanitize=leak,address,undefined
-						${SDL2_LIBRARIES}
-						${SDL2_IMAGE_LIBRARIES}
-						${GLEW_LIBRARIES} 
-						-s)
+					   DisplayLib
+					   OpenGLLib
+					   FileWatchLib
+					   ImGUILib
+					   GL # for Linux
+					   #opengl32 # for Windows/MSYS/MinGW
+					   #-fsanitize=leak,address,undefined
+					   ${SDL2_LIBRARIES}
+					   ${SDL2_IMAGE_LIBRARIES}
+					   ${GLEW_LIBRARIES} 
+					   -s)
 
 # only used under Linux
 add_custom_target (valgrind

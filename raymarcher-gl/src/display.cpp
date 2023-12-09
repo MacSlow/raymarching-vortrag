@@ -26,6 +26,10 @@
 #include <string>
 #include <sstream>
 
+#include "imgui.h"
+#include "imgui_impl_sdl2.h"
+#include "imgui_impl_opengl3.h"
+
 #include "config.h"
 #include "display.h"
 
@@ -118,6 +122,17 @@ Display::Display (const char* shaderfile, unsigned int width,
 
 	_gl = new OpenGL (_width, _height);
 	_gl->init (shaderfile, imagefile0, imagefile1, imagefile2, imagefile3);
+
+	IMGUI_CHECKVERSION ();
+	ImGui::CreateContext ();
+	ImGuiIO& io = ImGui::GetIO (); (void) io;
+	io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard; 
+	io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;
+	ImGui::StyleColorsDark ();
+	ImGui_ImplSDL2_InitForOpenGL (_window, _context);
+	ImGui_ImplOpenGL3_Init ("#version 130");
+	io.Fonts->AddFontFromFileTTF ("/usr/share/fonts/truetype/ubuntu/Ubuntu-R.ttf", 20.f);
+	io.Fonts->AddFontDefault ();
 }
 
 Display::~Display ()
@@ -140,6 +155,7 @@ bool Display::run ()
 	while (_running) {
 		SDL_Event event;
 		while (SDL_PollEvent (&event)) {
+			ImGui_ImplSDL2_ProcessEvent (&event);
 			switch (event.type) {	
 				case SDL_KEYUP:
 					if (event.key.keysym.sym == SDLK_ESCAPE) {
@@ -215,7 +231,30 @@ bool Display::update ()
 		return true;
 	}
 
+	ImGui_ImplOpenGL3_NewFrame();
+	ImGui_ImplSDL2_NewFrame();
+	ImGui::NewFrame();
+
 	_gl->draw (_mouse[0], _mouse[1], _lmbmouse[0], _lmbmouse[1]);
+
+	{
+		static float f = 0.0f;
+		static ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
+		ImGuiIO& io = ImGui::GetIO (); (void) io;
+
+		ImGui::Begin("ImGUI Demo");
+  
+		ImGui::Text("Some settings for Raymarcher-GL.");
+		ImGui::SliderFloat("float", &f, 0.0f, 1.0f);
+		ImGui::ColorEdit3("clear color", (float*) &clear_color);
+		ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / io.Framerate, io.Framerate);
+
+		ImGui::End();
+	}
+
+	ImGui::Render();
+	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+
 	SDL_GL_SwapWindow (_window);
 
     static unsigned int fps = 0;
