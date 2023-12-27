@@ -70,11 +70,18 @@ Display::Display (const char* shaderfile, unsigned int width,
                   unsigned int height, unsigned int targetFpsRate,
                   const char* imagefile0, const char* imagefile1,
                   const char* imagefile2, const char* imagefile3)
-    : _maximized (false), _width (width), _height (height),
-      _targetFpsRate (targetFpsRate), _initialized (false), _window (NULL),
-      _running (false),
-      _paused (false), _mouse{0, 0}, _lmbmouse{0, 0}, _file_watch_parameters{
-                                                          nullptr, 0}
+	: _maximized (false)
+	, _width (width)
+	, _height (height)
+	, _targetFpsRate (targetFpsRate)
+	, _fpsRate (0.0f)
+	, _initialized (false)
+	, _window (NULL)
+	, _running (false)
+	, _paused (false)
+	, _mouse{0, 0}
+	, _lmbmouse{0, 0}
+	, _file_watch_parameters{nullptr, 0}
 {
 	init ();
 
@@ -269,6 +276,7 @@ bool Display::update ()
         title << WIN_TITLE << " - " << fps << " fps";
         std::string str (title.str ());
         SDL_SetWindowTitle (_window, str.c_str ());
+		_gl->setFpsRate (static_cast<float> (fps));
         fps = 0;
         lastTick = currentTick;
 
@@ -281,3 +289,4 @@ bool Display::update ()
 
 	return true;
 }
+

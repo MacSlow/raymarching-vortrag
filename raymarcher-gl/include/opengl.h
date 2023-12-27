@@ -44,6 +44,7 @@ class OpenGL
 		bool resize (unsigned int width, unsigned int height);
 		bool draw (int x, int y, int lmbx, int lmby);
 		void reloadShader (const char* shaderfile);
+		void setFpsRate (float fpsRate);
 
 	private:
 		friend void checkGLError (const char* func);
@@ -58,6 +59,7 @@ class OpenGL
 	private:
 		unsigned int _width;
 		unsigned int _height;
+		float _frameRate;
 		unsigned int _frame;
         Texture* _texture[4];
 		GLuint _vShaderId;
@@ -68,6 +70,7 @@ class OpenGL
 		GLint _iResolution;
 		GLint _iGlobaltime;
 		GLint _iChannelRes[4];
+		GLint _iFrameRate;
 		GLint _iFrame;
 		GLint _iMouse;
 		GLint _iChannel[4];

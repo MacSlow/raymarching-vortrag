@@ -26,6 +26,7 @@
 // uniform vec3      iResolution (width, height, aspect)
 // uniform float     iGlobalTime (time in seconds since program start)
 // uniform vec3      iChannelResolution0..3 (texture-resolution for each unit)
+// uniform float     iFrameRate (shader frame rate)
 // uniform int       iFrame (shader playback frame)
 // uniform vec4      iMouse (xy = pixel-coords, zw = LMB-clicked pixel-coords)
 // uniform sampler2D iChannel0..3 (texture-data for units 0..3)
@@ -57,22 +58,24 @@ enum VertexAttribs {
 };
 
 OpenGL::OpenGL (unsigned int width,
-				unsigned int height) :
-	_width (width),
-	_height (height),
-    _texture {nullptr, nullptr, nullptr, nullptr},
-	_vShaderId (0),
-	_fShaderId (0),
-	_program (0),
-	_vao (0),
-	_vbo (0),
-	_iResolution (0),
-	_iGlobaltime (0),
-	_iChannelRes {0, 0, 0, 0},
-	_iFrame (0),
-	_iMouse (0),
-	_iChannel {0, 0, 0, 0},
-	_iDate (0)
+				unsigned int height)
+	: _width (width)
+	, _height (height)
+	, _frameRate (0.0f)
+    , _texture {nullptr, nullptr, nullptr, nullptr}
+	, _vShaderId (0)
+	, _fShaderId (0)
+	, _program (0)
+	, _vao (0)
+	, _vbo (0)
+	, _iResolution (0)
+	, _iGlobaltime (0)
+	, _iChannelRes {0, 0, 0, 0}
+	, _iFrameRate (0.0f)
+	, _iFrame (0)
+	, _iMouse (0)
+	, _iChannel {0, 0, 0, 0}
+	, _iDate (0)
 {
     glewExperimental = GL_TRUE;
     int success = glewInit ();
@@ -137,6 +140,7 @@ bool OpenGL::init (const char* shaderfile,
 	_iChannelRes[1] = glGetUniformLocation (_program, "iChannelResolution1");
 	_iChannelRes[2] = glGetUniformLocation (_program, "iChannelResolution2");
 	_iChannelRes[3] = glGetUniformLocation (_program, "iChannelResolution3");
+	_iFrameRate = glGetUniformLocation (_program, "iFrameRate");
 	_iFrame = glGetUniformLocation (_program, "iFrame");
 	_iMouse = glGetUniformLocation (_program, "iMouse");
 	_iChannel[0] = glGetUniformLocation (_program, "iChannel0");
@@ -252,6 +256,7 @@ bool OpenGL::draw (int x, int y, int lmbx, int lmby)
 				 (GLfloat) _height,
 				 (GLfloat) _width / (GLfloat) _height);
 	glUniform1f (_iGlobaltime, (GLfloat) SDL_GetTicks () / 1000.0);
+	glUniform1f (_iFrameRate, (GLfloat) _frameRate);
 	glUniform1i (_iFrame, (GLint) _frame);
 	glUniform4f (_iMouse,
 				 (GLfloat) x,
@@ -447,3 +452,9 @@ void OpenGL::dumpProgramBinaryInfoToConsole (GLuint progId) const
     glGetProgramiv (progId, GL_PROGRAM_BINARY_LENGTH, &binaryLength);
     std::cout << "binary-length: " << binaryLength << '\n';
 }
+
+void OpenGL::setFpsRate (float fpsRate)
+{
+	_frameRate = fpsRate;
+}
+

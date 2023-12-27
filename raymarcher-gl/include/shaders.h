@@ -46,6 +46,7 @@ const char frag3DMetaBalls[] = GLSL(
     uniform vec3 iChannelResolution1;
     uniform vec3 iChannelResolution2;
     uniform vec3 iChannelResolution3;
+    uniform float iFrameRate;
     uniform int  iFrame;
     uniform vec4 iMouse;
     uniform sampler2D iChannel0;
@@ -58,8 +59,6 @@ const char frag3DMetaBalls[] = GLSL(
 
 /*
 uniform float iTimeDelta;      // render time (in seconds)
-uniform float iFrameRate;      // shader frame rate
-uniform int   iFrame;          // shader playback frame
 uniform float iChannelTime[4]; // channel playback time (in seconds)
 uniform float iSampleRate;     // sound sample rate (i.e., 44100)
 */
@@ -245,6 +244,7 @@ const char fragPathTracer[] = GLSL(
     uniform vec3 iChannelResolution1;
     uniform vec3 iChannelResolution2;
     uniform vec3 iChannelResolution3;
+    uniform float iFrameRate;
     uniform int  iFrame;
     uniform vec4 iMouse;
     uniform sampler2D iChannel0;
@@ -2660,6 +2660,7 @@ const char fragJellyBoxes[] = GLSL(
 	uniform vec3 iChannelResolution1;
 	uniform vec3 iChannelResolution2;
 	uniform vec3 iChannelResolution3;
+    uniform float iFrameRate;
     uniform int  iFrame;
 	uniform vec4 iMouse;
 	uniform sampler2D iChannel0;
@@ -3039,6 +3040,7 @@ const char fragNoise[] = GLSL(
 	uniform vec3 iChannelResolution1;
 	uniform vec3 iChannelResolution2;
 	uniform vec3 iChannelResolution3;
+    uniform float iFrameRate;
     uniform int  iFrame;
 	uniform vec4 iMouse;
 	uniform sampler2D iChannel0;
@@ -3174,6 +3176,7 @@ const char fragRaymarch[] = GLSL(
 	uniform vec3 iChannelResolution1;
 	uniform vec3 iChannelResolution2;
 	uniform vec3 iChannelResolution3;
+    uniform float iFrameRate;
     uniform int  iFrame;
 	uniform vec4 iMouse;
 	uniform sampler2D iChannel0;
@@ -3578,6 +3581,7 @@ const char fragFractal[] = GLSL(
 	uniform vec3 iChannelResolution1;
 	uniform vec3 iChannelResolution2;
 	uniform vec3 iChannelResolution3;
+    uniform float iFrameRate;
     uniform int  iFrame;
 	uniform vec4 iMouse;
 	uniform sampler2D iChannel0;
@@ -3679,6 +3683,7 @@ const char fragLineBox[] = GLSL(
 	uniform vec3 iChannelResolution1;
 	uniform vec3 iChannelResolution2;
 	uniform vec3 iChannelResolution3;
+    uniform float iFrameRate;
     uniform int  iFrame;
 	uniform vec4 iMouse;
 	uniform sampler2D iChannel0;

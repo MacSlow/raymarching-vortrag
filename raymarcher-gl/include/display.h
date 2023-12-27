@@ -53,6 +53,7 @@ class Display
 		unsigned int _width;
 		unsigned int _height;
         unsigned int _targetFpsRate;
+		float _fpsRate;
         bool _initialized;
         SDL_Window* _window;
         SDL_GLContext _context;

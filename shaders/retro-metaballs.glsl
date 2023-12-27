@@ -2,6 +2,7 @@
 
 uniform vec3 iResolution;
 uniform float iTime;
+uniform float iFrameRate;
 uniform int iFrame;
 in vec2 fragCoord;
 out vec4 fragColor;
