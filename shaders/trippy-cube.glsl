@@ -2,6 +2,7 @@
 #version 420
 uniform vec3 iResolution;
 uniform float iTime;
+uniform float iTimeDelta;
 uniform vec3 iChannelResolution0;
 uniform float iFrameRate;
 uniform int  iFrame;

@@ -2,6 +2,7 @@
 
 	uniform vec3 iResolution;
 	uniform float iTime;
+    uniform float iTimeDelta;
 	uniform vec3 iChannelResolution0;
 	uniform vec3 iChannelResolution1;
 	uniform vec3 iChannelResolution2;

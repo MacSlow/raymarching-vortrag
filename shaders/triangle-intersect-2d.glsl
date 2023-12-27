@@ -1,6 +1,7 @@
 #version 420
 uniform vec3 iResolution;
 uniform float iTime;
+uniform float iTimeDelta;
 uniform float iFrameRate;
 uniform int  iFrame;
 uniform vec4 iMouse;

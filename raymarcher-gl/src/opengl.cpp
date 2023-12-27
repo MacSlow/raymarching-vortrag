@@ -25,6 +25,7 @@
 // the uniform inputs taken over from shadertoy.com
 // uniform vec3      iResolution (width, height, aspect)
 // uniform float     iGlobalTime (time in seconds since program start)
+// uniform float     iTimeDelta  (render time (in seconds))
 // uniform vec3      iChannelResolution0..3 (texture-resolution for each unit)
 // uniform float     iFrameRate (shader frame rate)
 // uniform int       iFrame (shader playback frame)
@@ -62,6 +63,7 @@ OpenGL::OpenGL (unsigned int width,
 	: _width (width)
 	, _height (height)
 	, _frameRate (0.0f)
+	, _frameTime (0.0f)
     , _texture {nullptr, nullptr, nullptr, nullptr}
 	, _vShaderId (0)
 	, _fShaderId (0)
@@ -70,6 +72,7 @@ OpenGL::OpenGL (unsigned int width,
 	, _vbo (0)
 	, _iResolution (0)
 	, _iGlobaltime (0)
+	, _iTimeDelta (0.0f)
 	, _iChannelRes {0, 0, 0, 0}
 	, _iFrameRate (0.0f)
 	, _iFrame (0)
@@ -136,6 +139,7 @@ bool OpenGL::init (const char* shaderfile,
     // the supported ShaderToy-like uniforms
 	_iResolution = glGetUniformLocation (_program, "iResolution");
 	_iGlobaltime = glGetUniformLocation (_program, "iTime");
+	_iTimeDelta = glGetUniformLocation (_program, "iTimeDelta");
 	_iChannelRes[0] = glGetUniformLocation (_program, "iChannelResolution0");
 	_iChannelRes[1] = glGetUniformLocation (_program, "iChannelResolution1");
 	_iChannelRes[2] = glGetUniformLocation (_program, "iChannelResolution2");
@@ -232,6 +236,9 @@ bool OpenGL::resize (unsigned int width, unsigned int height)
 
 bool OpenGL::draw (int x, int y, int lmbx, int lmby)
 {
+	static GLfloat current = 0.0f;
+	static GLfloat last = 0.0f;
+
 	glClear (GL_COLOR_BUFFER_BIT);
 
 	glUseProgram (_program);
@@ -256,6 +263,7 @@ bool OpenGL::draw (int x, int y, int lmbx, int lmby)
 				 (GLfloat) _height,
 				 (GLfloat) _width / (GLfloat) _height);
 	glUniform1f (_iGlobaltime, (GLfloat) SDL_GetTicks () / 1000.0);
+	glUniform1f (_iTimeDelta, (GLfloat) _frameTime);
 	glUniform1f (_iFrameRate, (GLfloat) _frameRate);
 	glUniform1i (_iFrame, (GLint) _frame);
 	glUniform4f (_iMouse,
@@ -280,6 +288,10 @@ bool OpenGL::draw (int x, int y, int lmbx, int lmby)
     glUseProgram (0);
 
 	++_frame;
+
+	current = (GLfloat) SDL_GetTicks ()/1000.f;
+	_frameTime = current - last;
+	last = current;
 
 	return true;
 }

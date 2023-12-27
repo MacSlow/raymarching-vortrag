@@ -60,6 +60,7 @@ class OpenGL
 		unsigned int _width;
 		unsigned int _height;
 		float _frameRate;
+		float _frameTime;
 		unsigned int _frame;
         Texture* _texture[4];
 		GLuint _vShaderId;
@@ -69,6 +70,7 @@ class OpenGL
 		GLuint _vbo;
 		GLint _iResolution;
 		GLint _iGlobaltime;
+		GLfloat _iTimeDelta;
 		GLint _iChannelRes[4];
 		GLint _iFrameRate;
 		GLint _iFrame;

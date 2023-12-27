@@ -3,6 +3,7 @@
 uniform vec3 iResolution;
 uniform sampler2D iChannel0;
 uniform float iTime;
+uniform float iTimeDelta;
 uniform float iFrameRate;
 uniform int iFrame;
 in vec2 fragCoord;

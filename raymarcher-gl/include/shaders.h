@@ -42,6 +42,7 @@ const char frag3DMetaBalls[] = GLSL(
     // the uniform inputs taken over from shadertoy.com
     uniform vec3 iResolution;
     uniform float iTime;
+    uniform float iTimeDelta;
     uniform vec3 iChannelResolution0;
     uniform vec3 iChannelResolution1;
     uniform vec3 iChannelResolution2;
@@ -58,10 +59,11 @@ const char frag3DMetaBalls[] = GLSL(
     out vec4 fragColor;
 
 /*
-uniform float iTimeDelta;      // render time (in seconds)
-uniform float iChannelTime[4]; // channel playback time (in seconds)
-uniform float iSampleRate;     // sound sample rate (i.e., 44100)
-*/
+ * ShaderToy uniforms not yet implemented:
+ *   - uniform float iTimeDelta;      // render time (in seconds)
+ *   - uniform float iChannelTime[4]; // channel playback time (in seconds)
+ *   - uniform float iSampleRate;     // sound sample rate (i.e., 44100)
+ */
 
 	precision highp float;
 
@@ -240,6 +242,7 @@ const char fragPathTracer[] = GLSL(
     // the uniform inputs taken over from shadertoy.com
     uniform vec3 iResolution;
     uniform float iTime;
+    uniform float iTimeDelta;
     uniform vec3 iChannelResolution0;
     uniform vec3 iChannelResolution1;
     uniform vec3 iChannelResolution2;
@@ -596,6 +599,7 @@ const char fragRaytracer[] = GLSL(
     // the uniform inputs taken over from shadertoy.com
     uniform vec3 iResolution;
     uniform float iTime;
+    uniform float iTimeDelta;
     uniform vec3 iChannelResolution0;
     uniform vec3 iChannelResolution1;
     uniform vec3 iChannelResolution2;
@@ -978,6 +982,7 @@ const char fragWireCube[] = GLSL(
     // the uniform inputs taken over from shadertoy.com
     uniform vec3 iResolution;
     uniform float iTime;
+    uniform float iTimeDelta;
     uniform vec3 iChannelResolution0;
     uniform vec3 iChannelResolution1;
     uniform vec3 iChannelResolution2;
@@ -1303,6 +1308,7 @@ const char fragPBRPlayground[] = GLSL(
     // the uniform inputs taken over from shadertoy.com
     uniform vec3 iResolution;
     uniform float iTime;
+    uniform float iTimeDelta;
     uniform vec3 iChannelResolution0;
     uniform vec3 iChannelResolution1;
     uniform vec3 iChannelResolution2;
@@ -1638,6 +1644,7 @@ const char frag3DTruchet[] = GLSL(
     // the uniform inputs taken over from shadertoy.com
     uniform vec3 iResolution;
     uniform float iTime;
+    uniform float iTimeDelta;
     uniform vec3 iChannelResolution0;
     uniform vec3 iChannelResolution1;
     uniform vec3 iChannelResolution2;
@@ -1806,6 +1813,7 @@ const char frag3DGlassNoise[] = GLSL(
     // the uniform inputs taken over from shadertoy.com
     uniform vec3 iResolution;
     uniform float iTime;
+    uniform float iTimeDelta;
     uniform vec3 iChannelResolution0;
     uniform vec3 iChannelResolution1;
     uniform vec3 iChannelResolution2;
@@ -1909,6 +1917,7 @@ const char fragRadialBlur[] = GLSL(
     // the uniform inputs taken over from shadertoy.com
     uniform vec3 iResolution;
     uniform float iTime;
+    uniform float iTimeDelta;
     uniform vec3 iChannelResolution0;
     uniform vec3 iChannelResolution1;
     uniform vec3 iChannelResolution2;
@@ -1950,6 +1959,7 @@ const char fragEye[] = GLSL(
 	// the uniform inputs taken over from shadertoy.com
 	uniform vec3 iResolution;
 	uniform float iTime;
+    uniform float iTimeDelta;
 	uniform vec3 iChannelResolution0;
 	uniform vec3 iChannelResolution1;
 	uniform vec3 iChannelResolution2;
@@ -2078,6 +2088,7 @@ const char fragEye[] = GLSL(
 const char frag4DJulia[] = GLSL(
 	uniform vec3 iResolution;
 	uniform float iTime;
+    uniform float iTimeDelta;
 	uniform vec3 iChannelResolution0;
 	uniform vec3 iChannelResolution1;
 	uniform vec3 iChannelResolution2;
@@ -2282,6 +2293,7 @@ const char frag2DRaymarch[] = GLSL(
 	// the uniform inputs taken over from shadertoy.com
 	uniform vec3 iResolution;
 	uniform float iTime;
+    uniform float iTimeDelta;
 	uniform vec3 iChannelResolution0;
 	uniform vec3 iChannelResolution1;
 	uniform vec3 iChannelResolution2;
@@ -2384,6 +2396,7 @@ const char fragMetaBalls[] = GLSL(
 	// the uniform inputs taken over from shadertoy.com
 	uniform vec3 iResolution;
 	uniform float iTime;
+    uniform float iTimeDelta;
 	uniform vec3 iChannelResolution0;
 	uniform vec3 iChannelResolution1;
 	uniform vec3 iChannelResolution2;
@@ -2479,6 +2492,7 @@ const char fragFractalExplorer[] = GLSL(
 	// the uniform inputs taken over from shadertoy.com
 	uniform vec3 iResolution;
 	uniform float iTime;
+    uniform float iTimeDelta;
 	uniform vec3 iChannelResolution0;
 	uniform vec3 iChannelResolution1;
 	uniform vec3 iChannelResolution2;
@@ -2656,6 +2670,7 @@ const char fragJellyBoxes[] = GLSL(
 	// the uniform inputs taken over from shadertoy.com
 	uniform vec3 iResolution;
 	uniform float iTime;
+    uniform float iTimeDelta;
 	uniform vec3 iChannelResolution0;
 	uniform vec3 iChannelResolution1;
 	uniform vec3 iChannelResolution2;
@@ -3036,6 +3051,7 @@ const char fragNoise[] = GLSL(
 	// the uniform inputs taken over from shadertoy.com
 	uniform vec3 iResolution;
 	uniform float iTime;
+    uniform float iTimeDelta;
 	uniform vec3 iChannelResolution0;
 	uniform vec3 iChannelResolution1;
 	uniform vec3 iChannelResolution2;
@@ -3172,6 +3188,7 @@ const char fragRaymarch[] = GLSL(
 	// the uniform inputs taken over from shadertoy.com
 	uniform vec3 iResolution;
 	uniform float iTime;
+    uniform float iTimeDelta;
 	uniform vec3 iChannelResolution0;
 	uniform vec3 iChannelResolution1;
 	uniform vec3 iChannelResolution2;
@@ -3577,6 +3594,7 @@ const char fragFractal[] = GLSL(
 	// the uniform inputs taken over from shadertoy.com
 	uniform vec3 iResolution;
 	uniform float iTime;
+    uniform float iTimeDelta;
 	uniform vec3 iChannelResolution0;
 	uniform vec3 iChannelResolution1;
 	uniform vec3 iChannelResolution2;
@@ -3679,6 +3697,7 @@ const char fragLineBox[] = GLSL(
 	// the uniform inputs taken over from shadertoy.com
 	uniform vec3 iResolution;
 	uniform float iTime;
+    uniform float iTimeDelta;
 	uniform vec3 iChannelResolution0;
 	uniform vec3 iChannelResolution1;
 	uniform vec3 iChannelResolution2;
