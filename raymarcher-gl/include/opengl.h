@@ -58,6 +58,7 @@ class OpenGL
 	private:
 		unsigned int _width;
 		unsigned int _height;
+		unsigned int _frame;
         Texture* _texture[4];
 		GLuint _vShaderId;
 		GLuint _fShaderId;
@@ -67,6 +68,7 @@ class OpenGL
 		GLint _iResolution;
 		GLint _iGlobaltime;
 		GLint _iChannelRes[4];
+		GLint _iFrame;
 		GLint _iMouse;
 		GLint _iChannel[4];
 		GLint _iDate;

@@ -6,6 +6,7 @@ uniform vec3 iChannelResolution0;
 uniform vec3 iChannelResolution1;
 uniform vec3 iChannelResolution2;
 uniform vec3 iChannelResolution3;
+uniform int  iFrame;
 uniform vec4 iMouse;
 uniform sampler2D iChannel0;
 uniform sampler2D iChannel1;

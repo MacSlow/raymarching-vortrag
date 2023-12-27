@@ -4,6 +4,7 @@ uniform vec3 iResolution;
 uniform float iTime;
 uniform vec3 iChannelResolution0;
 uniform vec3 iChannelResolution1;
+uniform int  iFrame;
 uniform vec4 iMouse;
 uniform sampler2D iChannel0;
 uniform sampler2D iChannel1;
