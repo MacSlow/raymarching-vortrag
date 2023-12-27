@@ -60,7 +60,6 @@ const char frag3DMetaBalls[] = GLSL(
 
 /*
  * ShaderToy uniforms not yet implemented:
- *   - uniform float iTimeDelta;      // render time (in seconds)
  *   - uniform float iChannelTime[4]; // channel playback time (in seconds)
  *   - uniform float iSampleRate;     // sound sample rate (i.e., 44100)
  */
