@@ -31,11 +31,26 @@ const char vert[] = GLSL(
     attribute vec2 aPosition;
     attribute vec2 aTexCoord;
     out vec2 fragCoord;
+
     void main()
     {
         gl_Position = vec4 (aPosition, -1.0, 1.0);
         fragCoord = aTexCoord;
     }
+);
+
+const char fragFBO2Window[] = GLSL(
+    uniform sampler2D iFBOTexture;
+    in vec2 fragCoord;
+    out vec4 fragColor;
+
+	precision highp float;
+
+	void main () {
+		// texelFetch() would be better fitting here... but I'm lazy
+        vec3 color = texture2D (iFBOTexture, fragCoord.xy).rgb;
+		fragColor = vec4 (color, 1.);
+	}
 );
 
 const char frag3DMetaBalls[] = GLSL(

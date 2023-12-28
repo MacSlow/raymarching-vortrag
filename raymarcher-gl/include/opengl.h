@@ -62,6 +62,7 @@ class OpenGL
 		GLuint _vShaderId;
 		GLuint _fShaderId;
 		GLuint _program;
+		GLuint _programFBO2Window;
 		GLuint _vao;
 		GLuint _vbo;
 		GLint _iResolution;
@@ -69,7 +70,11 @@ class OpenGL
 		GLint _iChannelRes[4];
 		GLint _iMouse;
 		GLint _iChannel[4];
+		GLint _iFBOTexture;
 		GLint _iDate;
+		GLuint _fbo;
+		GLuint _colorTextureId;
+		GLuint _attachments[1];
 };
 
 #endif // _OPENGL_H

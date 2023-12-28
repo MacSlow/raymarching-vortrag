@@ -1,4 +1,7 @@
 #version 420
+
+layout (location = 0) out vec4 fragColor;
+
 uniform vec3 iResolution;
 uniform float iTime;
 uniform vec3 iChannelResolution0;
@@ -12,7 +15,7 @@ uniform sampler2D iChannel2;
 uniform sampler2D iChannel3;
 uniform vec4 iDate;
 in vec2 fragCoord;
-out vec4 fragColor;
+//out vec4 fragColor;
 
 precision highp float;
 

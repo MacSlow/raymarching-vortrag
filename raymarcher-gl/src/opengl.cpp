@@ -63,6 +63,7 @@ OpenGL::OpenGL (unsigned int width,
 	_vShaderId (0),
 	_fShaderId (0),
 	_program (0),
+	_programFBO2Window (0),
 	_vao (0),
 	_vbo (0),
 	_iResolution (0),
@@ -70,8 +71,12 @@ OpenGL::OpenGL (unsigned int width,
 	_iChannelRes {0, 0, 0, 0},
 	_iMouse (0),
 	_iChannel {0, 0, 0, 0},
-	_iDate (0)
+	_iFBOTexture (0),
+	_iDate (0),
+	_fbo (0),
+	_colorTextureId (0)
 {
+	_attachments[0] = {GL_COLOR_ATTACHMENT0};
     glewExperimental = GL_TRUE;
     int success = glewInit ();
 	if (success != GLEW_OK) {
@@ -90,10 +95,12 @@ OpenGL::~OpenGL ()
     delete _texture[2];
     delete _texture[3];
 	glDeleteProgram (_program);
+	glDeleteProgram (_programFBO2Window);
 	glDeleteShader (_vShaderId);
 	glDeleteShader (_fShaderId);
 	glDeleteVertexArrays (1, &_vao);
 	glDeleteBuffers (1, &_vbo);
+	glDeleteFramebuffers (1, &_fbo);
 }
 
 void OpenGL::reloadShader (const char* shaderfile)
@@ -115,17 +122,37 @@ void OpenGL::reloadShader (const char* shaderfile)
     _program = createShaderProgram (vert, shader.c_str(), true);
 }
 
+void debugMessageCallback (GLenum source,
+						   GLenum type,
+						   GLuint id,
+						   GLenum severity,
+						   GLsizei length,
+						   const GLchar* message,
+						   const void* userParam)
+{
+	std::cout << "some OpenGL-error happened\n";
+	std::cout << message << '\n';
+}
+
 bool OpenGL::init (const char* shaderfile,
 				   const char* imagefile0,
                    const char* imagefile1,
                    const char* imagefile2,
                    const char* imagefile3)
 {
+	glDebugMessageCallback (&debugMessageCallback, nullptr);
+
 	dumpGLInfo ();
     glClearColor (1.0, 1.0, 1.0, 1.0);
     glViewport (0, 0, _width, _height);
     glEnable (GL_BLEND);
+	glEnable (GL_DEBUG_OUTPUT);
 	
+	_programFBO2Window = createShaderProgram (vert, fragFBO2Window, true);
+	_iFBOTexture = glGetUniformLocation (_programFBO2Window, "iFBOTexture");
+	glBindAttribLocation (_programFBO2Window, PositionAttr, "aPosition");
+	glBindAttribLocation (_programFBO2Window, TexCoordAttr, "aTexCoord");
+
 	reloadShader (shaderfile);
 
     // the supported ShaderToy-like uniforms
@@ -210,6 +237,17 @@ bool OpenGL::init (const char* shaderfile,
 	glBindVertexArray (0);
 	glBindBuffer (GL_ARRAY_BUFFER, 0);
 
+	// create framebuffer
+	glGenFramebuffers (1, &_fbo);
+	glBindFramebuffer (GL_FRAMEBUFFER, _fbo);
+	glGenTextures (1, &_colorTextureId);
+	glBindTexture (GL_TEXTURE_2D, _colorTextureId);
+	glTexImage2D (GL_TEXTURE_2D, 0, GL_RGBA, _width, _height, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
+	glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glFramebufferTexture2D (GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, _colorTextureId, 0);
+	glDrawBuffers (1, _attachments);
+
 	return true;
 }
 
@@ -219,13 +257,15 @@ bool OpenGL::resize (unsigned int width, unsigned int height)
 	_height = height;
 
 	glViewport (0, 0, _width, _height);
+	glBindTexture (GL_TEXTURE_2D, _colorTextureId);
+	glTexImage2D (GL_TEXTURE_2D, 0, GL_RGBA, _width, _height, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
 
 	return true;
 }
 
 bool OpenGL::draw (int x, int y, int lmbx, int lmby)
 {
-	glClear (GL_COLOR_BUFFER_BIT);
+	glBindFramebuffer (GL_FRAMEBUFFER, _fbo);
 
 	glUseProgram (_program);
     glBindVertexArray (_vao);
@@ -267,6 +307,16 @@ bool OpenGL::draw (int x, int y, int lmbx, int lmby)
 	static unsigned short indices[6] = {0, 1, 2, 3, 2, 0};
 	glDrawElements (GL_TRIANGLES, 6, GL_UNSIGNED_SHORT, indices);
 
+    glBindVertexArray (0);
+    glUseProgram (0);
+
+	glBindFramebuffer (GL_FRAMEBUFFER, 0);
+	glActiveTexture (GL_TEXTURE0);
+	glBindTexture (GL_TEXTURE_2D, _colorTextureId);
+	glUseProgram (_programFBO2Window);
+	glUniform1i (_iFBOTexture, 0);
+    glBindVertexArray (_vao);
+	glDrawElements (GL_TRIANGLES, 6, GL_UNSIGNED_SHORT, indices);
     glBindVertexArray (0);
     glUseProgram (0);
 
@@ -367,7 +417,7 @@ GLuint OpenGL::createShaderProgram (const char* vertSrc,
 									const char* fragSrc,
 									bool link)
 {
-	GLuint program = _program;
+	GLuint program = 0;
 
     if (!vertSrc && !fragSrc)
         return 0;
@@ -375,18 +425,18 @@ GLuint OpenGL::createShaderProgram (const char* vertSrc,
     if (vertSrc) {
         _vShaderId = loadShader (vertSrc, GL_VERTEX_SHADER);
         if (!_vShaderId)
-        	return _program;
+            return program;
     }
 
     if (fragSrc) {
         _fShaderId = loadShader (fragSrc, GL_FRAGMENT_SHADER);
         if (!_fShaderId)
-        	return _program;
+            return program;
     }
 
     program = glCreateProgram ();
     if (!program)
-        return _program;
+        return program;
 
     if (vertSrc) {
         glAttachShader (program, _vShaderId);
