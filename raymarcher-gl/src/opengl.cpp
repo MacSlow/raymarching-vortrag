@@ -130,7 +130,7 @@ void debugMessageCallback (GLenum source,
 						   const GLchar* message,
 						   const void* userParam)
 {
-	std::cout << "some OpenGL-error happened\n";
+	std::cout << "some OpenGL-message happened\n";
 	std::cout << message << '\n';
 }
 
